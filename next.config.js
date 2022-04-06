@@ -1,4 +1,4 @@
-const withTM = require('next-transpile-modules')(['next-mui-helper']);
+const withTM = require('next-transpile-modules')(['next-mui-helper', '@tawk.to/tawk-messenger-react']);
 
 module.exports = withTM({
   webpack: (config) => config,
