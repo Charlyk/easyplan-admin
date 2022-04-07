@@ -1,7 +1,8 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { ThemeProvider } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
+import TawkMessengerReact from '@tawk.to/tawk-messenger-react';
 import moment from 'moment-timezone';
 import App from 'next/app';
 import dynamic from 'next/dynamic';
@@ -68,6 +69,7 @@ const ChangeLogModal = dynamic(() =>
 const EasyApp = ({ Component, pageProps }) => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const tawkMessengerRef = useRef(null);
   const currentUser = useSelector(currentUserSelector);
   const currentClinic = useSelector(currentClinicSelector);
   const appointmentModal = useSelector(appointmentModalSelector);
@@ -121,7 +123,6 @@ const EasyApp = ({ Component, pageProps }) => {
   }, [clinicRoom]);
 
   useEffect(() => {
-    setChatVisitor(currentUser);
     updatePageTitle(currentClinic);
   }, [currentUser, currentClinic]);
 
@@ -139,15 +140,24 @@ const EasyApp = ({ Component, pageProps }) => {
     dispatch(closeAppointmentModal());
   };
 
-  const setChatVisitor = (currentUser) => {
+  const handleTawkMessengerLoad = () => {
     if (currentUser == null) {
       return;
     }
-    window.Tawk_API = window.Tawk_API || {};
-    window.Tawk_API.visitor = {
+
+    tawkMessengerRef.current.visitor = {
       name: `${currentUser.firstName} ${currentUser.lastName}`,
       email: currentUser.email,
     };
+    tawkMessengerRef.current.setAttributes({
+      id: currentUser.id,
+      clinicId: currentClinic?.id,
+      name: `${currentUser.firstName} ${currentUser.lastName}`,
+      email: currentUser.email,
+    });
+    if (currentClinic != null) {
+      tawkMessengerRef.current.addTags([currentClinic.clinicName]);
+    }
   };
 
   const setChatUserData = () => {
@@ -155,18 +165,16 @@ const EasyApp = ({ Component, pageProps }) => {
       if (currentUser == null) {
         return;
       }
-      window.Tawk_API = window.Tawk_API || {};
-      window.Tawk_API.onLoad = () => {
-        window.Tawk_API.setAttributes({
-          id: currentUser.id,
-          clinicId: currentClinic?.id,
-          name: `${currentUser.firstName} ${currentUser.lastName}`,
-          email: currentUser.email,
-        });
-        if (currentClinic != null) {
-          window.Tawk_API.addTags([currentClinic.clinicName]);
-        }
-      };
+
+      tawkMessengerRef.current.setAttributes({
+        id: currentUser.id,
+        clinicId: currentClinic?.id,
+        name: `${currentUser.firstName} ${currentUser.lastName}`,
+        email: currentUser.email,
+      });
+      if (currentClinic != null) {
+        tawkMessengerRef.current.addTags([currentClinic.clinicName]);
+      }
     } catch (error) {
       console.error('Error', error?.message);
     }
@@ -190,6 +198,7 @@ const EasyApp = ({ Component, pageProps }) => {
     try {
       setIsChecking(true);
       await requestCheckIsAuthenticated();
+
       setChatUserData();
     } catch (error) {
       if (error.response != null) {
@@ -247,10 +256,6 @@ const EasyApp = ({ Component, pageProps }) => {
           name='viewport'
           content='minimum-scale=1, initial-scale=1, width=device-width'
         />
-        {!currentPage.includes('confirmation') &&
-        !currentPage.includes('facebook') ? (
-          <script type='text/javascript' src='/tawkto.js' defer />
-        ) : null}
       </Head>
       <DndProvider backend={HTML5Backend}>
         <ThemeProvider theme={theme}>
@@ -299,6 +304,15 @@ const EasyApp = ({ Component, pageProps }) => {
                       onClose={handleCloseImageModal}
                     />
                   )}
+                  {!currentPage.includes('confirmation') &&
+                  !currentPage.includes('facebook') ? (
+                    <TawkMessengerReact
+                      propertyId='619407696bb0760a4942ea33'
+                      widgetId='1fkl3ptc4'
+                      ref={tawkMessengerRef}
+                      onLoad={handleTawkMessengerLoad}
+                    />
+                  ) : null}
                   <NextNprogress color='#29D' startPosition={0.3} height={2} />
                   <Component {...pageProps} />
                 </React.Fragment>
