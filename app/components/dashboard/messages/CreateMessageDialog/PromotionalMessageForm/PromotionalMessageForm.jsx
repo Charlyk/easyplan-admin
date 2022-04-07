@@ -129,12 +129,12 @@ const PromotionalMessageForm = ({
       messageTitle,
       message,
       messageType: messageTypeEnum.PromotionalMessage,
-      messageDate: moment().format('YYYY-MM-DD'),
+      messageDate: moment(messageDate).format('YYYY-MM-DD'),
       hour: hourToSend,
       filter: filterData,
     };
     onMessageChange?.(requestBody);
-  }, [message, messageTitle, hourToSend, filterData]);
+  }, [message, messageTitle, hourToSend, filterData, messageDate]);
 
   useEffect(() => {
     updateRecipientsCount();

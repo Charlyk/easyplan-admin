@@ -61,7 +61,7 @@ const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
     localDispatch(actions.setIsLoading(true));
     try {
       const requestBody = {
-        birthday,
+        birthday: moment(birthday).format('YYYY-MM-DD'),
         phoneNumber,
         language,
         source,
@@ -132,6 +132,7 @@ const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
     <EasyDatePicker
       placement='bottom'
       open={showBirthdayPicker}
+      maxDate={new Date()}
       pickerAnchor={birthdayPickerAnchor.current}
       onChange={handleBirthdayChange}
       onClose={handleCloseBirthdayPicker}

@@ -64,7 +64,7 @@ EasyDatePicker.propTypes = {
 
 EasyDatePicker.defaultProps = {
   selectedDate: new Date(),
-  maxDate: null,
+  c: null,
   placement: 'bottom',
   disablePortal: true,
   onClose: () => null,
