@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react';
+import { ThemeContainer } from '@easyplanpro/easyplan-components';
 import { ThemeProvider } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -36,11 +37,10 @@ import {
   currentClinicSelector,
   currentUserSelector,
 } from 'redux/selectors/appDataSelector';
-import { appointmentModalSelector } from 'redux/selectors/appointmentModalSelector';
+import { appointmentModalSelector } from 'redux/selectors/appointmentsSelector';
 import { imageModalSelector } from 'redux/selectors/imageModalSelector';
 import { logoutSelector } from 'redux/selectors/rootSelector';
 import { setAppData } from 'redux/slices/appDataSlice';
-import { closeAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
 import { triggerUserLogOut } from 'redux/slices/mainReduxSlice';
 import { handleRemoteMessageReceived } from 'redux/slices/pubnubMessagesSlice';
 import { wrapper } from 'store';
@@ -51,8 +51,10 @@ import 'react-awesome-lightbox/build/style.css';
 import 'app/utils';
 import { useAnalytics } from '../app/utils/hooks';
 
-const AddAppointmentModal = dynamic(() =>
-  import('app/components/dashboard/calendar/modals/AddAppointmentModal'),
+const AppointmentModal = dynamic(() =>
+  import(
+    'app/components/dashboard/calendar/modals/AppointmentModal/AppointmentModal'
+  ),
 );
 
 const FullScreenImageModal = dynamic(() =>
@@ -134,10 +136,6 @@ const EasyApp = ({ Component, pageProps }) => {
 
   const handlePubnubMessageReceived = (message) => {
     dispatch(handleRemoteMessageReceived(message));
-  };
-
-  const handleAppointmentModalClose = () => {
-    dispatch(closeAppointmentModal());
   };
 
   const handleTawkMessengerLoad = () => {
@@ -258,68 +256,60 @@ const EasyApp = ({ Component, pageProps }) => {
         />
       </Head>
       <DndProvider backend={HTML5Backend}>
-        <ThemeProvider theme={theme}>
-          <React.Fragment>
-            <CssBaseline />
-            <PubNubProvider client={pubnubClient}>
-              <NotificationsProvider>
-                <React.Fragment>
-                  {isDev && (
-                    <Typography className='develop-indicator'>Dev</Typography>
-                  )}
-                  {logout && (
-                    <ConfirmationModal
-                      title={textForKey('Logout')}
-                      message={textForKey('logout message')}
-                      onConfirm={handleUserLogout}
-                      onClose={handleCancelLogout}
-                      isLoading={isLoading}
-                      show={logout}
+        <ThemeContainer>
+          <ThemeProvider theme={theme}>
+            <React.Fragment>
+              <CssBaseline />
+              <PubNubProvider client={pubnubClient}>
+                <NotificationsProvider>
+                  <React.Fragment>
+                    {isDev && (
+                      <Typography className='develop-indicator'>Dev</Typography>
+                    )}
+                    {logout && (
+                      <ConfirmationModal
+                        title={textForKey('Logout')}
+                        message={textForKey('logout message')}
+                        onConfirm={handleUserLogout}
+                        onClose={handleCancelLogout}
+                        isLoading={isLoading}
+                        show={logout}
+                      />
+                    )}
+                    {changeLogModal.open && (
+                      <ChangeLogModal
+                        {...changeLogModal}
+                        onClose={handleCloseChangeLogModal}
+                      />
+                    )}
+                    {appointmentModal?.open && <AppointmentModal />}
+                    {imageModal.open && (
+                      <FullScreenImageModal
+                        {...imageModal}
+                        onClose={handleCloseImageModal}
+                      />
+                    )}
+                    {!currentPage.includes('confirmation') &&
+                    !currentPage.includes('facebook') ? (
+                      <TawkMessengerReact
+                        propertyId='619407696bb0760a4942ea33'
+                        widgetId='1fkl3ptc4'
+                        ref={tawkMessengerRef}
+                        onLoad={handleTawkMessengerLoad}
+                      />
+                    ) : null}
+                    <NextNprogress
+                      color='#29D'
+                      startPosition={0.3}
+                      height={2}
                     />
-                  )}
-                  {changeLogModal.open && (
-                    <ChangeLogModal
-                      {...changeLogModal}
-                      onClose={handleCloseChangeLogModal}
-                    />
-                  )}
-                  {appointmentModal?.open && (
-                    <AddAppointmentModal
-                      currentClinic={currentClinic}
-                      onClose={handleAppointmentModalClose}
-                      schedule={appointmentModal?.schedule}
-                      open={appointmentModal?.open}
-                      doctor={appointmentModal?.doctor}
-                      date={appointmentModal?.date}
-                      patient={appointmentModal?.patient}
-                      startHour={appointmentModal?.startHour}
-                      endHour={appointmentModal?.endHour}
-                      cabinet={appointmentModal?.cabinet}
-                      isDoctorMode={appointmentModal?.isDoctorMode}
-                    />
-                  )}
-                  {imageModal.open && (
-                    <FullScreenImageModal
-                      {...imageModal}
-                      onClose={handleCloseImageModal}
-                    />
-                  )}
-                  {!currentPage.includes('confirmation') &&
-                  !currentPage.includes('facebook') ? (
-                    <TawkMessengerReact
-                      propertyId='619407696bb0760a4942ea33'
-                      widgetId='1fkl3ptc4'
-                      ref={tawkMessengerRef}
-                      onLoad={handleTawkMessengerLoad}
-                    />
-                  ) : null}
-                  <NextNprogress color='#29D' startPosition={0.3} height={2} />
-                  <Component {...pageProps} />
-                </React.Fragment>
-              </NotificationsProvider>
-            </PubNubProvider>
-          </React.Fragment>
-        </ThemeProvider>
+                    <Component {...pageProps} />
+                  </React.Fragment>
+                </NotificationsProvider>
+              </PubNubProvider>
+            </React.Fragment>
+          </ThemeProvider>
+        </ThemeContainer>
       </DndProvider>
     </React.Fragment>
   );

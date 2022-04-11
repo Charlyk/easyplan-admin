@@ -66,6 +66,7 @@ const initialState: ReduxState = {
     schedules: [],
     details: null,
     dayHours: [],
+    isLoading: false,
     closeDetails: false,
     isFetchingDetails: false,
     viewDate: null,
@@ -219,6 +220,64 @@ const initialState: ReduxState = {
     isLoading: false,
     deal: null,
     searchType: 'Deal',
+  },
+  appointments: {
+    modalProps: {
+      open: false,
+    },
+    formData: {
+      date: '',
+      serviceId: -1,
+      cabinetId: -1,
+      endHour: '',
+      startHour: '',
+      doctorId: -1,
+      isUrgent: false,
+      patientId: -1,
+      notes: '',
+      scheduleId: null,
+    },
+    schedules: {
+      loading: false,
+      data: {
+        hours: [],
+        schedules: [],
+      },
+      error: null,
+    },
+    newPatientsModalOpen: false,
+    selectedDate: null,
+    isLoading: false,
+    doctors: {
+      data: [],
+      error: null,
+      loading: false,
+    },
+    services: {
+      data: [],
+      error: null,
+      loading: false,
+    },
+    startHours: {
+      data: [],
+      error: null,
+      loading: false,
+    },
+    endHours: {
+      data: [],
+      error: null,
+      loading: false,
+    },
+  },
+  patients: {
+    data: { data: [], total: 0 },
+    loading: false,
+    error: null,
+  },
+  patientsAutocomplete: {
+    data: [],
+    loading: false,
+    error: null,
   },
 };
 
