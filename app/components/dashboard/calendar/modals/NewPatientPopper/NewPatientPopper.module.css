@@ -1,0 +1,14 @@
+.patientForm {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+}
+
+.patientForm > *:not(:last-child) {
+  margin-bottom: 1em !important;
+}
+
+.paper {
+ padding: 1em;
+  width: 20em;
+}

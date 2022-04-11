@@ -9,3 +9,5 @@ export * from './saveCrmFilterRequest.types';
 export * from './updateDealStateRequest.types';
 export * from './createReminderRequest.types';
 export * from './createDealStateRequest.types';
+export * from './patientsRequest.types';
+export * from './appointmentRequests.types';

@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { ThemeContainer } from '@easyplanpro/easyplan-components';
 import { ThemeProvider } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -35,7 +36,7 @@ import {
   currentClinicSelector,
   currentUserSelector,
 } from 'redux/selectors/appDataSelector';
-import { appointmentModalSelector } from 'redux/selectors/appointmentModalSelector';
+import { appointmentModalSelector } from 'redux/selectors/appointmentsSelector';
 import { imageModalSelector } from 'redux/selectors/imageModalSelector';
 import { logoutSelector } from 'redux/selectors/rootSelector';
 import { setAppData } from 'redux/slices/appDataSlice';
@@ -50,8 +51,10 @@ import 'react-awesome-lightbox/build/style.css';
 import 'app/utils';
 import { useAnalytics } from '../app/utils/hooks';
 
-const AddAppointmentModal = dynamic(() =>
-  import('app/components/dashboard/calendar/modals/AddAppointmentModal'),
+const AppointmentModal = dynamic(() =>
+  import(
+    'app/components/dashboard/calendar/modals/AppointmentModal/AppointmentModal'
+  ),
 );
 
 const FullScreenImageModal = dynamic(() =>
@@ -253,59 +256,51 @@ const EasyApp = ({ Component, pageProps }) => {
         ) : null}
       </Head>
       <DndProvider backend={HTML5Backend}>
-        <ThemeProvider theme={theme}>
-          <React.Fragment>
-            <CssBaseline />
-            <PubNubProvider client={pubnubClient}>
-              <NotificationsProvider>
-                <React.Fragment>
-                  {isDev && (
-                    <Typography className='develop-indicator'>Dev</Typography>
-                  )}
-                  {logout && (
-                    <ConfirmationModal
-                      title={textForKey('Logout')}
-                      message={textForKey('logout message')}
-                      onConfirm={handleUserLogout}
-                      onClose={handleCancelLogout}
-                      isLoading={isLoading}
-                      show={logout}
+        <ThemeContainer>
+          <ThemeProvider theme={theme}>
+            <React.Fragment>
+              <CssBaseline />
+              <PubNubProvider client={pubnubClient}>
+                <NotificationsProvider>
+                  <React.Fragment>
+                    {isDev && (
+                      <Typography className='develop-indicator'>Dev</Typography>
+                    )}
+                    {logout && (
+                      <ConfirmationModal
+                        title={textForKey('Logout')}
+                        message={textForKey('logout message')}
+                        onConfirm={handleUserLogout}
+                        onClose={handleCancelLogout}
+                        isLoading={isLoading}
+                        show={logout}
+                      />
+                    )}
+                    {changeLogModal.open && (
+                      <ChangeLogModal
+                        {...changeLogModal}
+                        onClose={handleCloseChangeLogModal}
+                      />
+                    )}
+                    {appointmentModal?.open && <AppointmentModal />}
+                    {imageModal.open && (
+                      <FullScreenImageModal
+                        {...imageModal}
+                        onClose={handleCloseImageModal}
+                      />
+                    )}
+                    <NextNprogress
+                      color='#29D'
+                      startPosition={0.3}
+                      height={2}
                     />
-                  )}
-                  {changeLogModal.open && (
-                    <ChangeLogModal
-                      {...changeLogModal}
-                      onClose={handleCloseChangeLogModal}
-                    />
-                  )}
-                  {appointmentModal?.open && (
-                    <AddAppointmentModal
-                      currentClinic={currentClinic}
-                      onClose={handleAppointmentModalClose}
-                      schedule={appointmentModal?.schedule}
-                      open={appointmentModal?.open}
-                      doctor={appointmentModal?.doctor}
-                      date={appointmentModal?.date}
-                      patient={appointmentModal?.patient}
-                      startHour={appointmentModal?.startHour}
-                      endHour={appointmentModal?.endHour}
-                      cabinet={appointmentModal?.cabinet}
-                      isDoctorMode={appointmentModal?.isDoctorMode}
-                    />
-                  )}
-                  {imageModal.open && (
-                    <FullScreenImageModal
-                      {...imageModal}
-                      onClose={handleCloseImageModal}
-                    />
-                  )}
-                  <NextNprogress color='#29D' startPosition={0.3} height={2} />
-                  <Component {...pageProps} />
-                </React.Fragment>
-              </NotificationsProvider>
-            </PubNubProvider>
-          </React.Fragment>
-        </ThemeProvider>
+                    <Component {...pageProps} />
+                  </React.Fragment>
+                </NotificationsProvider>
+              </PubNubProvider>
+            </React.Fragment>
+          </ThemeProvider>
+        </ThemeContainer>
       </DndProvider>
     </React.Fragment>
   );

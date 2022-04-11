@@ -5,6 +5,7 @@ import { HYDRATE } from 'next-redux-wrapper';
 import initialState from 'redux/initialState';
 import { CalendarDataState } from 'redux/types';
 import { ScheduleItem, ScheduleDetails, Schedule } from 'types';
+import { CreateAppointmentType } from 'types/api';
 import { FilterData } from '../types';
 
 const isScheduleInGroup = (group: ScheduleItem, schedule: Schedule) => {
@@ -45,6 +46,12 @@ const calendarData = createSlice({
       }>,
     ) {
       state;
+    },
+    dispatchCreateAppointment(
+      state,
+      _action: PayloadAction<CreateAppointmentType>,
+    ) {
+      state.isLoading = true;
     },
     setSchedules(state, action: PayloadAction<ScheduleItem[]>) {
       state.schedules = mapSchedules(action.payload);
@@ -94,6 +101,7 @@ const calendarData = createSlice({
           };
         });
       }
+      state.isLoading = false;
     },
     updateSchedule(state, action: PayloadAction<Schedule>) {
       const scheduleToUpdate = action.payload;
@@ -121,6 +129,7 @@ const calendarData = createSlice({
           ),
         };
       });
+      state.isLoading = false;
     },
     deleteSchedule(state, action: PayloadAction<Schedule>) {
       const scheduleToDelete = action.payload;
@@ -219,6 +228,7 @@ const calendarData = createSlice({
 
 export const {
   setSchedules,
+  dispatchCreateAppointment,
   addNewSchedule,
   updateSchedule,
   deleteSchedule,
