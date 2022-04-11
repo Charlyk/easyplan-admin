@@ -7,10 +7,10 @@ on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
     branches:
-      - 'bug/eas-**'
-      - 'other/eas-**'
-      - 'task/eas-**'
-      - 'fix/eas-**'
+      - 'bug/easy-**'
+      - 'other/easy-**'
+      - 'task/easy-**'
+      - 'fix/easy-**'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:

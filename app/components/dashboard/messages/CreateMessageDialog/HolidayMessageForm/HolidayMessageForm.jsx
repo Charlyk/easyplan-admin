@@ -77,11 +77,11 @@ const HolidayMessageForm = ({
       messageTitle,
       message,
       messageType: messageTypeEnum.HolidayCongrats,
-      messageDate: moment().format('YYYY-MM-DD'),
+      messageDate: moment(messageDate).format('YYYY-MM-DD'),
       hour: hourToSend,
     };
     onMessageChange?.(requestBody);
-  }, [message, messageTitle, hourToSend]);
+  }, [message, messageTitle, hourToSend, messageDate]);
 
   const handleSubmit = (event) => {
     event?.preventDefault();
