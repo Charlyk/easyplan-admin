@@ -41,7 +41,6 @@ import { appointmentModalSelector } from 'redux/selectors/appointmentsSelector';
 import { imageModalSelector } from 'redux/selectors/imageModalSelector';
 import { logoutSelector } from 'redux/selectors/rootSelector';
 import { setAppData } from 'redux/slices/appDataSlice';
-import { closeAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
 import { triggerUserLogOut } from 'redux/slices/mainReduxSlice';
 import { handleRemoteMessageReceived } from 'redux/slices/pubnubMessagesSlice';
 import { wrapper } from 'store';
@@ -137,10 +136,6 @@ const EasyApp = ({ Component, pageProps }) => {
 
   const handlePubnubMessageReceived = (message) => {
     dispatch(handleRemoteMessageReceived(message));
-  };
-
-  const handleAppointmentModalClose = () => {
-    dispatch(closeAppointmentModal());
   };
 
   const handleTawkMessengerLoad = () => {
