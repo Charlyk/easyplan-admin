@@ -31,6 +31,7 @@ const handler = async (apiCall, req, res) => {
     res.setHeader('Allow', ['GET', 'PUT', 'DELETE', 'POST']);
     if (error?.response != null) {
       const { status, statusText, data } = error.response;
+      console.log(data);
       const jsonResponse = {
         error: true,
         message: data?.message || statusText,

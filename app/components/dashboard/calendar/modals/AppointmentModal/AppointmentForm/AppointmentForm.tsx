@@ -260,16 +260,16 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ selectedDate }) => {
     const [endHours, endMinutes] = formData.endHour.split(':');
 
     const body = {
-      patientId: String(formData.patientId),
-      doctorId: String(formData.doctorId),
-      serviceId: String(formData.serviceId),
-      cabinetId: String(formData.cabinetId),
+      patientId: formData.patientId,
+      doctorId: formData.doctorId,
+      serviceId: formData.serviceId,
+      cabinetId: formData.cabinetId ?? null,
       startDate: String(addTimeToDate(selectedDate, startHours, startMinutes)),
       endDate: String(addTimeToDate(selectedDate, endHours, endMinutes)),
       isUrgent: formData.isUrgent,
       status: 'Pending',
       message: String(formData.notes),
-      scheduleId: String(formData.scheduleId),
+      scheduleId: formData.scheduleId,
     };
     dispatch(dispatchCreateAppointment(body));
     setWasSubmitClicked(true);
