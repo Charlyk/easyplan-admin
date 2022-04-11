@@ -37,7 +37,7 @@ import {
   currentClinicSelector,
   currentUserSelector,
 } from 'redux/selectors/appDataSelector';
-import { appointmentModalSelector } from 'redux/selectors/appointmentModalSelector';
+import { appointmentModalSelector } from 'redux/selectors/appointmentsSelector';
 import { imageModalSelector } from 'redux/selectors/imageModalSelector';
 import { logoutSelector } from 'redux/selectors/rootSelector';
 import { setAppData } from 'redux/slices/appDataSlice';
