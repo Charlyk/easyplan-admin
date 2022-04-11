@@ -35,13 +35,13 @@ jobs:
           cache: 'yarn'
 
 
-  - name: Install dependecies
-    uses: borales/actions-yarn@v2.3.0
-    with:
-      auth-token: ${{ secrets.NPM_AUTH_TOKEN }}
-      cmd: install
+      - name: Install dependecies
+        uses: borales/actions-yarn@v2.3.0
+        with:
+          auth-token: ${{ secrets.NPM_AUTH_TOKEN }}
+          cmd: install
 
-  - name: Build application
-    uses: borales/actions-yarn@v2.3.0
-    with:
-      cmd: build:testing
+      - name: Build application
+        uses: borales/actions-yarn@v2.3.0
+        with:
+          cmd: build:testing
