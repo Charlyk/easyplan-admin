@@ -1,7 +1,7 @@
 export type CreateAppointmentType = {
-  patientId: string;
+  patientId: string | number;
   doctorId: string | number;
-  serviceId: string;
+  serviceId: string | number;
   startDate: Date | string;
   endDate: Date | string;
   isUrgent: boolean;
