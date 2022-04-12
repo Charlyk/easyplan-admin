@@ -29,6 +29,7 @@ import {
   formDataSelector,
   newPatientModalOpenSelector,
 } from 'redux/selectors/appointmentsSelector';
+import { isScheduleLoadingSelector } from 'redux/selectors/scheduleSelector';
 import {
   setSelectedDate,
   dispatchFetchServices,
@@ -41,7 +42,6 @@ import {
 } from 'redux/slices/appointmentSlice';
 import { dispatchCreateAppointment } from 'redux/slices/calendarData';
 import { NewPatientPopper } from '../../NewPatientPopper';
-// import { isScheduleLoadingSelector } from 'redux/selectors/calendarSelector';
 import styles from './AppointmentForm.module.css';
 import { AppointmentFormProps } from './AppointmentForm.types';
 
@@ -51,7 +51,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ selectedDate }) => {
   const formData = useSelector(formDataSelector);
   const dispatch = useDispatch();
   const formatDate = useDateFormatter();
-  // const isScheduleLoading = useSelector(isScheduleLoadingSelector);
+  const isScheduleLoading = useSelector(isScheduleLoadingSelector);
 
   const { data: doctors, error: doctorsError } = useSelector(
     appointmentDoctorsSelector,
@@ -383,7 +383,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ selectedDate }) => {
             label={textForKey('appointment_create')}
             variant='contained'
             size='medium'
-            // loading={isScheduleLoading}
+            loading={isScheduleLoading}
             disabled={!isFormValid()}
           />
         </div>

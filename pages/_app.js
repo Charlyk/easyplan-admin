@@ -47,7 +47,6 @@ import { wrapper } from 'store';
 import 'moment/locale/ro';
 import 'app/styles/base/base.scss';
 import 'react-h5-audio-player/src/styles.scss';
-import 'react-awesome-lightbox/build/style.css';
 import 'app/utils';
 import { useAnalytics } from '../app/utils/hooks';
 

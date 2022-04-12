@@ -54,9 +54,11 @@ const calendarData = createSlice({
       state.isLoading = true;
     },
     setSchedules(state, action: PayloadAction<ScheduleItem[]>) {
+      state.isLoading = false;
       state.schedules = mapSchedules(action.payload);
     },
     addNewSchedule(state, action: PayloadAction<Schedule>) {
+      state.isLoading = false;
       const newSchedule = action.payload;
       const viewDate = moment(state.viewDate);
       const viewMode = state.viewMode;
@@ -104,6 +106,7 @@ const calendarData = createSlice({
       state.isLoading = false;
     },
     updateSchedule(state, action: PayloadAction<Schedule>) {
+      state.isLoading = false;
       const scheduleToUpdate = action.payload;
       state.schedules = state.schedules.map((item) => {
         if (!isScheduleInGroup(item, scheduleToUpdate)) {

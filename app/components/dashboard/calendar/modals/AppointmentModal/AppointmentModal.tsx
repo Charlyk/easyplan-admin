@@ -1,8 +1,13 @@
 import React, { useEffect, useMemo } from 'react';
-import { CalendarPreview, IconButton } from '@easyplanpro/easyplan-components';
+import {
+  CalendarPreview,
+  IconButton,
+  Typography,
+} from '@easyplanpro/easyplan-components';
 import { Modal, CircularProgress } from '@material-ui/core';
 import { format } from 'date-fns';
 import { useSelector, useDispatch } from 'react-redux';
+import { textForKey } from 'app/utils/localization';
 import {
   appointmentSelector,
   appointmentSchedulesSelector,
@@ -16,6 +21,24 @@ import {
 } from 'redux/slices/appointmentSlice';
 import NewAppointmentForm from './AppointmentForm/AppointmentForm';
 import styles from './AppointmentModal.module.scss';
+
+const placeholderHours = [
+  '00:00',
+  '00:30',
+  '00:00',
+  '00:30',
+  '00:00',
+  '00:30',
+  '00:00',
+  '00:30',
+  '00:00',
+  '00:30',
+  '00:00',
+  '00:30',
+  '00:00',
+  '00:30',
+  '00:00',
+];
 
 const AppointmentModal = () => {
   const dispatch = useDispatch();
@@ -56,12 +79,22 @@ const AppointmentModal = () => {
       <CalendarPreview
         calendarContainerProps={{
           hours: data?.hours,
-          schedules: data?.schedules,
+          schedules: [
+            {
+              ...data?.schedules[0],
+              holiday:
+                data?.schedules[0]?.holiday || data?.schedules[0]?.isDayOff,
+            },
+          ],
           canCreateSchedules: false,
         }}
       />
     ) : (
-      <div className={styles.placeholder} />
+      <div className={styles.placeholder}>
+        <Typography variant='titleXXLarge' color={'red'}>
+          {textForKey('day off')}
+        </Typography>
+      </div>
     );
 
   return modalProps.open ? (
@@ -80,7 +113,23 @@ const AppointmentModal = () => {
             <CircularProgress />
           </div>
         ) : (
-          calendarPreview
+          <CalendarPreview
+            calendarContainerProps={{
+              hours: data?.hours?.length > 0 ? data?.hours : placeholderHours,
+              schedules:
+                data?.schedules?.length > 0
+                  ? [
+                      {
+                        ...data?.schedules[0],
+                        holiday:
+                          data?.schedules[0]?.holiday ||
+                          data?.schedules[0]?.isDayOff,
+                      },
+                    ]
+                  : [],
+              canCreateSchedules: false,
+            }}
+          />
         )}
       </div>
     </Modal>

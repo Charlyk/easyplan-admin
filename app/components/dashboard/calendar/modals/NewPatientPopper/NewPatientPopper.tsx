@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   LoadingButton,
   PhoneField,
@@ -31,6 +31,7 @@ const NewPatientPopper: React.FC<NewPatientPopperProps> = ({
   const [formData, setFormData] = useState(blankFormData);
   const dispatch = useDispatch();
   const loading = useSelector(patientsLoadingSelector);
+  const [country, setCountry] = useState('md');
 
   const mappedPatientSources = useMemo(() => {
     const defaultOption = {
@@ -40,6 +41,14 @@ const NewPatientPopper: React.FC<NewPatientPopperProps> = ({
 
     return [defaultOption, ...PatientSources];
   }, []);
+
+  useEffect(() => {
+    const div = document.getElementById('country-menu');
+    if (!div) {
+      return;
+    }
+    div.style.zIndex = '2000';
+  });
 
   const handleSubmitForm = (evt: React.FormEvent) => {
     evt.preventDefault();
@@ -74,6 +83,9 @@ const NewPatientPopper: React.FC<NewPatientPopperProps> = ({
     phoneNumber: string,
     countryData: { name: string; dialCode: string; countryCode: string },
   ) => {
+    if (country !== countryData.countryCode) {
+      setCountry(countryData.countryCode);
+    }
     setFormData((formData) => ({
       ...formData,
       phoneNumber,
@@ -83,6 +95,7 @@ const NewPatientPopper: React.FC<NewPatientPopperProps> = ({
 
   return (
     <Popper
+      sx={{ zIndex: '20000' }}
       anchorEl={anchorEl as any}
       placement={placement as any}
       popperRef={popperRef as any}
@@ -97,6 +110,11 @@ const NewPatientPopper: React.FC<NewPatientPopperProps> = ({
               value={formData.fullName}
               fullWidth
               onChange={handleInputChange}
+              InputProps={{
+                inputProps: {
+                  maxLength: 40,
+                },
+              }}
             />
             <PhoneField
               label={textForKey('appointment_phone')}
@@ -104,7 +122,7 @@ const NewPatientPopper: React.FC<NewPatientPopperProps> = ({
               value={formData.phoneNumber}
               fullWidth
               onChange={handlePhoneInputChange}
-              defaultCountry='md'
+              defaultCountry={country}
             />
             <SelectMenu
               label={textForKey('appointment_source')}
