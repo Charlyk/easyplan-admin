@@ -83,6 +83,8 @@ const calendarData = createSlice({
             id: newSchedule.cabinetId ?? newSchedule.doctorId,
             groupId: newSchedule.cabinetId ?? newSchedule.doctorId,
             schedules: [newSchedule],
+            isDayOff: false,
+            holiday: false,
           },
         ];
       } else {
