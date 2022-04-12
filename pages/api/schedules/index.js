@@ -89,7 +89,6 @@ export default authorized(async (req, res) => {
     }
     case 'POST': {
       const data = await handler(createNewSchedule, req, res);
-      console.log(data);
       if (!data) {
         return;
       }
