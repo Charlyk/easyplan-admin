@@ -1,10 +1,10 @@
 import React from 'react';
-
 import IconMoney from '@material-ui/icons/AttachMoney';
 import IconClear from '@material-ui/icons/Clear';
 import DoneIcon from '@material-ui/icons/Done';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
 import IconFree from '@material-ui/icons/MoneyOff';
+import { enUS, ro, ru } from 'date-fns/locale';
 import moment from 'moment-timezone';
 
 import { environment } from 'eas.config';
@@ -549,3 +549,9 @@ export const colorArray = [
   '#FF4D4D',
   '#99E6E6',
 ];
+
+export const DateLocales = {
+  ro: ro,
+  ru: ru,
+  en: enUS,
+};

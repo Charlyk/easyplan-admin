@@ -40,6 +40,14 @@ import {
   createDealStateWatcher,
   deleteDealStateWatcher,
   dealDetailsWatcher,
+  createNewAppointmentWatcher,
+  fetchAppointmentEndHoursWatcher,
+  fetchAppointmentSchedulesWatcher,
+  fetchAppointmentServicesWatcher,
+  fetchAppointmentStartHoursWatcher,
+  fetchAppointmentDoctorsWatcher,
+  fetchFilteredPatientsWatcher,
+  createAppointmentPatientWatcher,
 } from './handlers';
 
 export default function* rootSaga() {
@@ -84,5 +92,13 @@ export default function* rootSaga() {
     createDealStateWatcher(),
     deleteDealStateWatcher(),
     dealDetailsWatcher(),
+    createNewAppointmentWatcher(),
+    fetchAppointmentStartHoursWatcher(),
+    fetchAppointmentEndHoursWatcher(),
+    fetchAppointmentSchedulesWatcher(),
+    fetchAppointmentServicesWatcher(),
+    fetchAppointmentDoctorsWatcher(),
+    fetchFilteredPatientsWatcher(),
+    createAppointmentPatientWatcher(),
   ]);
 }

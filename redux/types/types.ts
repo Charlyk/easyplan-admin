@@ -27,15 +27,21 @@ import {
   CrmFilterPatient,
   GroupedDeals,
   PatientTag,
-  DealDetailsView,
   CrmDealDetailsType,
+  WithQuery,
   PaginatedResponse,
 } from 'types';
+import {
+  AppointmentsDoctorsResponse,
+  AppointmentServiceResponse,
+  CalendarSchedulesResponse,
+} from 'types/api';
 
 export interface CalendarDataState {
   schedules: ScheduleItem[];
   details: ScheduleDetails;
   dayHours: string[];
+  isLoading: boolean;
   updateSchedule?: Schedule | null;
   deleteSchedule?: Schedule | null;
   closeDetails: boolean;
@@ -243,6 +249,35 @@ export interface CreateReminderModalState {
   searchType: 'Deal' | 'Schedule';
 }
 
+export interface AppointmentsState {
+  modalProps: {
+    open: boolean;
+  };
+  formData: {
+    patientId: number;
+    doctorId: number;
+    notes: string;
+    serviceId: number;
+    date: string;
+    startHour: string;
+    endHour: string;
+    isUrgent: boolean;
+    cabinetId: number;
+    scheduleId: number | null;
+  };
+  selectedDate: string | Date | null;
+  isLoading: boolean;
+  doctors: WithQuery<AppointmentsDoctorsResponse[]>;
+  services: WithQuery<AppointmentServiceResponse[]>;
+  startHours: WithQuery<string[]>;
+  endHours: WithQuery<string[]>;
+  schedules: WithQuery<CalendarSchedulesResponse>;
+  newPatientsModalOpen: boolean;
+}
+
+export type PatientsState = WithQuery<PaginatedResponse<Patient>>;
+export type PatientsAutocompleteState = WithQuery<Patient[]>;
+
 export interface ReduxState {
   updateCategories: boolean;
   updateServices: boolean;
@@ -291,4 +326,7 @@ export interface ReduxState {
   moizvonkiConnection: MoizvonkiConnectionState;
   crmFilters: CrmFiltersState;
   createReminderModal: CreateReminderModalState;
+  patients: PatientsState;
+  patientsAutocomplete: PatientsAutocompleteState;
+  appointments: AppointmentsState;
 }

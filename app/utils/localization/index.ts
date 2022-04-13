@@ -1,3 +1,4 @@
+import { AppLocale } from 'types';
 import strings from './strings/strings';
 
 /**
@@ -13,12 +14,12 @@ export function setAppLanguage(newLanguage) {
  * Get application language code
  * @return {string}
  */
-export function getAppLanguage() {
+export function getAppLanguage(): AppLocale {
   const lang =
     typeof localStorage !== 'undefined'
       ? localStorage.getItem('appLanguage')
       : null;
-  return lang ? lang : 'ro';
+  return lang ? (lang as AppLocale) : 'ro';
 }
 
 /**

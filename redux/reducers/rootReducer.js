@@ -11,6 +11,7 @@ import patientPurchases from 'app/components/dashboard/patients/PatientDetailsMo
 import clinicSettings from 'app/components/dashboard/settings/ApplicationSettings/ClinicSettings/ClinicSettings.reducer';
 import moizvonkiConnection from 'app/components/dashboard/settings/CrmSettings/Integrations/MoizvonkiIntegration/MoizvonkiIntegration.reducer';
 import appData from 'redux/slices/appDataSlice';
+import appointments from 'redux/slices/appointmentSlice';
 import cabinetsData from 'redux/slices/cabinetsData';
 import calendarData from 'redux/slices/calendarData';
 import clinicData from 'redux/slices/clinicDataSlice';
@@ -22,9 +23,11 @@ import doctorScheduleDetails from 'redux/slices/doctorScheduleDetailsSlice';
 import globalNotifications from 'redux/slices/globalNotificationsSlice';
 import main from 'redux/slices/mainReduxSlice';
 import patientList from 'redux/slices/patientsListSlice';
+import patients from 'redux/slices/patientsSlice';
 import pubnubMessages from 'redux/slices/pubnubMessagesSlice';
 import servicesList from 'redux/slices/servicesListSlice';
 import usersList from 'redux/slices/usersListSlice';
+import patientsAutocomplete from '../slices/patientsAutocompleteSlice';
 import addPaymentModal from './addPaymentModal';
 import calendar from './calendar';
 import clinic from './clinic';
@@ -81,6 +84,9 @@ const rootReducer = combineReducers({
   moizvonkiConnection,
   crmFilters,
   createReminderModal,
+  patients,
+  appointments,
+  patientsAutocomplete,
 });
 
 export default rootReducer;
