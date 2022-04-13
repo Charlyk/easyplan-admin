@@ -8,6 +8,11 @@ export const schedulesSelector = createSelector(
   (calendar) => calendar.schedules,
 );
 
+export const isScheduleLoadingSelector = createSelector(
+  calendarDataSelector,
+  (calendar) => calendar.isLoading,
+);
+
 export const filteredSchedulesSelector = createSelector(
   calendarDataSelector,
   (calendar) => {

@@ -4,12 +4,19 @@
 @import "~react-date-range/dist/styles.css";
 @import "~react-virtualized/styles.css";
 
+#country-menu {
+  z-index: 1401;
+}
+
 body {
   margin: 0;
   font-family: Inter, serif;
   font-style: normal;
   width: 100%;
   overflow: auto;
+  div#country-menu {
+    z-index: 2500 !important;
+  }
 
   ::-webkit-scrollbar {
     display: initial;

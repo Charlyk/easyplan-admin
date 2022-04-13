@@ -29,4 +29,6 @@ export interface ScheduleItem {
   id: number | string;
   groupId: number | string;
   schedules: Schedule[];
+  holiday: boolean;
+  isDayOff: boolean;
 }
