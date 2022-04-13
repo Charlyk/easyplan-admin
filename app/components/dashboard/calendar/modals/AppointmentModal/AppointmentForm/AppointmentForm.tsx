@@ -39,6 +39,7 @@ import {
   setAppointmentFormKeyValue,
   openNewPatientsModal,
   closeNewPatientsModal,
+  setEndHours,
 } from 'redux/slices/appointmentSlice';
 import { dispatchCreateAppointment } from 'redux/slices/calendarData';
 import { NewPatientPopper } from '../../NewPatientPopper';
@@ -168,7 +169,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ selectedDate }) => {
         startTime: formData.startHour,
       }),
     );
-  }, [formData.startHour, formData.serviceId]);
+  }, [formData.startHour, formData.serviceId, formData.date]);
 
   const isFormValid = () => {
     const isPatientValid = formData.patientId !== 0;
@@ -222,6 +223,10 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ selectedDate }) => {
       }),
     );
     dispatch(setSelectedDate(format(date, 'yyyy-MM-dd')));
+    dispatch(setStartHours([]));
+    dispatch(setEndHours([]));
+    dispatch(setAppointmentFormKeyValue({ key: 'startHour', value: '' }));
+    dispatch(setAppointmentFormKeyValue({ key: 'endHour', value: '' }));
   };
 
   const closeDatePopper = () => {
