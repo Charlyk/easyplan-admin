@@ -1,13 +1,8 @@
 import React, { useEffect, useMemo } from 'react';
-import {
-  CalendarPreview,
-  IconButton,
-  Typography,
-} from '@easyplanpro/easyplan-components';
+import { CalendarPreview, IconButton } from '@easyplanpro/easyplan-components';
 import { Modal, CircularProgress } from '@material-ui/core';
 import { format } from 'date-fns';
 import { useSelector, useDispatch } from 'react-redux';
-import { textForKey } from 'app/utils/localization';
 import {
   appointmentSelector,
   appointmentSchedulesSelector,
@@ -52,6 +47,24 @@ const AppointmentModal = () => {
     return initialDate ? new Date(initialDate) : new Date();
   }, [initialDate]);
 
+  const scheduleGroup = useMemo(() => {
+    if (data.schedules.length === 0)
+      return {
+        schedules: [],
+        groupId: '',
+        id: '',
+        holiday: false,
+        isDayOff: false,
+      };
+
+    const scheduleGroup = data.schedules[0];
+
+    return {
+      ...scheduleGroup,
+      holiday: scheduleGroup?.isDayOff || scheduleGroup?.holiday,
+    };
+  }, [data]);
+
   useEffect(() => {
     dispatch(dispatchFetchDoctors());
   }, []);
@@ -85,9 +98,7 @@ const AppointmentModal = () => {
           />
           <NewAppointmentForm
             selectedDate={new Date(selectedDate ?? '')}
-            disableSubmit={
-              data?.schedules[0]?.isDayOff || data?.schedules[0]?.holiday
-            }
+            disableSubmit={scheduleGroup.holiday}
           />
         </div>
         {schedulesLoading ? (
@@ -98,17 +109,7 @@ const AppointmentModal = () => {
           <CalendarPreview
             calendarContainerProps={{
               hours: data?.hours?.length > 0 ? data?.hours : placeholderHours,
-              schedules:
-                data?.schedules?.length > 0
-                  ? [
-                      {
-                        ...data?.schedules[0],
-                        holiday:
-                          data?.schedules[0]?.holiday ||
-                          data?.schedules[0]?.isDayOff,
-                      },
-                    ]
-                  : [],
+              schedules: data?.schedules?.length > 0 ? [scheduleGroup] : [],
               canCreateSchedules: false,
             }}
           />
