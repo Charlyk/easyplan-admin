@@ -74,29 +74,6 @@ const AppointmentModal = () => {
     dispatch(resetAppointmentsState());
   };
 
-  const calendarPreview =
-    data?.hours.length > 1 ? (
-      <CalendarPreview
-        calendarContainerProps={{
-          hours: data?.hours,
-          schedules: [
-            {
-              ...data?.schedules[0],
-              holiday:
-                data?.schedules[0]?.holiday || data?.schedules[0]?.isDayOff,
-            },
-          ],
-          canCreateSchedules: false,
-        }}
-      />
-    ) : (
-      <div className={styles.placeholder}>
-        <Typography variant='titleXXLarge' color={'red'}>
-          {textForKey('day off')}
-        </Typography>
-      </div>
-    );
-
   return modalProps.open ? (
     <Modal open={modalProps.open} className={styles.modal} disableEnforceFocus>
       <div className={styles.modalContent}>
@@ -106,7 +83,12 @@ const AppointmentModal = () => {
             className={styles.iconButton}
             onClick={handleClose}
           />
-          <NewAppointmentForm selectedDate={new Date(selectedDate ?? '')} />
+          <NewAppointmentForm
+            selectedDate={new Date(selectedDate ?? '')}
+            disableSubmit={
+              data?.schedules[0]?.isDayOff || data?.schedules[0]?.holiday
+            }
+          />
         </div>
         {schedulesLoading ? (
           <div className={styles.loaderContainer}>
