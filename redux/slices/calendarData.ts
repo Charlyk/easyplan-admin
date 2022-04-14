@@ -69,7 +69,13 @@ const calendarData = createSlice({
         (viewMode === 'week' && viewDate.isSame(scheduleDate, 'week')) ||
         (viewMode === 'month' && viewDate.isSame(scheduleDate, 'month'));
 
-      if (!canAddSchedule) {
+      const isScheduleAlreadyAdded = state.schedules.some((scheduleGroup) =>
+        scheduleGroup.schedules.some(
+          (schedule) => schedule.id === newSchedule.id,
+        ),
+      );
+
+      if (!canAddSchedule || isScheduleAlreadyAdded) {
         return state;
       }
 

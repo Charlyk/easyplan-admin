@@ -1,5 +1,6 @@
 export type AppointmentFormProps = {
   selectedDate: Date | string;
+  disableSubmit?: boolean;
 };
 
 export type FormData = {

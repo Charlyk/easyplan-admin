@@ -46,7 +46,10 @@ import { NewPatientPopper } from '../../NewPatientPopper';
 import styles from './AppointmentForm.module.css';
 import { AppointmentFormProps } from './AppointmentForm.types';
 
-const AppointmentForm: React.FC<AppointmentFormProps> = ({ selectedDate }) => {
+const AppointmentForm: React.FC<AppointmentFormProps> = ({
+  selectedDate,
+  disableSubmit = false,
+}) => {
   const inputRef = useRef<HTMLDivElement | null>(null);
   const newClientRef = useRef<HTMLButtonElement>(null);
   const formData = useSelector(formDataSelector);
@@ -109,7 +112,13 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ selectedDate }) => {
 
   useEffect(() => {
     if (!selectedDate) return;
-    handleDateChange(selectedDate);
+    dispatch(
+      setAppointmentFormKeyValue({
+        key: 'date',
+        value: formatDate(selectedDate, false, 'dd MMMM yyyy'),
+      }),
+    );
+    dispatch(setSelectedDate(format(new Date(selectedDate), 'yyyy-MM-dd')));
     if (formData.startHour !== '') {
       dispatch(setStartHours([formData.startHour]));
     }
@@ -223,10 +232,6 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ selectedDate }) => {
       }),
     );
     dispatch(setSelectedDate(format(date, 'yyyy-MM-dd')));
-    dispatch(setStartHours([]));
-    dispatch(setEndHours([]));
-    dispatch(setAppointmentFormKeyValue({ key: 'startHour', value: '' }));
-    dispatch(setAppointmentFormKeyValue({ key: 'endHour', value: '' }));
   };
 
   const closeDatePopper = () => {
@@ -344,6 +349,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ selectedDate }) => {
             name='startHour'
             value={formData.startHour}
             onChange={handleHourChange}
+            disabled={disableSubmit}
           />
           <SelectMenu
             options={mappedEndHours}
@@ -353,6 +359,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ selectedDate }) => {
             sx={{ marginTop: '1em' }}
             value={formData.endHour}
             onChange={handleHourChange}
+            disabled={disableSubmit}
           />
         </div>
         {startHoursError && (
@@ -389,7 +396,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ selectedDate }) => {
             variant='contained'
             size='medium'
             loading={isScheduleLoading}
-            disabled={!isFormValid()}
+            disabled={!isFormValid() || disableSubmit}
           />
         </div>
       </form>
