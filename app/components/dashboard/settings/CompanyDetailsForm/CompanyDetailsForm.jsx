@@ -228,6 +228,7 @@ const CompanyDetailsForm = ({ countries }) => {
         description: data.description,
         workdays: data.workdays,
         hasBrackets: data.hasBrackets,
+        timeZone: data.timeZone,
       };
       const response = await updateClinic(requestBody, data.logoFile, {
         [HeaderKeys.authorization]: authToken,
