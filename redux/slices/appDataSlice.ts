@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { HYDRATE } from 'next-redux-wrapper';
 import initialState from 'redux/initialState';
 import { AppDataState } from 'redux/types';
-import { CurrentClinic } from 'types';
+import { AppLocale, CurrentClinic } from 'types';
 import {
   AppDataRequest,
   AppDataResponse,
@@ -85,6 +85,12 @@ const appDataSlice = createSlice({
     updateIsEmailChanged(state, action: PayloadAction<boolean>) {
       state.isEmailChanged = action.payload;
     },
+    dispatchUpdateUserLanguage(state, _action: PayloadAction<AppLocale>) {
+      return state;
+    },
+    setNewAppLanguage(state, action: PayloadAction<AppLocale>) {
+      state.currentUser = { ...state.currentUser, language: action.payload };
+    },
   },
   extraReducers: {
     [HYDRATE]: (state, action) => {
@@ -111,6 +117,8 @@ export const {
   setCurrentEntities,
   dispatchChangeDoctorCalendarOrder,
   updateIsEmailChanged,
+  dispatchUpdateUserLanguage,
+  setNewAppLanguage,
 } = appDataSlice.actions;
 
 export default appDataSlice.reducer;
