@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import moment from 'moment-timezone';
+import { useSelector } from 'react-redux';
 import { textForKey } from 'app/utils/localization';
+import { viewDateSelector } from 'redux/selectors/scheduleSelector';
 import styles from './CalendarNoDataView.module.scss';
 
 interface CalendarNoDataViewProps {
@@ -14,7 +16,12 @@ const CalendarNoDataView: React.FC<CalendarNoDataViewProps> = ({
   showButton,
   onSetupHours,
 }) => {
-  const date = moment().format('DD MMM YYYY');
+  const selectedDate = useSelector(viewDateSelector);
+
+  const date = useMemo(() => {
+    return moment(selectedDate ?? '').format('DD MMM YYYY');
+  }, [selectedDate]);
+
   return (
     <div className={styles.calendarNoDataView}>
       <Typography className={styles.dayOffLabel}>

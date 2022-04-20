@@ -1,6 +1,7 @@
 import {
   call,
   put,
+  select,
   SagaReturnType,
   takeLatest,
 } from '@redux-saga/core/effects';
@@ -38,6 +39,7 @@ import {
 import {
   addNewSchedule,
   dispatchCreateAppointment,
+  updateSchedule,
 } from 'redux/slices/calendarData';
 import {
   setSearchedPatients,
@@ -49,6 +51,7 @@ import {
   CreateAppointmentType,
   CreatePatientBody,
 } from 'types/api';
+import { schedulesSelector } from '../../../selectors/scheduleSelector';
 
 function* handleFetchAppointmentSchedules(
   action: PayloadAction<{ start: string; end: string; doctorId: string }>,
@@ -74,7 +77,18 @@ function* handleCreateAppointment(
   try {
     const response: SagaReturnType<typeof postCreateNewAppointment> =
       yield call(postCreateNewAppointment, action.payload);
-    yield put(addNewSchedule(response.data));
+    const schedules = yield select(schedulesSelector);
+
+    const isScheduleAlreadyAdded = schedules.some((scheduleGroup) =>
+      scheduleGroup.schedules.some(
+        (schedule) => schedule.id === response?.data?.id,
+      ),
+    );
+    if (isScheduleAlreadyAdded) {
+      yield put(updateSchedule(response.data));
+    } else {
+      yield put(addNewSchedule(response.data));
+    }
     yield put(closeAppointmentModal());
     yield put(resetAppointmentsState());
   } catch (error) {

@@ -9,6 +9,8 @@
   padding-top: 1rem;
   padding-bottom: 1rem;
 
+
+
   .settings-menu-item {
     user-select: none;
     outline: none;
@@ -53,3 +55,9 @@
     }
   }
 }
+
+.activeBtn {
+  background-color: #3a83dc !important;
+  color: white !important;
+}
+

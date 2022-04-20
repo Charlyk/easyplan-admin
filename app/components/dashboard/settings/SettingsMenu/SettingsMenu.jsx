@@ -1,15 +1,28 @@
 import React from 'react';
 import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 import IconNext from 'app/components/icons/iconNext';
 import { Role } from 'app/utils/constants';
+import { AppLanguages } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
+import { setAppLanguage } from 'app/utils/localization';
+import { appLanguageSelector } from 'redux/selectors/appDataSelector';
+import { dispatchUpdateUserLanguage } from 'redux/slices/appDataSlice';
 import styles from './SettingsMenu.module.scss';
 
 const SettingsMenu = ({ onSelect, currentOption, selectedClinic }) => {
+  const dispatch = useDispatch();
+  const appLanguage = useSelector(appLanguageSelector);
   const isSelected = (type) => {
     return currentOption === type;
+  };
+
+  const handleLanguageButtonClick = (key) => {
+    setAppLanguage(key);
+    dispatch(dispatchUpdateUserLanguage(key));
   };
 
   return (
@@ -121,6 +134,18 @@ const SettingsMenu = ({ onSelect, currentOption, selectedClinic }) => {
         <div className={styles['next-arrow']}>
           {isSelected('securitySettings') && <IconNext />}
         </div>
+      </Box>
+      <Box className={clsx(styles['settings-menu-item'])}>
+        {AppLanguages.map((key) => (
+          <Button
+            id={key}
+            key={key}
+            onClick={() => handleLanguageButtonClick(key)}
+            className={clsx({ [styles.activeBtn]: key === appLanguage })}
+          >
+            {key}
+          </Button>
+        ))}
       </Box>
     </div>
   );
