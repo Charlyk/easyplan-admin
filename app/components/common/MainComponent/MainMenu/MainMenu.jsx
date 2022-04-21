@@ -307,7 +307,17 @@ const MainMenu = ({ currentPath, onCreateClinic }) => {
             );
           } else if (item.type === 'link') {
             return (
-              <Link passHref href={item.href} key={item.id}>
+              <Link
+                passHref
+                href={
+                  item.id !== 'settings'
+                    ? item.href
+                    : userClinic.RoleInClinic === Role.reception
+                    ? '/settings/account-settings'
+                    : '/settings/company-details'
+                }
+                key={item.id}
+              >
                 <ListItem
                   classes={{ root: styles.listItem, selected: styles.selected }}
                   selected={isActive(item.href)}
