@@ -10,7 +10,6 @@ import {
   TextField,
   SelectMenu,
   Typography,
-  Button,
   Checkbox,
   CalendarPopper,
   LoadingButton,
@@ -27,7 +26,6 @@ import {
   appointmentServicesSelector,
   appointmentStartHoursSelector,
   formDataSelector,
-  newPatientModalOpenSelector,
 } from 'redux/selectors/appointmentsSelector';
 import { isScheduleLoadingSelector } from 'redux/selectors/scheduleSelector';
 import {
@@ -37,12 +35,9 @@ import {
   dispatchFetchEndHours,
   setStartHours,
   setAppointmentFormKeyValue,
-  openNewPatientsModal,
-  closeNewPatientsModal,
   setEndHours,
 } from 'redux/slices/appointmentSlice';
 import { dispatchCreateAppointment } from 'redux/slices/calendarData';
-import { NewPatientPopper } from '../../NewPatientPopper';
 import styles from './AppointmentForm.module.css';
 import { AppointmentFormProps } from './AppointmentForm.types';
 
@@ -51,7 +46,6 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
   disableSubmit = false,
 }) => {
   const inputRef = useRef<HTMLDivElement | null>(null);
-  const newClientRef = useRef<HTMLButtonElement>(null);
   const formData = useSelector(formDataSelector);
   const dispatch = useDispatch();
   const formatDate = useDateFormatter();
@@ -72,7 +66,6 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
   const { data: endHours, error: endHoursError } = useSelector(
     appointmentEndHoursSelector,
   );
-  const newPatientPopperOpen = useSelector(newPatientModalOpenSelector);
   const [wasSubmitClicked, setWasSubmitClicked] = useState(false);
   const [popperOpen, setPopperOpen] = useState(false);
 
@@ -259,14 +252,6 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
     );
   };
 
-  const handleNewPatientClick = () => {
-    dispatch(openNewPatientsModal());
-  };
-
-  const handleNewPatientClose = () => {
-    dispatch(closeNewPatientsModal());
-  };
-
   const handleFormSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     if (selectedDate === null) return;
@@ -300,13 +285,6 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
           className={styles.noMargin}
           onSelect={onPatientSelect}
           value={formData.patientId}
-        />
-        <Button
-          ref={newClientRef}
-          variant='text'
-          label={`${textForKey('new patient')}?`}
-          size='small'
-          onClick={handleNewPatientClick}
         />
         <SelectMenu
           options={doctorsMappedToOptionStructure}
@@ -404,15 +382,6 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
           />
         </div>
       </form>
-      {newPatientPopperOpen && (
-        <NewPatientPopper
-          anchorEl={newClientRef.current}
-          open={newPatientPopperOpen}
-          className={styles.newPatientPopper}
-          placement='right'
-          onClose={handleNewPatientClose}
-        />
-      )}
       <CalendarPopper
         locale='ro'
         open={popperOpen}
