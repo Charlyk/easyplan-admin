@@ -73,12 +73,7 @@ const AppointmentModal = () => {
   }, []);
 
   useEffect(() => {
-    if (
-      !formData?.doctorId ||
-      formData?.doctorId === -1 ||
-      formData.doctorId === ''
-    )
-      return;
+    if (!formData?.doctorId || formData?.doctorId === -1) return;
     const formattedDate = format(new Date(selectedDate), 'yyyy-MM-dd');
 
     dispatch(
