@@ -54,7 +54,7 @@ const PatientsAutocomplete: React.FC<PatientsAutocompleteProps> = ({
   const mappedOptions = useMemo(() => {
     const defaultOption = {
       id: -1,
-      fullName: `${textForKey('no options')}`,
+      fullName: `${textForKey('appointment_placeholder')}`,
     };
     const addNewPatientOption = {
       id: 0,
@@ -62,7 +62,7 @@ const PatientsAutocomplete: React.FC<PatientsAutocompleteProps> = ({
     };
     if (data.length === 0)
       return requestInitiated.current ? [addNewPatientOption] : [defaultOption];
-    return data as unknown as OptionType[];
+    return [...data, addNewPatientOption] as unknown as OptionType[];
   }, [data, loading, requestInitiated.current]);
 
   const handleValueChange = useCallback(
