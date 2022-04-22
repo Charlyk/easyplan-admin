@@ -225,10 +225,6 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
       }),
     );
     dispatch(setSelectedDate(format(date, 'yyyy-MM-dd')));
-    dispatch(setStartHours([]));
-    dispatch(setEndHours([]));
-    dispatch(setAppointmentFormKeyValue({ key: 'startHour', value: '' }));
-    dispatch(setAppointmentFormKeyValue({ key: 'endHour', value: '' }));
   };
 
   const closeDatePopper = () => {

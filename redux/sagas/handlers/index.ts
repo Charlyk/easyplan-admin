@@ -19,3 +19,4 @@ export * from './clinicSettings';
 export * from './moizvonki';
 export * from './crmFilters';
 export * from './appointments';
+export * from './user';

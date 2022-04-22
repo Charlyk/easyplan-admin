@@ -46,6 +46,11 @@ export const filteredSchedulesSelector = createSelector(
   },
 );
 
+export const viewDateSelector = createSelector(
+  calendarDataSelector,
+  (calendar) => calendar.viewDate,
+);
+
 export const filterDataSelector = createSelector(
   calendarDataSelector,
   (calendar) => calendar.filterData,
