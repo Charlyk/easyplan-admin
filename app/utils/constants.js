@@ -555,3 +555,5 @@ export const DateLocales = {
   ru: ru,
   en: enUS,
 };
+
+export const AppLanguages = ['ro', 'ru', 'en'];
