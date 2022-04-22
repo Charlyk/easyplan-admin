@@ -20,8 +20,8 @@ import {
   resetData,
 } from 'redux/slices/patientsAutocompleteSlice';
 import { PatientsAutocompleteProps } from '.';
-import styles from '../../dashboard/calendar/modals/AppointmentModal/AppointmentForm/AppointmentForm.module.css';
 import { NewPatientPopper } from '../NewPatientPopper';
+import styles from './PatientsAutocomplete.module.css';
 
 const PatientsAutocomplete: React.FC<PatientsAutocompleteProps> = ({
   className,
