@@ -135,7 +135,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
   }, [formData.doctorId]);
 
   useEffect(() => {
-    if (selectedDate && formData.serviceId !== 0) {
+    if (selectedDate && formData.serviceId !== 0 && formData.doctorId !== -1) {
       dispatch(
         dispatchFetchStartHours({
           doctorId: String(formData.doctorId),
