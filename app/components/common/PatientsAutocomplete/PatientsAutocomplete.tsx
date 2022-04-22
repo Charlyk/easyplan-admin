@@ -1,4 +1,10 @@
-import React, { useCallback, useMemo } from 'react';
+import React, {
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+  useEffect,
+} from 'react';
 import {
   EASAutocomplete,
   OptionType,
@@ -14,6 +20,8 @@ import {
   resetData,
 } from 'redux/slices/patientsAutocompleteSlice';
 import { PatientsAutocompleteProps } from '.';
+import { NewPatientPopper } from '../NewPatientPopper';
+import styles from './PatientsAutocomplete.module.css';
 
 const PatientsAutocomplete: React.FC<PatientsAutocompleteProps> = ({
   className,
@@ -21,7 +29,15 @@ const PatientsAutocomplete: React.FC<PatientsAutocompleteProps> = ({
   value,
 }) => {
   const dispatch = useDispatch();
+  const newClientRef = useRef<HTMLDivElement>(null);
+  const requestInitiated = useRef(false);
+  const [newPatientPopperOpen, setNewPatientPopperOpen] = useState(false);
   const { data, loading } = useSelector(patientsAutocompleteSelector);
+
+  useEffect(() => {
+    if (!loading) return;
+    requestInitiated.current = true;
+  }, [loading]);
 
   const selectedPatient = useMemo(() => {
     if (!data)
@@ -37,19 +53,23 @@ const PatientsAutocomplete: React.FC<PatientsAutocompleteProps> = ({
 
   const mappedOptions = useMemo(() => {
     const defaultOption = {
-      id: 0,
-      fullName: textForKey('appointment.noPatient'),
+      id: -1,
+      fullName: `${textForKey('appointment_placeholder')}`,
     };
-    if (!data) return [defaultOption];
-
-    return data as unknown as OptionType[];
-  }, [data]);
+    const addNewPatientOption = {
+      id: 0,
+      fullName: `${textForKey('new patient')} +`,
+    };
+    if (data.length === 0)
+      return requestInitiated.current ? [addNewPatientOption] : [defaultOption];
+    return [...data, addNewPatientOption] as unknown as OptionType[];
+  }, [data, loading, requestInitiated.current]);
 
   const handleValueChange = useCallback(
     debounce((evt: React.ChangeEvent<HTMLInputElement>) => {
       const query = evt.target.value;
 
-      if (query.length > 3) {
+      if (query.length >= 1) {
         dispatch(dispatchFetchFilteredPatients(evt.target.value));
       } else {
         dispatch(resetData());
@@ -58,11 +78,22 @@ const PatientsAutocomplete: React.FC<PatientsAutocompleteProps> = ({
     [],
   );
 
+  const handleNewPatientClose = () => {
+    setNewPatientPopperOpen(false);
+  };
+
+  const handleNewPatientClick = () => {
+    setNewPatientPopperOpen(true);
+  };
+
   const filterOptions = (options: any) => options;
 
   const renderOption = (props: any, option: any) => {
     return (
-      <MenuItem {...props}>
+      <MenuItem
+        {...props}
+        onClick={option.id === 0 ? handleNewPatientClick : props.onClick}
+      >
         <Typography variant='bodySmall'>{option.fullName}</Typography>
       </MenuItem>
     );
@@ -77,7 +108,7 @@ const PatientsAutocomplete: React.FC<PatientsAutocompleteProps> = ({
   };
 
   return (
-    <div className={className}>
+    <div className={className} ref={newClientRef}>
       <EASAutocomplete
         loading={loading}
         options={(mappedOptions as any) ?? []}
@@ -92,6 +123,13 @@ const PatientsAutocomplete: React.FC<PatientsAutocompleteProps> = ({
         placeholder={textForKey('appointment_placeholder')}
         fullWidth
         value={selectedPatient}
+      />
+      <NewPatientPopper
+        anchorEl={newClientRef.current}
+        open={newPatientPopperOpen}
+        className={styles.newPatientPopper}
+        placement='right'
+        onClose={handleNewPatientClose}
       />
     </div>
   );

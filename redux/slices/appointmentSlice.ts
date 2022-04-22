@@ -110,10 +110,23 @@ const appointmentsModalSlice = createSlice({
         value: number | string | boolean;
       }>,
     ) {
+      const { key, value } = action.payload;
+
       state.formData = {
         ...state.formData,
-        [action.payload.key]: action.payload.value,
+        [key]: value,
       };
+
+      const shouldEraseErrors =
+        key === 'date' ||
+        key === 'startHour' ||
+        key === 'endHour' ||
+        key === 'doctorId';
+
+      if (shouldEraseErrors) {
+        state.startHours.error = null;
+        state.endHours.error = null;
+      }
     },
     setAppointmentFormData(
       state,
