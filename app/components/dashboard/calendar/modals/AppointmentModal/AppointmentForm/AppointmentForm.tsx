@@ -35,7 +35,6 @@ import {
   dispatchFetchEndHours,
   setStartHours,
   setAppointmentFormKeyValue,
-  setEndHours,
 } from 'redux/slices/appointmentSlice';
 import { dispatchCreateAppointment } from 'redux/slices/calendarData';
 import styles from './AppointmentForm.module.css';
