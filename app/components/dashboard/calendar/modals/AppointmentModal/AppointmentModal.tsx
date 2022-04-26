@@ -8,6 +8,7 @@ import {
   appointmentSelector,
   appointmentSchedulesSelector,
   formDataSelector,
+  appointmentStartHoursSelector,
 } from 'redux/selectors/appointmentsSelector';
 import {
   closeAppointmentModal,
@@ -42,6 +43,7 @@ const AppointmentModal = () => {
   const dispatch = useDispatch();
   const { selectedDate: initialDate, modalProps } =
     useSelector(appointmentSelector);
+  const { data: startHours } = useSelector(appointmentStartHoursSelector);
   const formData = useSelector(formDataSelector);
   const { data, loading: schedulesLoading } = useSelector(
     appointmentSchedulesSelector,
@@ -124,7 +126,9 @@ const AppointmentModal = () => {
                     value: approximatedHour,
                   }),
                 );
-                dispatch(setStartHours([approximatedHour]));
+                if (!startHours.some((hour) => hour === approximatedHour)) {
+                  dispatch(setStartHours([approximatedHour]));
+                }
               },
             }}
           />
