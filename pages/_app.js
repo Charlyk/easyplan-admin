@@ -248,8 +248,6 @@ const EasyApp = ({ Component, pageProps }) => {
     dispatch(closeChangeLogModal());
   };
 
-  console.log(locale);
-
   return (
     <React.Fragment>
       <Head>
