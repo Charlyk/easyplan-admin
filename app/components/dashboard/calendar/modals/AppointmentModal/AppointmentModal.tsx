@@ -3,6 +3,7 @@ import { CalendarPreview, IconButton } from '@easyplanpro/easyplan-components';
 import { Modal, CircularProgress } from '@material-ui/core';
 import { format } from 'date-fns';
 import { useSelector, useDispatch } from 'react-redux';
+import approximateTime from 'app/utils/approximateTime';
 import {
   appointmentSelector,
   appointmentSchedulesSelector,
@@ -13,6 +14,8 @@ import {
   dispatchFetchDoctors,
   resetAppointmentsState,
   dispatchFetchAppointmentSchedules,
+  setAppointmentFormKeyValue,
+  setStartHours,
 } from 'redux/slices/appointmentSlice';
 import NewAppointmentForm from './AppointmentForm/AppointmentForm';
 import styles from './AppointmentModal.module.scss';
@@ -110,7 +113,17 @@ const AppointmentModal = () => {
             calendarContainerProps={{
               hours: data?.hours?.length > 0 ? data?.hours : placeholderHours,
               schedules: data?.schedules?.length > 0 ? [scheduleGroup] : [],
-              canCreateSchedules: false,
+              canCreateSchedules: true,
+              onCreateSchedule: (_: string | Date, hour: string) => {
+                const approximatedHour = approximateTime(hour, 5);
+                dispatch(
+                  setAppointmentFormKeyValue({
+                    key: 'startHour',
+                    value: approximatedHour,
+                  }),
+                );
+                dispatch(setStartHours([approximatedHour]));
+              },
             }}
           />
         )}
