@@ -1,152 +1,81 @@
 import React from 'react';
 import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
+// import { useDispatch, useSelector } from 'react-redux';
 import IconNext from 'app/components/icons/iconNext';
 import { Role } from 'app/utils/constants';
-import { AppLanguages } from 'app/utils/constants';
+// import { AppLanguages } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
-import { setAppLanguage } from 'app/utils/localization';
-import { appLanguageSelector } from 'redux/selectors/appDataSelector';
-import { dispatchUpdateUserLanguage } from 'redux/slices/appDataSlice';
+// import { setAppLanguage } from 'app/utils/localization';
+// import { appLanguageSelector } from 'redux/selectors/appDataSelector';
+// import { dispatchUpdateUserLanguage } from 'redux/slices/appDataSlice';
 import styles from './SettingsMenu.module.scss';
 
+const managersMenuItems = [
+  { name: 'Company Details', url: 'company-details' },
+  { name: 'Application settings', url: 'app-settings' },
+  { name: 'crm_settings', url: 'crm-settings' },
+  { name: 'Braces settings', url: 'braces-settings' },
+  { name: 'Working hours', url: 'working-hours' },
+];
+
+const generalMenuItems = [
+  { name: 'Account settings', url: 'account-settings' },
+  { name: 'Security settings', url: 'security-settings' },
+];
+
 const SettingsMenu = ({ onSelect, currentOption, selectedClinic }) => {
-  const dispatch = useDispatch();
-  const appLanguage = useSelector(appLanguageSelector);
+  // const dispatch = useDispatch();
+  // const appLanguage = useSelector(appLanguageSelector);
   const isSelected = (type) => {
     return currentOption === type;
   };
 
-  const handleLanguageButtonClick = (key) => {
-    setAppLanguage(key);
-    dispatch(dispatchUpdateUserLanguage(key));
-  };
+  // const handleLanguageButtonClick = (key) => {
+  //   setAppLanguage(key);
+  //   dispatch(dispatchUpdateUserLanguage(key));
+  // };
 
   return (
     <div className={styles['settings-menu']}>
-      {[Role.admin, Role.manager].includes(selectedClinic?.roleInClinic) && (
-        <Box
-          onClick={() => onSelect('companyDetails')}
-          className={clsx(
-            styles['settings-menu-item'],
-            isSelected('companyDetails') && styles.selected,
-          )}
-        >
-          <span className={styles['item-title']}>
-            {textForKey('Company details')}
-          </span>
-          <div className={styles['next-arrow']}>
-            {isSelected('companyDetails') && <IconNext />}
-          </div>
-        </Box>
-      )}
-      {[Role.admin, Role.manager].includes(selectedClinic?.roleInClinic) && (
-        <Box
-          onClick={() => onSelect('appSettings')}
-          className={clsx(
-            styles['settings-menu-item'],
-            isSelected('appSettings') && styles.selected,
-          )}
-        >
-          <span className={styles['item-title']}>
-            {textForKey('Application settings')}
-          </span>
-          <div className={styles['next-arrow']}>
-            {isSelected('appSettings') && <IconNext />}
-          </div>
-        </Box>
-      )}
-      {[Role.admin, Role.manager].includes(selectedClinic?.roleInClinic) && (
-        <Box
-          onClick={() => onSelect('crmSettings')}
-          className={clsx(
-            styles['settings-menu-item'],
-            isSelected('crmSettings') && styles.selected,
-          )}
-        >
-          <span className={styles['item-title']}>
-            {textForKey('crm_settings')}
-          </span>
-          <div className={styles['next-arrow']}>
-            {isSelected('crmSettings') && <IconNext />}
-          </div>
-        </Box>
-      )}
-      {[Role.admin, Role.manager].includes(selectedClinic?.roleInClinic) && (
-        <Box
-          onClick={() => onSelect('bracesSettings')}
-          className={clsx(
-            styles['settings-menu-item'],
-            isSelected('bracesSettings') && styles.selected,
-          )}
-        >
-          <span className={styles['item-title']}>
-            {textForKey('Braces settings')}
-          </span>
-          <div className={styles['next-arrow']}>
-            {isSelected('bracesSettings') && <IconNext />}
-          </div>
-        </Box>
-      )}
-      {[Role.admin, Role.manager].includes(selectedClinic?.roleInClinic) && (
-        <Box
-          onClick={() => onSelect('workingHours')}
-          className={clsx(
-            styles['settings-menu-item'],
-            isSelected('workingHours') && styles.selected,
-          )}
-        >
-          <span className={styles['item-title']}>
-            {textForKey('Working hours')}
-          </span>
-          <div className={styles['next-arrow']}>
-            {isSelected('workingHours') && <IconNext />}
-          </div>
-        </Box>
-      )}
-      <Box
-        onClick={() => onSelect('accountSettings')}
-        className={clsx(
-          styles['settings-menu-item'],
-          isSelected('accountSettings') && styles.selected,
-        )}
-      >
-        <span className={styles['item-title']}>
-          {textForKey('Account settings')}
-        </span>
-        <div className={styles['next-arrow']}>
-          {isSelected('accountSettings') && <IconNext />}
-        </div>
-      </Box>
-      <Box
-        onClick={() => onSelect('securitySettings')}
-        className={clsx(
-          styles['settings-menu-item'],
-          isSelected('securitySettings') && styles.selected,
-        )}
-      >
-        <span className={styles['item-title']}>
-          {textForKey('Security settings')}
-        </span>
-        <div className={styles['next-arrow']}>
-          {isSelected('securitySettings') && <IconNext />}
-        </div>
-      </Box>
-      <Box className={clsx(styles['settings-menu-item'])}>
-        {AppLanguages.map((key) => (
-          <Button
-            id={key}
-            key={key}
-            onClick={() => handleLanguageButtonClick(key)}
-            className={clsx({ [styles.activeBtn]: key === appLanguage })}
+      {[
+        ...([Role.admin, Role.manager].includes(selectedClinic?.roleInClinic)
+          ? managersMenuItems
+          : []),
+        ...generalMenuItems,
+      ].map((menuItem) => {
+        const isActive = isSelected(menuItem.url);
+        return (
+          <Box
+            key={menuItem.url}
+            onClick={() => onSelect(menuItem.url)}
+            className={clsx(styles['settings-menu-item'], {
+              [styles.selected]: isActive,
+            })}
           >
-            {key}
-          </Button>
-        ))}
-      </Box>
+            <span className={styles['item-title']}>
+              {textForKey(menuItem.name)}
+            </span>
+            <div className={styles['next-arrow']}>
+              {isActive && <IconNext />}
+            </div>
+          </Box>
+        );
+      })}
+      {/*<Box className={clsx(styles['settings-menu-item'])}>*/}
+      {/*  {AppLanguages.map((key) => (*/}
+      {/*    <Button*/}
+      {/*      id={key}*/}
+      {/*      key={key}*/}
+      {/*      onClick={() => handleLanguageButtonClick(key)}*/}
+      {/*      className={clsx({ [styles.activeBtn]: key === appLanguage })}*/}
+      {/*    >*/}
+      {/*      {key}*/}
+      {/*    </Button>*/}
+      {/*  ))}*/}
+      {/*</Box>*/}
     </div>
   );
 };

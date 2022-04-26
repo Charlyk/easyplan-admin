@@ -50,8 +50,7 @@ const NewPatientPopper: React.FC<NewPatientPopperProps> = ({
     div.style.zIndex = '2000';
   });
 
-  const handleSubmitForm = (evt: React.FormEvent) => {
-    evt.preventDefault();
+  const handleSubmitForm = () => {
     const [firstName, lastName] = formData.fullName.split(' ');
 
     dispatch(
@@ -103,7 +102,7 @@ const NewPatientPopper: React.FC<NewPatientPopperProps> = ({
     >
       <ClickAwayListener onClickAway={onClose}>
         <Paper classes={{ root: styles.paper }}>
-          <form className={styles.patientForm} onSubmit={handleSubmitForm}>
+          <form className={styles.patientForm}>
             <TextField
               label={textForKey('appointment_name')}
               name='fullName'
@@ -133,8 +132,8 @@ const NewPatientPopper: React.FC<NewPatientPopperProps> = ({
               options={mappedPatientSources}
             />
             <LoadingButton
+              onClick={handleSubmitForm}
               variant='text'
-              type='submit'
               label={textForKey('create patient')}
               loading={loading}
               dense

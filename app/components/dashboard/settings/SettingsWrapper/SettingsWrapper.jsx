@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
-import { Role } from 'app/utils/constants';
 import { userClinicSelector } from 'redux/selectors/appDataSelector';
 import styles from './SettingsWrapper.module.scss';
-const AccountSettings = dynamic(() => import('../AccountSettings'));
+
+const AccountSettings = dynamic(() =>
+  import('../AccountSettings/AccountSettings'),
+);
 const ApplicationSettings = dynamic(() => import('../ApplicationSettings'));
 const BracesSettings = dynamic(() => import('../BracesSettings'));
 const ClinicWorkingHours = dynamic(() => import('../ClinicWorkingHours'));
@@ -14,13 +17,13 @@ const SettingsMenu = dynamic(() => import('../SettingsMenu'));
 const CrmSettings = dynamic(() => import('../CrmSettings'));
 
 const SettingsForm = {
-  companyDetails: 'companyDetails',
-  workingHours: 'workingHours',
-  accountSettings: 'accountSettings',
-  securitySettings: 'securitySettings',
-  appSettings: 'appSettings',
-  bracesSettings: 'bracesSettings',
-  crmSettings: 'crmSettings',
+  companyDetails: 'company-details',
+  workingHours: 'working-hours',
+  accountSettings: 'account-settings',
+  securitySettings: 'security-settings',
+  appSettings: 'app-settings',
+  bracesSettings: 'braces-settings',
+  crmSettings: 'crm-settings',
 };
 
 const SettingsWrapper = ({
@@ -29,41 +32,32 @@ const SettingsWrapper = ({
   facebookToken,
   facebookCode,
 }) => {
+  const router = useRouter();
   const selectedClinic = useSelector(userClinicSelector);
-  const [currentForm, setCurrentForm] = useState(
-    [Role.admin, Role.manager].includes(selectedClinic?.roleInClinic)
-      ? SettingsForm.companyDetails
-      : SettingsForm.accountSettings,
-  );
 
-  useEffect(() => {
-    if (!selectedMenu) {
-      return;
-    }
-    setCurrentForm(selectedMenu);
-  }, [selectedMenu]);
-
-  const handleFormChange = (newForm) => setCurrentForm(newForm);
+  const handleFormChange = async (newForm) => {
+    await router.replace(`/settings/${newForm}`);
+  };
 
   return (
     <div className={styles['settings-root']}>
       <div className={styles['settings-root__menu']}>
         <SettingsMenu
-          currentOption={currentForm}
+          currentOption={selectedMenu}
           onSelect={handleFormChange}
           selectedClinic={selectedClinic}
         />
       </div>
       <div className={styles['settings-root__form']}>
-        {currentForm === SettingsForm.companyDetails && (
+        {selectedMenu === SettingsForm.companyDetails && (
           <CompanyDetailsForm countries={countries} />
         )}
-        {currentForm === SettingsForm.workingHours && <ClinicWorkingHours />}
-        {currentForm === SettingsForm.accountSettings && <AccountSettings />}
-        {currentForm === SettingsForm.securitySettings && <SecuritySettings />}
-        {currentForm === SettingsForm.appSettings && <ApplicationSettings />}
-        {currentForm === SettingsForm.bracesSettings && <BracesSettings />}
-        {currentForm === SettingsForm.crmSettings && (
+        {selectedMenu === SettingsForm.workingHours && <ClinicWorkingHours />}
+        {selectedMenu === SettingsForm.accountSettings && <AccountSettings />}
+        {selectedMenu === SettingsForm.securitySettings && <SecuritySettings />}
+        {selectedMenu === SettingsForm.appSettings && <ApplicationSettings />}
+        {selectedMenu === SettingsForm.bracesSettings && <BracesSettings />}
+        {selectedMenu === SettingsForm.crmSettings && (
           <CrmSettings
             facebookCode={facebookCode}
             facebookToken={facebookToken}

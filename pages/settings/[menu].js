@@ -4,6 +4,7 @@ import { END } from 'redux-saga';
 import MainComponent from 'app/components/common/MainComponent/MainComponent';
 import SettingsWrapper from 'app/components/dashboard/settings/SettingsWrapper';
 import { JwtRegex } from 'app/utils/constants';
+import { Role } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
 import parseCookies from 'app/utils/parseCookies';
 import redirectToUrl from 'app/utils/redirectToUrl';
@@ -28,6 +29,14 @@ const Settings = ({ countries, facebookCode, facebookToken, menu }) => {
     </MainComponent>
   );
 };
+
+const managersMenuItems = [
+  'company-details',
+  'app-settings',
+  'crm-settings',
+  'braces-settings',
+  'working-hours',
+];
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) =>
@@ -68,10 +77,24 @@ export const getServerSideProps = wrapper.getServerSideProps(
           };
         }
 
+        if (
+          ![Role.admin, Role.manager].includes(
+            currentUser.userClinic.roleInClinic,
+          ) &&
+          managersMenuItems.includes(query.menu)
+        ) {
+          return {
+            redirect: {
+              destination: `/settings/${'account-settings'}`,
+              permanent: false,
+            },
+          };
+        }
+
         const { data: countries } = await fetchAllCountries(req.headers);
         return {
           props: {
-            menu: query?.menu ?? '',
+            menu: query.menu,
             facebookCode: query?.code ?? '',
             facebookToken: query?.token ?? '',
             countries,
