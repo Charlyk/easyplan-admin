@@ -91,6 +91,8 @@ const AppointmentModal = () => {
   };
 
   return modalProps.open ? (
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     <Modal open={modalProps.open} className={styles.modal} disableEnforceFocus>
       <div className={styles.modalContent}>
         <div className={styles.formWrapper}>
