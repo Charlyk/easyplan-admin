@@ -1,0 +1,49 @@
+.wrapper {
+    width: 100%;
+    padding: 1.5em 3em;
+    background-color: #fff;
+    border-radius: 4px;
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+
+    .introHeader {
+        display: flex;
+
+        .infoBox {
+            padding: 1em 2em;
+            border-radius: 6px;
+            border: 1px solid #3a83dc;
+            &Header {
+                font-family: Inter, sans-serif !important;
+                font-style: normal !important;
+            }
+
+            &Amount {
+                font-family: Inter, sans-serif !important;
+                font-style: normal !important;
+                font-size: 28px !important;
+                color: hsl(338, 83%, 56%);
+                margin: .2em 0;
+            }
+
+            &Link {
+                font-family: Inter, sans-serif !important;
+                font-style: normal !important;
+                font-size: 13px !important;
+                color: #3a83dc !important;
+                cursor: pointer;
+            }
+
+            &:not(:last-child) {
+                margin-right: 2.5em;
+
+            }
+        }
+    }
+    .content {
+        width: 100%;
+        background-color: red;
+    }
+
+}
+
