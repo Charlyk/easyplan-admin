@@ -1,3 +1,4 @@
+import orderBy from 'lodash/orderBy';
 import { createSelector } from 'reselect';
 import { ReduxState } from 'redux/types';
 
@@ -20,12 +21,18 @@ export const newPatientModalOpenSelector = createSelector(
 
 export const appointmentDoctorsSelector = createSelector(
   appointmentSelector,
-  (appointments) => appointments.doctors,
+  (appointments) => ({
+    ...appointments.doctors,
+    data: orderBy(appointments.doctors.data, 'fullName', 'asc'),
+  }),
 );
 
 export const appointmentServicesSelector = createSelector(
   appointmentSelector,
-  (appointments) => appointments.services,
+  (appointments) => ({
+    ...appointments.services,
+    data: orderBy(appointments.services.data, 'name', 'asc'),
+  }),
 );
 
 export const appointmentStartHoursSelector = createSelector(

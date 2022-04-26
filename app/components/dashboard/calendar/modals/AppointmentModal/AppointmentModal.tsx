@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { CalendarPreview, IconButton } from '@easyplanpro/easyplan-components';
-import { Modal, CircularProgress } from '@material-ui/core';
+import { CircularProgress, Modal } from '@material-ui/core';
 import { format } from 'date-fns';
 import { useSelector, useDispatch } from 'react-redux';
 import approximateTime from 'app/utils/approximateTime';
@@ -91,6 +91,8 @@ const AppointmentModal = () => {
   };
 
   return modalProps.open ? (
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     <Modal open={modalProps.open} className={styles.modal} disableEnforceFocus>
       <div className={styles.modalContent}>
         <div className={styles.formWrapper}>
