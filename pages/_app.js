@@ -248,6 +248,8 @@ const EasyApp = ({ Component, pageProps }) => {
     dispatch(closeChangeLogModal());
   };
 
+  console.log(locale);
+
   return (
     <React.Fragment>
       <Head>
@@ -260,7 +262,7 @@ const EasyApp = ({ Component, pageProps }) => {
       <DndProvider backend={HTML5Backend}>
         <I18n
           locale={locale ?? 'ro'}
-          messages={require(`../public/localization/${locale}.json`)}
+          messages={require(`../public/localization/${locale ?? 'ro'}.json`)}
         >
           <ThemeContainer>
             <ThemeProvider theme={theme}>
