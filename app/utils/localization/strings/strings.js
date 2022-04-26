@@ -821,6 +821,7 @@ export default {
     appointment_phone: 'Telefon',
     appointment_source: 'Sursa',
     appointment_createPatient: 'Crează pacient',
+    billing_details: 'Billing details',
   },
   ro: {
     analytics: 'Analitică',
@@ -1654,6 +1655,7 @@ export default {
     appointment_phone: 'Telefon',
     appointment_source: 'Sursa',
     appointment_createPatient: 'Crează pacient',
+    billing_details: 'Detalii plăți',
   },
   ru: {
     analytics: 'Analytics',
@@ -2474,5 +2476,6 @@ export default {
     appointment_phone: 'Telefon',
     appointment_source: 'Sursa',
     appointment_createPatient: 'Crează pacient',
+    billing_details: 'Detalii plăți',
   },
 };

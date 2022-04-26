@@ -279,6 +279,20 @@ const initialState: ReduxState = {
     loading: false,
     error: null,
   },
+  payments: {
+    subscriptionInfo: {
+      loading: false,
+      error: null,
+      data: {
+        id: '',
+        availableSeats: 0,
+        nextPayment: '',
+        nextAmount: 0,
+        nextCurrency: '',
+        totalSeats: 0,
+      },
+    },
+  },
 };
 
 export default initialState;
