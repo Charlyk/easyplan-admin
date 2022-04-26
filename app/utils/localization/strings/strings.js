@@ -820,8 +820,10 @@ export default {
     appointment_name: 'Nume Prenume',
     appointment_phone: 'Telefon',
     appointment_source: 'Sursa',
-    appointment_createPatient: 'Crează pacient',
+    appointment_createPatient: 'Create patient',
     billing_details: 'Billing details',
+    no_purchased_subscription:
+      'There are no purchased subscriptions to display',
   },
   ro: {
     analytics: 'Analitică',
@@ -1656,6 +1658,7 @@ export default {
     appointment_source: 'Sursa',
     appointment_createPatient: 'Crează pacient',
     billing_details: 'Detalii plăți',
+    no_purchased_subscription: 'Nu sunt abonamente de afișat',
   },
   ru: {
     analytics: 'Analytics',
@@ -2477,5 +2480,6 @@ export default {
     appointment_source: 'Sursa',
     appointment_createPatient: 'Crează pacient',
     billing_details: 'Detalii plăți',
+    no_purchased_subscription: 'Nu sunt abonamente de afișat',
   },
 };

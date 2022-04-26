@@ -24,6 +24,7 @@ import globalNotifications from 'redux/slices/globalNotificationsSlice';
 import main from 'redux/slices/mainReduxSlice';
 import patientList from 'redux/slices/patientsListSlice';
 import patients from 'redux/slices/patientsSlice';
+import payments from 'redux/slices/paymentSlice';
 import pubnubMessages from 'redux/slices/pubnubMessagesSlice';
 import servicesList from 'redux/slices/servicesListSlice';
 import usersList from 'redux/slices/usersListSlice';
@@ -87,6 +88,7 @@ const rootReducer = combineReducers({
   patients,
   appointments,
   patientsAutocomplete,
+  paymentsState: payments,
 });
 
 export default rootReducer;

@@ -49,6 +49,9 @@ import {
   fetchFilteredPatientsWatcher,
   createAppointmentPatientWatcher,
   updateUserLanguageWatcher,
+  fetchSubscriptionInfoWatcher,
+  fetchInvoicesWatcher,
+  fetchPaymentMethodsWatcher,
 } from './handlers';
 
 export default function* rootSaga() {
@@ -102,5 +105,8 @@ export default function* rootSaga() {
     fetchFilteredPatientsWatcher(),
     createAppointmentPatientWatcher(),
     updateUserLanguageWatcher(),
+    fetchSubscriptionInfoWatcher(),
+    fetchInvoicesWatcher(),
+    fetchPaymentMethodsWatcher(),
   ]);
 }

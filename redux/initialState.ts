@@ -279,7 +279,7 @@ const initialState: ReduxState = {
     loading: false,
     error: null,
   },
-  payments: {
+  paymentsState: {
     subscriptionInfo: {
       loading: false,
       error: null,
@@ -291,6 +291,16 @@ const initialState: ReduxState = {
         nextCurrency: '',
         totalSeats: 0,
       },
+    },
+    paymentMethods: {
+      loading: false,
+      error: null,
+      data: null,
+    },
+    invoicesInfo: {
+      loading: false,
+      error: null,
+      data: null,
     },
   },
 };

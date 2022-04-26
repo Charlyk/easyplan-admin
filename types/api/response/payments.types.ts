@@ -6,3 +6,21 @@ export type PaymentSubscription = {
   nextAmount: number;
   nextCurrency: string;
 };
+
+export type PaymentInvoices = {
+  id: string;
+  number: string;
+  created: string;
+  amount: number;
+  currency: string;
+  invoicePdf: string;
+};
+
+export type PaymentMethod = {
+  id: string;
+  last4: string;
+  brand: string;
+  expMonth: number;
+  expYear: number;
+  isDefault: boolean;
+};
