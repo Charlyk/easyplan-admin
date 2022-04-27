@@ -29,7 +29,7 @@ import reducer, {
   setSnackbar,
 } from './csvImportSlice';
 
-const maxAllowedRows = 14000;
+const maxAllowedRows = 15000;
 
 const CSVImportModal = ({
   open,
