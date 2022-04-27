@@ -19,7 +19,7 @@ export const currentUserSelector = createSelector(
 
 export const appLanguageSelector = createSelector(
   currentUserSelector,
-  (user) => user.language,
+  (user) => user?.language,
 );
 
 export const authTokenSelector = createSelector(
