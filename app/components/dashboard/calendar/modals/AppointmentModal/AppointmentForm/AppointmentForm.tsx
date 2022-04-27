@@ -262,7 +262,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
       endDate: String(addTimeToDate(selectedDate, endHours, endMinutes)),
       isUrgent: formData.isUrgent,
       status: 'Pending',
-      message: String(formData.notes),
+      note: String(formData.notes),
       scheduleId: formData.scheduleId,
     };
     dispatch(dispatchCreateAppointment(body));
