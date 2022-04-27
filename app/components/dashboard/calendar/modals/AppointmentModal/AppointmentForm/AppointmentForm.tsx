@@ -261,7 +261,6 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
       startDate: String(addTimeToDate(selectedDate, startHours, startMinutes)),
       endDate: String(addTimeToDate(selectedDate, endHours, endMinutes)),
       isUrgent: formData.isUrgent,
-      status: 'Pending',
       note: String(formData.notes),
       scheduleId: formData.scheduleId,
     };
