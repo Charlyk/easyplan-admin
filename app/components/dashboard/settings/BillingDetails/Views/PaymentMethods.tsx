@@ -5,13 +5,13 @@ import clsx from 'clsx';
 import Image from 'next/image';
 import { useSelector, useDispatch } from 'react-redux';
 import { textForKey } from 'app/utils/localization';
-import amex from 'public/images/cards/amex.png';
-import diners from 'public/images/cards/diners.png';
-import discover from 'public/images/cards/discover.png';
-import jcb from 'public/images/cards/jcb.png';
-import mastercard from 'public/images/cards/mastercard.jpg';
+import amex from 'public/images/cards/amex.svg';
+import diners from 'public/images/cards/diners.svg';
+import discover from 'public/images/cards/discover.svg';
+import jcb from 'public/images/cards/jcb.svg';
+import mastercard from 'public/images/cards/mastercard.svg';
 import unionpay from 'public/images/cards/unionpay.png';
-import visa from 'public/images/cards/visa.png';
+import visa from 'public/images/cards/visa.svg';
 import {
   paymentsNewCardModalSelector,
   paymentsPaymentMethodsSelector,
@@ -127,7 +127,7 @@ export const PaymentMethod: React.FC<
         </>
       )}
       <div className={styles.brand}>
-        <Image src={imagesMap[brand]} width={80} height={50} />
+        <Image src={imagesMap[brand]} width={100} height={60} />
       </div>
       <Typography classes={{ root: styles.number }}>
         **** **** **** {last4}
