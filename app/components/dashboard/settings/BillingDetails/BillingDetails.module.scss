@@ -5,10 +5,15 @@
     border-radius: 4px;
     font-family: Inter, sans-serif !important;
     font-style: normal !important;
+    overflow: hidden;
+    max-height: 100%;
+    height: 100%;
 
     .introHeader {
-        display: flex;
-
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);;
+        gap: 1em;
+        margin-bottom: 1em;
         .infoBox {
             padding: 1em 2em;
             border-radius: 6px;
@@ -33,21 +38,20 @@
                 color: #3a83dc !important;
                 cursor: pointer;
             }
-
-            &:not(:last-child) {
-                margin-right: 2.5em;
-
-            }
         }
     }
     .content {
         width: 100%;
-
+        overflow: auto;
+        height: 100%;
+        max-height: calc(100% - 130px);
         .btnWrapper {
             min-height: 3.5em;
             display: flex;
             align-items: center;
             text-transform: none !important;
+            justify-content: space-between;
+            margin-right: 1em;
         }
     }
 }
@@ -60,4 +64,6 @@
     align-items: center;
     background-color: #fff;
 }
+
+
 

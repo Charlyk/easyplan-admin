@@ -3,12 +3,16 @@ import { Button } from '@easyplanpro/easyplan-components';
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
+import { formatInTimeZone } from 'date-fns-tz';
 import dynamic from 'next/dynamic';
 import { useSelector, useDispatch } from 'react-redux';
 import { textForKey } from 'app/utils/localization';
+import { clinicTimeZoneSelector } from 'redux/selectors/appDataSelector';
 import {
   paymentsSubscriptionSelector,
   paymentsPaymentMethodsSelector,
+  isPaymentDataLoadingSelector,
+  paymentsInvoicesSelector,
 } from 'redux/selectors/paymentsSelector';
 import {
   dispatchFetchSubscriptionInfo,
@@ -16,45 +20,56 @@ import {
   dispatchFetchInvoices,
 } from 'redux/slices/paymentSlice';
 import styles from './BillingDetails.module.scss';
-import { BillingDetailsViewMode } from './BillingDetails.types';
+import {
+  BillingDetailsViewMode,
+  BillingDetailsProps,
+} from './BillingDetails.types';
 
 const PaymentHistory = dynamic(() => import('./Views/PaymentHistory'));
 const PaymentMethods = dynamic(() => import('./Views/PaymentMethods'));
 const SeatsManagement = dynamic(() => import('./Views/SeatsManagement'));
 const PaymentPlan = dynamic(import('./Views/PaymentPlan'));
 
-const BillingDetails: React.FC = () => {
+const BillingDetails: React.FC<BillingDetailsProps> = ({ countries }) => {
   const dispatch = useDispatch();
   const initialRenderRef = useRef(false);
   const [selectedView, setSelectedView] =
     useState<BillingDetailsViewMode>('payment-history');
-  const {
-    loading: subscriptionLoading,
-    data: subscriptionData,
-    error: subscriptionError,
-  } = useSelector(paymentsSubscriptionSelector);
-  const {
-    loading: paymentMethodLoading,
-    data: paymentMethods,
-    error: paymentMethodError,
-  } = useSelector(paymentsPaymentMethodsSelector);
+  const { loading: subscriptionLoading, data: subscriptionData } = useSelector(
+    paymentsSubscriptionSelector,
+  );
+  const { loading: paymentMethodLoading, data: paymentMethods } = useSelector(
+    paymentsPaymentMethodsSelector,
+  );
+  const { loading: invoicesLoading } = useSelector(paymentsInvoicesSelector);
+  const isDataLoading = useSelector(isPaymentDataLoadingSelector);
+  const timeZone = useSelector(clinicTimeZoneSelector);
+
+  const defaultPaymentMethod = useMemo(() => {
+    if (!paymentMethods) return null;
+    const defaultMethod = paymentMethods.find((method) => method.isDefault);
+    return defaultMethod ?? null;
+  }, [paymentMethods]);
 
   const loading = useMemo(() => {
-    return subscriptionLoading || paymentMethodLoading;
-  }, [subscriptionLoading, paymentMethodLoading]);
+    return subscriptionLoading || paymentMethodLoading || invoicesLoading;
+  }, [subscriptionLoading, paymentMethodLoading, invoicesLoading]);
 
   useEffect(() => {
     dispatch(dispatchFetchSubscriptionInfo());
     dispatch(dispatchFetchInvoices());
     dispatch(dispatchFetchPaymentMethods());
-    initialRenderRef.current = true;
   }, []);
 
   const handleViewModeSwitch = (newMode: BillingDetailsViewMode) => {
     setSelectedView(newMode);
   };
 
-  if (loading && !initialRenderRef.current) {
+  const handleGoBack = () => {
+    handleViewModeSwitch('payment-history');
+  };
+
+  if (loading) {
     return (
       <div className={styles.loadingWrapper}>
         <CircularProgress />
@@ -63,98 +78,111 @@ const BillingDetails: React.FC = () => {
   }
 
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.introHeader}>
-        <div className={styles.infoBox}>
-          <Typography className={styles.infoBoxHeader}>
-            Current Monthly Bill
-          </Typography>
-          <Typography
-            classes={{
-              root: styles.infoBoxAmount,
-            }}
-          >
-            {subscriptionData.totalSeats > 0
-              ? subscriptionData.nextAmount
-              : textForKey('no_seats_notice')}
-          </Typography>
-          <Box onClick={() => handleViewModeSwitch('manage-seats')}>
-            <Typography classes={{ root: styles.infoBoxLink }}>
-              Manage Seats
+    <>
+      <div className={styles.wrapper}>
+        <div className={styles.introHeader}>
+          <div className={styles.infoBox}>
+            <Typography className={styles.infoBoxHeader}>
+              {textForKey('current_bill')}
             </Typography>
-          </Box>
-        </div>
+            <Typography
+              classes={{
+                root: styles.infoBoxAmount,
+              }}
+            >
+              {subscriptionData.nextAmount} {subscriptionData.nextCurrency} /
+              {subscriptionData.totalSeats} {textForKey('seats')}
+            </Typography>
+            <Box onClick={() => handleViewModeSwitch('manage-seats')}>
+              <Typography classes={{ root: styles.infoBoxLink }}>
+                {textForKey('manage_seats')}
+                {subscriptionData.availableSeats > 0 &&
+                  `(${subscriptionData.availableSeats} ${textForKey(
+                    'seats_available',
+                  )})`}
+              </Typography>
+            </Box>
+          </div>
 
-        <div className={styles.infoBox}>
-          <Typography
-            classes={{
-              root: styles.infoBoxHeader,
-            }}
-            className={styles.infoBoxHeader}
-          >
-            Next Payment Due
-          </Typography>
-          <Typography
-            classes={{
-              root: styles.infoBoxAmount,
-            }}
-          >
-            {subscriptionData.nextPayment !== ''
-              ? subscriptionData.nextPayment
-              : textForKey('no_plan_notice')}
-          </Typography>
-          <Box onClick={() => handleViewModeSwitch('payment-plan')}>
-            <Typography classes={{ root: styles.infoBoxLink }}>
-              Switch to yearly plan and save
+          <div className={styles.infoBox}>
+            <Typography
+              classes={{
+                root: styles.infoBoxHeader,
+              }}
+              className={styles.infoBoxHeader}
+            >
+              {textForKey('payment_due')}
             </Typography>
-          </Box>
-        </div>
+            <Typography
+              classes={{
+                root: styles.infoBoxAmount,
+              }}
+            >
+              {formatInTimeZone(
+                subscriptionData.nextPayment === ''
+                  ? new Date()
+                  : subscriptionData.nextPayment,
+                timeZone,
+                'dd-MM-yyyy',
+              )}
+            </Typography>
+            <Box onClick={() => handleViewModeSwitch('payment-plan')}>
+              <Typography classes={{ root: styles.infoBoxLink }}>
+                {textForKey(
+                  subscriptionData.interval === 'MONTH'
+                    ? 'switch_year_plan'
+                    : 'switch_month_plan',
+                )}
+              </Typography>
+            </Box>
+          </div>
 
-        <div className={styles.infoBox}>
-          <Typography className={styles.infoBoxHeader}>
-            Payment Method
-          </Typography>
-          <Typography
-            classes={{
-              root: styles.infoBoxAmount,
-            }}
-          >
-            **** **** **** 5543
-          </Typography>
-          <Box onClick={() => handleViewModeSwitch('payment-method')}>
-            <Typography classes={{ root: styles.infoBoxLink }}>
-              Manage Payment Method
+          <div className={styles.infoBox}>
+            <Typography className={styles.infoBoxHeader}>
+              {textForKey('payment_method')}
             </Typography>
-          </Box>
+            <Typography
+              classes={{
+                root: styles.infoBoxAmount,
+              }}
+            >
+              {defaultPaymentMethod
+                ? `**** **** **** ${defaultPaymentMethod.last4}`
+                : '**** **** **** 0000'}
+            </Typography>
+            <Box onClick={() => handleViewModeSwitch('payment-method')}>
+              <Typography classes={{ root: styles.infoBoxLink }}>
+                {textForKey('manage_payment_method')}
+              </Typography>
+            </Box>
+          </div>
         </div>
-      </div>
-      <div className={styles.content}>
-        <div className={styles.btnWrapper}>
-          {selectedView !== 'payment-history' && (
-            <Button
-              variant='text'
-              label='Back to Payment History'
-              onClick={() => handleViewModeSwitch('payment-history')}
-              startIcon='arrow-back'
-              sx={{ textTransform: 'none !important' }}
-            />
+        <div className={styles.content}>
+          <div className={styles.btnWrapper}>
+            {selectedView !== 'payment-history' && (
+              <Button
+                variant='text'
+                label={textForKey('back_to_payment_history')}
+                onClick={handleGoBack}
+                startIcon='arrow-back'
+                sx={{ textTransform: 'none !important' }}
+              />
+            )}
+            {isDataLoading && <CircularProgress />}
+          </div>
+          {selectedView === 'payment-history' && <PaymentHistory />}
+          {selectedView === 'payment-method' && (
+            <PaymentMethods countries={countries} />
+          )}
+          {selectedView === 'manage-seats' && (
+            <SeatsManagement onCancel={handleGoBack} />
+          )}
+          {selectedView === 'payment-plan' && (
+            <PaymentPlan onCancel={handleGoBack} />
           )}
         </div>
-        {subscriptionError && selectedView === 'payment-history' && (
-          <Typography>
-            {subscriptionError === 'no_purchased_subscription'
-              ? textForKey(subscriptionError)
-              : subscriptionError}
-          </Typography>
-        )}
-        {!subscriptionError && selectedView === 'payment-history' && (
-          <PaymentHistory />
-        )}
-        {selectedView === 'payment-method' && <PaymentMethods />}
-        {selectedView === 'manage-seats' && <SeatsManagement />}
-        {selectedView === 'payment-plan' && <PaymentPlan />}
       </div>
-    </div>
+    </>
   );
 };
 
