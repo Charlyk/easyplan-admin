@@ -19,8 +19,6 @@ async function purchaseSeats(
     interval: req.body.interval,
   };
 
-  console.log(body);
-
   return axios.post(`${updatedServerUrl()}/payments/purchase-seats`, body, {
     headers: {
       [HeaderKeys.authorization]: authToken,
@@ -51,13 +49,11 @@ export default authorized(async (req: NextApiRequest, res: NextApiResponse) => {
     switch (req.method) {
       case 'POST': {
         const response = await purchaseSeats(req);
-        console.log(response);
         res.json(response.data.data);
         break;
       }
       case 'PUT': {
         const response = await removeSeats(req);
-        console.log(response);
         res.json(response.data.data);
         break;
       }
@@ -69,7 +65,6 @@ export default authorized(async (req: NextApiRequest, res: NextApiResponse) => {
     }
   } catch (error) {
     const axiosError = error as AxiosError;
-    console.log(axiosError.response.data);
     res
       .status(axiosError.response?.status ?? 400)
       .json(axiosError.response?.data);
