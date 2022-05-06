@@ -17,3 +17,13 @@ export const paymentsInvoicesSelector = createSelector(
   paymentsRootSelector,
   (payments) => payments.invoicesInfo,
 );
+
+export const paymentsNewCardModalSelector = createSelector(
+  paymentsRootSelector,
+  (payments) => payments.modalOpen,
+);
+
+export const isPaymentDataLoadingSelector = createSelector(
+  paymentsRootSelector,
+  (payments) => payments.isDataLoading,
+);

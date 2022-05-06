@@ -280,6 +280,8 @@ const initialState: ReduxState = {
     error: null,
   },
   paymentsState: {
+    modalOpen: false,
+    isDataLoading: false,
     subscriptionInfo: {
       loading: false,
       error: null,
@@ -290,6 +292,7 @@ const initialState: ReduxState = {
         nextAmount: 0,
         nextCurrency: '',
         totalSeats: 0,
+        interval: 'MONTH',
       },
     },
     paymentMethods: {

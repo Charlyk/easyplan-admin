@@ -24,6 +24,23 @@ async function fetchSubscriptionInfo(
   });
 }
 
+async function cancelSubscription(
+  req: NextApiRequest,
+): Promise<AxiosResponse<ServerResponse<PaymentSubscription>>> {
+  const { clinic_id: clinicId, auth_token: authToken } = cookie.parse(
+    req.headers.cookie,
+  );
+
+  return axios.delete(`${updatedServerUrl()}/payments/subscription/cancel`, {
+    headers: {
+      [HeaderKeys.authorization]: authToken,
+      [HeaderKeys.clinicId]: clinicId,
+      [HeaderKeys.subdomain]: getSubdomain(req),
+      [HeaderKeys.contentType]: 'application/json',
+    },
+  });
+}
+
 export default authorized(async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     switch (req.method) {
@@ -32,14 +49,21 @@ export default authorized(async (req: NextApiRequest, res: NextApiResponse) => {
         res.json(response.data.data);
         break;
       }
+      case 'DELETE': {
+        const response = await cancelSubscription(req);
+        console.log(response.data.data);
+        res.json(response.data.data);
+        break;
+      }
       default: {
-        res.setHeader('Allow', ['GET']);
+        res.setHeader('Allow', ['GET', 'DELETE']);
         res.status(405).end(`Method ${req.method} Not Allowed`);
         break;
       }
     }
   } catch (error) {
     const axiosError = error as AxiosError;
+    console.log(axiosError.response.data);
     res
       .status(axiosError.response?.status ?? 400)
       .json(axiosError.response?.data);

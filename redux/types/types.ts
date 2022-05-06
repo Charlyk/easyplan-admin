@@ -285,6 +285,8 @@ export type PaymentsState = {
   subscriptionInfo: WithQuery<PaymentSubscription>;
   invoicesInfo: WithQuery<PaymentInvoices[]>;
   paymentMethods: WithQuery<PaymentMethod[]>;
+  modalOpen: boolean;
+  isDataLoading: boolean;
 };
 
 export interface ReduxState {

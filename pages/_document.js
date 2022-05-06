@@ -65,7 +65,7 @@ class AppDocument extends Document {
             href='https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap'
           />
         </Head>
-        <body styles={{ '#country-data': { zIndex: 2000 } }}>
+        <body style={{ '#country-data': { zIndex: 2000 } }}>
           <Main />
           <NextScript />
           <div id='modal-root' />

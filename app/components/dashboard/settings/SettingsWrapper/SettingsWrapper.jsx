@@ -59,7 +59,9 @@ const SettingsWrapper = ({
         {selectedMenu === SettingsForm.securitySettings && <SecuritySettings />}
         {selectedMenu === SettingsForm.appSettings && <ApplicationSettings />}
         {selectedMenu === SettingsForm.bracesSettings && <BracesSettings />}
-        {selectedMenu === SettingsForm.billingDetails && <BillingDetails />}
+        {selectedMenu === SettingsForm.billingDetails && (
+          <BillingDetails countries={countries} />
+        )}
         {selectedMenu === SettingsForm.crmSettings && (
           <CrmSettings
             facebookCode={facebookCode}

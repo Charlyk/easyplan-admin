@@ -137,6 +137,9 @@
       "redux"
     ]
   },
+  "engines": {
+    "node": "16.14.2"
+  },
   "eslintConfig": {
     "extends": "react-app"
   },
