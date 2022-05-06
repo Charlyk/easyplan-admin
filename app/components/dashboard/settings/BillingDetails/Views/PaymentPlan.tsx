@@ -27,9 +27,7 @@ const PaymentPlan: React.FC<Props> = () => {
   const dispatch = useDispatch();
   const { data: subscription } = useSelector(paymentsSubscriptionSelector);
   const isDataLoading = useSelector(isPaymentDataLoadingSelector);
-  const [interval, setInterval] = useState(
-    subscription.nextInterval ?? subscription.interval,
-  );
+  const [interval, setInterval] = useState(subscription.interval);
 
   const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const { checked, name } = evt.target;
