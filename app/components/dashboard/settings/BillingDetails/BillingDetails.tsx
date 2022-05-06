@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Button } from '@easyplanpro/easyplan-components';
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -6,8 +6,13 @@ import Typography from '@material-ui/core/Typography';
 import { formatInTimeZone } from 'date-fns-tz';
 import dynamic from 'next/dynamic';
 import { useSelector, useDispatch } from 'react-redux';
+import { DateLocales } from 'app/utils/constants';
+import formatAmountWithSymbol from 'app/utils/formatAmountWithSymbol';
 import { textForKey } from 'app/utils/localization';
-import { clinicTimeZoneSelector } from 'redux/selectors/appDataSelector';
+import {
+  appLanguageSelector,
+  clinicTimeZoneSelector,
+} from 'redux/selectors/appDataSelector';
 import {
   paymentsSubscriptionSelector,
   paymentsPaymentMethodsSelector,
@@ -32,7 +37,6 @@ const PaymentPlan = dynamic(import('./Views/PaymentPlan'));
 
 const BillingDetails: React.FC<BillingDetailsProps> = ({ countries }) => {
   const dispatch = useDispatch();
-  const initialRenderRef = useRef(false);
   const [selectedView, setSelectedView] =
     useState<BillingDetailsViewMode>('payment-history');
   const { loading: subscriptionLoading, data: subscriptionData } = useSelector(
@@ -44,6 +48,7 @@ const BillingDetails: React.FC<BillingDetailsProps> = ({ countries }) => {
   const { loading: invoicesLoading } = useSelector(paymentsInvoicesSelector);
   const isDataLoading = useSelector(isPaymentDataLoadingSelector);
   const timeZone = useSelector(clinicTimeZoneSelector);
+  const appLanguage = useSelector(appLanguageSelector);
 
   const defaultPaymentMethod = useMemo(() => {
     if (!paymentMethods) return null;
@@ -56,9 +61,9 @@ const BillingDetails: React.FC<BillingDetailsProps> = ({ countries }) => {
   }, [subscriptionLoading, paymentMethodLoading, invoicesLoading]);
 
   useEffect(() => {
-    dispatch(dispatchFetchSubscriptionInfo());
     dispatch(dispatchFetchInvoices());
     dispatch(dispatchFetchPaymentMethods());
+    dispatch(dispatchFetchSubscriptionInfo());
   }, []);
 
   const handleViewModeSwitch = (newMode: BillingDetailsViewMode) => {
@@ -90,8 +95,11 @@ const BillingDetails: React.FC<BillingDetailsProps> = ({ countries }) => {
                 root: styles.infoBoxAmount,
               }}
             >
-              {subscriptionData.nextAmount} {subscriptionData.nextCurrency} /
-              {subscriptionData.totalSeats} {textForKey('seats')}
+              {formatAmountWithSymbol(
+                subscriptionData.nextAmount,
+                subscriptionData.nextCurrency,
+              )}{' '}
+              / {subscriptionData.totalSeats} {textForKey('seats')}
             </Typography>
             <Box onClick={() => handleViewModeSwitch('manage-seats')}>
               <Typography classes={{ root: styles.infoBoxLink }}>
@@ -123,7 +131,10 @@ const BillingDetails: React.FC<BillingDetailsProps> = ({ countries }) => {
                   ? new Date()
                   : subscriptionData.nextPayment,
                 timeZone,
-                'dd-MM-yyyy',
+                'dd MMM yyyy',
+                {
+                  locale: DateLocales[appLanguage],
+                },
               )}
             </Typography>
             <Box onClick={() => handleViewModeSwitch('payment-plan')}>

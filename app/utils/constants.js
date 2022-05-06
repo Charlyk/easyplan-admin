@@ -557,3 +557,9 @@ export const DateLocales = {
 };
 
 export const AppLanguages = ['ro', 'ru', 'en'];
+
+export const currenciesMap = {
+  eur: '€',
+  usd: '$',
+  ron: 'lei',
+};

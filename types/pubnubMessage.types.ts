@@ -46,6 +46,7 @@ export enum MessageAction {
   InvoiceUpdated = 'InvoiceUpdated',
   UserCanCreateScheduleChanged = 'UserCanCreateScheduleChanged',
   DealStateChanged = 'DealStateChanged',
+  SubscriptionUpdated = 'SubscriptionUpdated',
 }
 
 export type PatientTag = {

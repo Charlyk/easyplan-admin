@@ -16,6 +16,7 @@ import {
 import { formatInTimeZone, utcToZonedTime } from 'date-fns-tz';
 import { useSelector, useDispatch } from 'react-redux';
 import { DateLocales } from 'app/utils/constants';
+import formatAmountWithSymbol from 'app/utils/formatAmountWithSymbol';
 import { textForKey } from 'app/utils/localization';
 import { clinicDoctorsSelector } from 'redux/selectors/appDataSelector';
 import {
@@ -83,7 +84,7 @@ const SeatsManagement: React.FC<Props> = ({ onCancel }) => {
       return `${differenceInDays(
         new Date(subscription.nextPayment),
         new Date(),
-      )} ${textForKey('days')}`;
+      )}`;
     else {
       const today = new Date();
       const duePaymentDate = utcToZonedTime(nextPayment, timeZone);
@@ -125,10 +126,11 @@ const SeatsManagement: React.FC<Props> = ({ onCancel }) => {
   }, [costOfOneSeat, noOfSeats]);
 
   const paymentLabel = useMemo(() => {
+    const { nextCurrency } = subscription;
     if (isAddingSeats) {
       return textForKey(
         'payment_info',
-        `${totalCharge}€`,
+        formatAmountWithSymbol(totalCharge, nextCurrency),
         noOfSeats,
         subscription.totalSeats + parsedNoOfSeats,
       ) as string;
@@ -142,6 +144,7 @@ const SeatsManagement: React.FC<Props> = ({ onCancel }) => {
   }, [noOfSeats, costOfOneSeat, totalCharge]);
 
   const nextPaymentLabel = useMemo(() => {
+    const { nextCurrency } = subscription;
     let nextFullAmount: number;
     const seatCount = isAddingSeats
       ? subscription.totalSeats + parsedNoOfSeats
@@ -154,7 +157,7 @@ const SeatsManagement: React.FC<Props> = ({ onCancel }) => {
     }
     return textForKey(
       'next_payment_info',
-      `${nextFullAmount}€`,
+      formatAmountWithSymbol(nextFullAmount, nextCurrency),
       paymentDueString,
     );
   }, [noOfSeats, subscription.nextPayment, subscription.interval]);
@@ -175,7 +178,7 @@ const SeatsManagement: React.FC<Props> = ({ onCancel }) => {
 
     return textForKey(
       'tax_prorated_info',
-      `${oneMothPrice}€`,
+      formatAmountWithSymbol(oneMothPrice, subscription.nextCurrency),
       timeLeftTillPaymentDue,
     );
   }, []);

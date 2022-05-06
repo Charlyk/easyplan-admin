@@ -42,6 +42,7 @@ import { imageModalSelector } from 'redux/selectors/imageModalSelector';
 import { logoutSelector } from 'redux/selectors/rootSelector';
 import { setAppData } from 'redux/slices/appDataSlice';
 import { triggerUserLogOut } from 'redux/slices/mainReduxSlice';
+import { setSubscriptionInfo } from 'redux/slices/paymentSlice';
 import { handleRemoteMessageReceived } from 'redux/slices/pubnubMessagesSlice';
 import { wrapper } from 'store';
 import 'moment/locale/ro';
@@ -336,8 +337,7 @@ EasyApp.getInitialProps = wrapper.getInitialAppProps(
         ctx.req?.headers,
         queryDate ?? moment().format('YYYY-MM-DD'),
       );
-      const { currentUser, currentClinic } = data;
-
+      const { currentUser, currentClinic, subscription } = data;
       // update moment default timezone
       moment.tz.setDefault(currentClinic.timeZone);
 
@@ -350,6 +350,7 @@ EasyApp.getInitialProps = wrapper.getInitialAppProps(
         cookies,
       };
       store.dispatch(setAppData(appData));
+      store.dispatch(setSubscriptionInfo(subscription));
     } catch (e) {
       console.error('App', e.message);
     }
