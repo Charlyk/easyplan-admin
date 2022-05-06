@@ -51,7 +51,6 @@ export default authorized(async (req: NextApiRequest, res: NextApiResponse) => {
       }
       case 'DELETE': {
         const response = await cancelSubscription(req);
-        console.log(response.data.data);
         res.json(response.data.data);
         break;
       }
@@ -63,7 +62,6 @@ export default authorized(async (req: NextApiRequest, res: NextApiResponse) => {
     }
   } catch (error) {
     const axiosError = error as AxiosError;
-    console.log(axiosError.response.data);
     res
       .status(axiosError.response?.status ?? 400)
       .json(axiosError.response?.data);

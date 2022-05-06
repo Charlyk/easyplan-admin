@@ -28,7 +28,6 @@ export default authorized(async (req: NextApiRequest, res: NextApiResponse) => {
     switch (req.method) {
       case 'PUT': {
         const response = await changeBillingPeriod(req);
-        console.log(response.data);
         res.json(response.data.data);
         break;
       }
@@ -40,7 +39,6 @@ export default authorized(async (req: NextApiRequest, res: NextApiResponse) => {
     }
   } catch (error) {
     const axiosError = error as AxiosError;
-    console.log(axiosError.response.data);
     res
       .status(axiosError.response?.status ?? 400)
       .json(axiosError.response?.data);
