@@ -3,16 +3,13 @@ import {
   Typography,
   EASIcon,
   Checkbox,
-  LoadingButton,
   Button,
   theme,
 } from '@easyplanpro/easyplan-components';
 import { useSelector, useDispatch } from 'react-redux';
+import ConfirmationModal from 'app/components/common/modals/ConfirmationModal';
 import { textForKey } from 'app/utils/localization';
-import {
-  isPaymentDataLoadingSelector,
-  paymentsSubscriptionSelector,
-} from 'redux/selectors/paymentsSelector';
+import { paymentsSubscriptionSelector } from 'redux/selectors/paymentsSelector';
 import {
   dispatchCancelSubcription,
   dispatchChangeBillingPeriod,
@@ -25,8 +22,8 @@ type Props = {
 
 const PaymentPlan: React.FC<Props> = () => {
   const dispatch = useDispatch();
+  const [modalOpen, setModalOpen] = useState(false);
   const { data: subscription } = useSelector(paymentsSubscriptionSelector);
-  const isDataLoading = useSelector(isPaymentDataLoadingSelector);
   const [interval, setInterval] = useState(subscription.interval);
 
   const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,10 +39,20 @@ const PaymentPlan: React.FC<Props> = () => {
 
   const cancelSubscription = () => {
     dispatch(dispatchCancelSubcription());
+    setModalOpen(false);
   };
 
   return (
     <>
+      {modalOpen && (
+        <ConfirmationModal
+          show={modalOpen}
+          onConfirm={cancelSubscription}
+          onClose={() => setModalOpen(false)}
+          title={textForKey('confirm')}
+          message={textForKey('cancel_subscription_confirmation')}
+        />
+      )}
       <div className={styles.divider} />
       <div className={styles.wrapper}>
         <div className={styles.content}>
@@ -84,9 +91,8 @@ const PaymentPlan: React.FC<Props> = () => {
                 </div>
               </div>
               <div className={styles.btnWrapper}>
-                <LoadingButton
+                <Button
                   label={textForKey('confirm')}
-                  loading={isDataLoading}
                   disabled={interval === subscription.interval}
                   variant={'contained'}
                   onClick={submitResponse}
@@ -111,7 +117,7 @@ const PaymentPlan: React.FC<Props> = () => {
                 <Button
                   label={textForKey('cancel_schedule')}
                   variant={'contained'}
-                  onClick={cancelSubscription}
+                  onClick={() => setModalOpen(true)}
                   size={'small'}
                   className={styles.cancelButton}
                 />

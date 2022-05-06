@@ -4,6 +4,7 @@ export type Country = {
   dialCode: string;
   id: number;
   iso: string;
+  iso2: string;
   languages: string;
   name: string;
   russianName: string;

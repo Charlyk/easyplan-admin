@@ -1750,6 +1750,9 @@ export default {
     delete_subscription_info:
       'La rezilierea contractului nu se va mai percepe taxă conform planului selectat, iar accesul la aplicație va fi limitat.',
     months: 'Luni',
+    cancel_subscription_confirmation:
+      'Sunteți sigur că doriți să anulați subscripția ?',
+    add_seats: 'Adaugă locuri',
   },
   ru: {
     analytics: 'Analytics',

@@ -97,6 +97,9 @@ const paymentSlice = createSlice({
     dispatchCancelSubcription(state) {
       state.isDataLoading = true;
     },
+    clearPaymentMethodsError(state) {
+      state.paymentMethods.error = null;
+    },
     openNewCardModal(state) {
       state.modalOpen = true;
     },
@@ -135,6 +138,7 @@ export const {
   setPaymentMethodAsDefault,
   dispatchPurchaseSeats,
   dispatchRemoveSeats,
+  clearPaymentMethodsError,
 } = paymentSlice.actions;
 
 export default paymentSlice.reducer;

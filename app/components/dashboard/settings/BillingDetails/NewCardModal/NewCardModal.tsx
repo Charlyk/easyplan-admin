@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   TextField,
   SelectMenu,
@@ -16,6 +16,7 @@ import {
   paymentsNewCardModalSelector,
 } from 'redux/selectors/paymentsSelector';
 import {
+  clearPaymentMethodsError,
   closeNewCardModal,
   dispatchAddNewPaymentMethod,
   setPaymentMethodsError,
@@ -46,6 +47,12 @@ const NewCardModal: React.FC<NewCardModalProps> = ({ countries }) => {
   const modalOpen = useSelector(paymentsNewCardModalSelector);
   const [cardFormData, setCardFormData] = useState(defaultCardValues);
   const [addressFormData, setAddressFormData] = useState(defaultAddressValue);
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearPaymentMethodsError());
+    };
+  }, []);
 
   const months = useMemo(() => {
     const months = new Array(12)
@@ -118,7 +125,7 @@ const NewCardModal: React.FC<NewCardModalProps> = ({ countries }) => {
       ...cardFormData,
       address: {
         ...addressFormData,
-        country: selectedCountry.name,
+        country: selectedCountry.iso2,
       },
     };
 
