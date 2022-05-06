@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { CalendarPreview, IconButton } from '@easyplanpro/easyplan-components';
-import { Modal, CircularProgress } from '@material-ui/core';
+import { CircularProgress, Modal } from '@material-ui/core';
 import { format } from 'date-fns';
 import { useSelector, useDispatch } from 'react-redux';
 import approximateTime from 'app/utils/approximateTime';
@@ -8,6 +8,7 @@ import {
   appointmentSelector,
   appointmentSchedulesSelector,
   formDataSelector,
+  appointmentStartHoursSelector,
 } from 'redux/selectors/appointmentsSelector';
 import {
   closeAppointmentModal,
@@ -42,6 +43,7 @@ const AppointmentModal = () => {
   const dispatch = useDispatch();
   const { selectedDate: initialDate, modalProps } =
     useSelector(appointmentSelector);
+  const { data: startHours } = useSelector(appointmentStartHoursSelector);
   const formData = useSelector(formDataSelector);
   const { data, loading: schedulesLoading } = useSelector(
     appointmentSchedulesSelector,
@@ -91,6 +93,8 @@ const AppointmentModal = () => {
   };
 
   return modalProps.open ? (
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     <Modal open={modalProps.open} className={styles.modal} disableEnforceFocus>
       <div className={styles.modalContent}>
         <div className={styles.formWrapper}>
@@ -122,7 +126,9 @@ const AppointmentModal = () => {
                     value: approximatedHour,
                   }),
                 );
-                dispatch(setStartHours([approximatedHour]));
+                if (!startHours.some((hour) => hour === approximatedHour)) {
+                  dispatch(setStartHours([approximatedHour]));
+                }
               },
             }}
           />

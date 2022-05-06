@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useReducer } from 'react';
-import { formatInTimeZone } from 'date-fns-tz';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
@@ -19,18 +18,9 @@ import {
   authTokenSelector,
   calendarDoctorsSelector,
   currentClinicSelector,
-  clinicTimeZoneSelector,
 } from 'redux/selectors/appDataSelector';
 import { updateClinicDataSelector } from 'redux/selectors/clinicDataSelector';
-import {
-  openAppointmentModal,
-  setAppointmentFormData,
-  setStartHours,
-  setSelectedDate,
-  setAppointmentServices,
-  setEndHours,
-} from 'redux/slices/appointmentSlice';
-import { setSearchedPatients } from 'redux/slices/patientsAutocompleteSlice';
+import { openAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
 import styles from './CalendarContainer.module.scss';
 import reducer, {
   initialState,
@@ -127,7 +117,6 @@ const CalendarContainer = ({ date, doctorId, viewMode, children }) => {
   const doctors = useSelector(calendarDoctorsSelector);
   const currentClinic = useSelector(currentClinicSelector);
   const authToken = useSelector(authTokenSelector);
-  const timeZone = useSelector(clinicTimeZoneSelector);
   const router = useRouter();
   const dispatch = useDispatch();
   const services =
@@ -200,16 +189,17 @@ const CalendarContainer = ({ date, doctorId, viewMode, children }) => {
       toast.warn(textForKey('doctor_is_fired'));
       return;
     }
-    dispatch(setStartHours([startHour]));
-    dispatch(setSelectedDate(selectedDate?.toString()));
     dispatch(
-      setAppointmentFormData({
-        startHour: startHour ?? '',
-        doctorId: doctor?.id ?? -1,
-        cabinetId: cabinet?.id ?? -1,
+      openAppointmentModal({
+        open: true,
+        doctor: doctor ?? selectedDoctor,
+        startHour,
+        endHour,
+        date: moment(selectedDate ?? viewDate).format('YYYY-MM-DD'),
+        patient,
+        cabinet,
       }),
     );
-    dispatch(openAppointmentModal());
   };
 
   const handleDoctorSelected = async (doctor) => {
@@ -316,32 +306,13 @@ const CalendarContainer = ({ date, doctorId, viewMode, children }) => {
   };
 
   const handleEditSchedule = (schedule) => {
-    const stringStart = formatInTimeZone(
-      schedule?.startTime,
-      timeZone,
-      'HH:mm',
-    );
-    const stringEnd = formatInTimeZone(schedule?.endTime, timeZone, 'HH:mm');
-    dispatch(setStartHours([stringStart]));
-    dispatch(setEndHours([stringEnd]));
-    dispatch(setAppointmentServices([schedule?.service]));
-    dispatch(setSelectedDate(schedule.startTime?.toString()));
     dispatch(
-      setAppointmentFormData({
-        scheduleId: schedule.id,
-        serviceId: schedule?.service?.id,
-        doctorId: schedule?.doctor?.id,
-        cabinetId: schedule?.cabinet?.id,
-        isUrgent: schedule?.isUrgent,
-        date: schedule?.startTime,
-        patientId: schedule?.patient?.id,
-        startHour: stringStart,
-        endHour: stringEnd,
+      openAppointmentModal({
+        open: true,
+        schedule,
+        cabinet: schedule?.cabinet,
       }),
     );
-
-    dispatch(setSearchedPatients([schedule?.patient]));
-    dispatch(openAppointmentModal());
   };
 
   const handleDeleteSchedule = (schedule) => {

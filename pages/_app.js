@@ -13,6 +13,7 @@ import NextNprogress from 'nextjs-progressbar';
 import { PubNubProvider } from 'pubnub-react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { I18n } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import { END } from 'redux-saga';
 import {
@@ -34,13 +35,15 @@ import { pubnubClient } from 'pubnubUtils';
 import { setImageModal } from 'redux/actions/imageModalActions';
 import initialState from 'redux/initialState';
 import {
+  appLanguageSelector,
   currentClinicSelector,
   currentUserSelector,
 } from 'redux/selectors/appDataSelector';
-import { appointmentModalSelector } from 'redux/selectors/appointmentsSelector';
+import { appointmentModalSelector } from 'redux/selectors/appointmentModalSelector';
 import { imageModalSelector } from 'redux/selectors/imageModalSelector';
 import { logoutSelector } from 'redux/selectors/rootSelector';
 import { setAppData } from 'redux/slices/appDataSlice';
+import { closeAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
 import { triggerUserLogOut } from 'redux/slices/mainReduxSlice';
 import { handleRemoteMessageReceived } from 'redux/slices/pubnubMessagesSlice';
 import { wrapper } from 'store';
@@ -50,9 +53,9 @@ import 'react-h5-audio-player/src/styles.scss';
 import 'app/utils';
 import { useAnalytics } from '../app/utils/hooks';
 
-const AppointmentModal = dynamic(() =>
+const AddAppointmentModal = dynamic(() =>
   import(
-    'app/components/dashboard/calendar/modals/AppointmentModal/AppointmentModal'
+    'app/components/dashboard/calendar/modals/AddAppointmentModal/AddAppointmentModal'
   ),
 );
 
@@ -82,6 +85,7 @@ const EasyApp = ({ Component, pageProps }) => {
   const logout = useSelector(logoutSelector);
   const [logEvent] = useAnalytics();
   const currentPage = router.asPath;
+  const locale = useSelector(appLanguageSelector);
 
   useEffect(() => {
     dispatch(setAppData(pageProps.appData));
@@ -135,6 +139,10 @@ const EasyApp = ({ Component, pageProps }) => {
 
   const handlePubnubMessageReceived = (message) => {
     dispatch(handleRemoteMessageReceived(message));
+  };
+
+  const handleAppointmentModalClose = () => {
+    dispatch(closeAppointmentModal());
   };
 
   const handleTawkMessengerLoad = () => {
@@ -255,60 +263,81 @@ const EasyApp = ({ Component, pageProps }) => {
         />
       </Head>
       <DndProvider backend={HTML5Backend}>
-        <ThemeContainer>
-          <ThemeProvider theme={theme}>
-            <React.Fragment>
-              <CssBaseline />
-              <PubNubProvider client={pubnubClient}>
-                <NotificationsProvider>
-                  <React.Fragment>
-                    {isDev && (
-                      <Typography className='develop-indicator'>Dev</Typography>
-                    )}
-                    {logout && (
-                      <ConfirmationModal
-                        title={textForKey('Logout')}
-                        message={textForKey('logout message')}
-                        onConfirm={handleUserLogout}
-                        onClose={handleCancelLogout}
-                        isLoading={isLoading}
-                        show={logout}
+        <I18n
+          locale={locale ?? 'ro'}
+          messages={require(`../public/localization/${locale ?? 'ro'}.json`)}
+        >
+          <ThemeContainer>
+            <ThemeProvider theme={theme}>
+              <React.Fragment>
+                <CssBaseline />
+                <PubNubProvider client={pubnubClient}>
+                  <NotificationsProvider>
+                    <React.Fragment>
+                      {isDev && (
+                        <Typography className='develop-indicator'>
+                          Dev
+                        </Typography>
+                      )}
+                      {logout && (
+                        <ConfirmationModal
+                          title={textForKey('Logout')}
+                          message={textForKey('logout message')}
+                          onConfirm={handleUserLogout}
+                          onClose={handleCancelLogout}
+                          isLoading={isLoading}
+                          show={logout}
+                        />
+                      )}
+                      {changeLogModal.open && (
+                        <ChangeLogModal
+                          {...changeLogModal}
+                          onClose={handleCloseChangeLogModal}
+                        />
+                      )}
+                      {appointmentModal?.open && (
+                        <AddAppointmentModal
+                          currentClinic={currentClinic}
+                          onClose={handleAppointmentModalClose}
+                          schedule={appointmentModal?.schedule}
+                          open={appointmentModal?.open}
+                          doctor={appointmentModal?.doctor}
+                          date={appointmentModal?.date}
+                          patient={appointmentModal?.patient}
+                          startHour={appointmentModal?.startHour}
+                          endHour={appointmentModal?.endHour}
+                          cabinet={appointmentModal?.cabinet}
+                          isDoctorMode={appointmentModal?.isDoctorMode}
+                        />
+                      )}
+                      {imageModal.open && (
+                        <FullScreenImageModal
+                          {...imageModal}
+                          onClose={handleCloseImageModal}
+                        />
+                      )}
+                      {!currentPage.includes('confirmation') &&
+                      !currentPage.includes('facebook') ? (
+                        <TawkMessengerReact
+                          propertyId='619407696bb0760a4942ea33'
+                          widgetId='1fkl3ptc4'
+                          ref={tawkMessengerRef}
+                          onLoad={handleTawkMessengerLoad}
+                        />
+                      ) : null}
+                      <NextNprogress
+                        color='#29D'
+                        startPosition={0.3}
+                        height={2}
                       />
-                    )}
-                    {changeLogModal.open && (
-                      <ChangeLogModal
-                        {...changeLogModal}
-                        onClose={handleCloseChangeLogModal}
-                      />
-                    )}
-                    {appointmentModal?.open && <AppointmentModal />}
-                    {imageModal.open && (
-                      <FullScreenImageModal
-                        {...imageModal}
-                        onClose={handleCloseImageModal}
-                      />
-                    )}
-                    {!currentPage.includes('confirmation') &&
-                    !currentPage.includes('facebook') ? (
-                      <TawkMessengerReact
-                        propertyId='619407696bb0760a4942ea33'
-                        widgetId='1fkl3ptc4'
-                        ref={tawkMessengerRef}
-                        onLoad={handleTawkMessengerLoad}
-                      />
-                    ) : null}
-                    <NextNprogress
-                      color='#29D'
-                      startPosition={0.3}
-                      height={2}
-                    />
-                    <Component {...pageProps} />
-                  </React.Fragment>
-                </NotificationsProvider>
-              </PubNubProvider>
-            </React.Fragment>
-          </ThemeProvider>
-        </ThemeContainer>
+                      <Component {...pageProps} />
+                    </React.Fragment>
+                  </NotificationsProvider>
+                </PubNubProvider>
+              </React.Fragment>
+            </ThemeProvider>
+          </ThemeContainer>
+        </I18n>
       </DndProvider>
     </React.Fragment>
   );

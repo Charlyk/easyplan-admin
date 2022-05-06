@@ -35,7 +35,6 @@ import {
   dispatchFetchEndHours,
   setStartHours,
   setAppointmentFormKeyValue,
-  setEndHours,
 } from 'redux/slices/appointmentSlice';
 import { dispatchCreateAppointment } from 'redux/slices/calendarData';
 import styles from './AppointmentForm.module.css';
@@ -262,8 +261,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
       startDate: String(addTimeToDate(selectedDate, startHours, startMinutes)),
       endDate: String(addTimeToDate(selectedDate, endHours, endMinutes)),
       isUrgent: formData.isUrgent,
-      status: 'Pending',
-      message: String(formData.notes),
+      note: String(formData.notes),
       scheduleId: formData.scheduleId,
     };
     dispatch(dispatchCreateAppointment(body));

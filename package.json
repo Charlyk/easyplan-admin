@@ -65,6 +65,7 @@
     "react-number-format": "^4.8.0",
     "react-papaparse": "^3.18.1",
     "react-phone-input-2": "^2.14.0",
+    "react-polyglot": "^0.7.2",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.0.2",
     "react-spring": "^9.3.1",

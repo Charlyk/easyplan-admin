@@ -5,5 +5,6 @@ export type CreateAppointmentType = {
   startDate: Date | string;
   endDate: Date | string;
   isUrgent: boolean;
-  status: string;
+  status?: string | null;
+  note?: string | null;
 };
