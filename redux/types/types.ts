@@ -35,6 +35,9 @@ import {
   AppointmentsDoctorsResponse,
   AppointmentServiceResponse,
   CalendarSchedulesResponse,
+  PaymentInvoices,
+  PaymentMethod,
+  PaymentSubscription,
 } from 'types/api';
 
 export interface CalendarDataState {
@@ -278,6 +281,14 @@ export interface AppointmentsState {
 export type PatientsState = WithQuery<PaginatedResponse<Patient>>;
 export type PatientsAutocompleteState = WithQuery<Patient[]>;
 
+export type PaymentsState = {
+  subscriptionInfo: WithQuery<PaymentSubscription>;
+  invoicesInfo: WithQuery<PaymentInvoices[]>;
+  paymentMethods: WithQuery<PaymentMethod[]>;
+  modalOpen: boolean;
+  isDataLoading: boolean;
+};
+
 export interface ReduxState {
   updateCategories: boolean;
   updateServices: boolean;
@@ -329,4 +340,5 @@ export interface ReduxState {
   patients: PatientsState;
   patientsAutocomplete: PatientsAutocompleteState;
   appointments: AppointmentsState;
+  paymentsState: PaymentsState;
 }

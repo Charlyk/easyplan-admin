@@ -1,0 +1,16 @@
+.wrapper {
+  width: 100%;
+  max-height: calc(100% - 100px);
+  padding-right: 1em;
+
+  .link {
+    text-decoration: none;
+  }
+}
+
+.container {
+  max-height: calc(100% - 20px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-bottom: 1em;
+}
