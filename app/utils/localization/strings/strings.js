@@ -866,6 +866,16 @@ export default {
     discount_notice: 'Salvează 15% din tariful lunar',
     set_as_default: 'Setează card implicit',
     add_new_card: 'Adaugă card nou',
+    number: 'Număr',
+    delete_subscription: 'Rezilierea contractului',
+    delete_subscription_info:
+      'La rezilierea contractului nu se va mai percepe taxă conform planului selectat, iar accesul la aplicație va fi limitat.',
+    cancel_subscription_confirmation:
+      'Sunteți sigur că doriți să anulați subscripția ?',
+    add_seats: 'Adaugă locuri',
+    months: 'luni',
+    transaction_unsuccessful: '<h1>Tranzacție nereușită</h1>',
+    go_to: 'Mergeți la',
   },
   ro: {
     analytics: 'Analitică',
@@ -1747,10 +1757,12 @@ export default {
     delete_subscription: 'Rezilierea contractului',
     delete_subscription_info:
       'La rezilierea contractului nu se va mai percepe taxă conform planului selectat, iar accesul la aplicație va fi limitat.',
-    months: 'Luni',
     cancel_subscription_confirmation:
       'Sunteți sigur că doriți să anulați subscripția ?',
     add_seats: 'Adaugă locuri',
+    months: 'luni',
+    transaction_unsuccessful: 'Tranzacție nereușită',
+    go_to: 'Mergeți la',
   },
   ru: {
     analytics: 'Analytics',
@@ -2616,5 +2628,15 @@ export default {
     discount_notice: 'Salvează 15% din tariful lunar',
     set_as_default: 'Setează card implicit',
     add_new_card: 'Adaugă card nou',
+    number: 'Număr',
+    delete_subscription: 'Rezilierea contractului',
+    delete_subscription_info:
+      'La rezilierea contractului nu se va mai percepe taxă conform planului selectat, iar accesul la aplicație va fi limitat.',
+    cancel_subscription_confirmation:
+      'Sunteți sigur că doriți să anulați subscripția ?',
+    add_seats: 'Adaugă locuri',
+    months: 'luni',
+    transaction_unsuccessful: '<h1>Tranzacție nereușită</h1>',
+    go_to: 'Mergeți la',
   },
 };

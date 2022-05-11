@@ -61,9 +61,14 @@ const SeatsManagement: React.FC<Props> = ({ onCancel }) => {
   }, [isDataLoading]);
 
   const paymentDueString = useMemo(() => {
-    return formatInTimeZone(subscription.nextPayment, timeZone, 'dd MMM yyyy', {
-      locale: DateLocales[appLanguage],
-    });
+    return formatInTimeZone(
+      !subscription.nextPayment ? new Date() : subscription.nextPayment,
+      timeZone,
+      'dd MMM yyyy',
+      {
+        locale: DateLocales[appLanguage],
+      },
+    );
   }, [subscription.nextPayment]);
 
   const isAddingSeats = useMemo(() => {
@@ -92,7 +97,9 @@ const SeatsManagement: React.FC<Props> = ({ onCancel }) => {
         start: today,
         end: duePaymentDate,
       });
-      return `${duration.months} ${textForKey('months')} ${duration.days}`;
+      return `${
+        duration.years > 0 ? `${duration.years}${textForKey('year')}` : ''
+      } ${duration.months} ${textForKey('months')} ${duration.days}`;
     }
   }, [subscription.nextPayment, subscription.interval]);
 

@@ -1,6 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
-const Calendar = () => {
+const Settings = () => {
   return (
     <div>
       <div />
@@ -8,7 +9,7 @@ const Calendar = () => {
   );
 };
 
-export default Calendar;
+export default connect((state) => state)(Settings);
 
 export const getServerSideProps = async () => {
   return {

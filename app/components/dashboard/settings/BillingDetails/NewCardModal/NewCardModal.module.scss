@@ -8,6 +8,8 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  overflow: auto;
+  max-height: calc(100vh - 5rem);
 
   .closeBtn {
     position: absolute !important;

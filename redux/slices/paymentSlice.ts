@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { HYDRATE } from 'next-redux-wrapper';
 import {
   PaymentSubscription,
   PaymentMethod,
@@ -107,15 +108,14 @@ const paymentSlice = createSlice({
       state.modalOpen = false;
     },
   },
-
-  // extraReducers: {
-  //   [HYDRATE]: (state, action) => {
-  //     return {
-  //       ...state,
-  //       ...action.payload.paymentsSlice,
-  //     };
-  //   },
-  // },
+  extraReducers: {
+    [HYDRATE]: (state, action) => {
+      return {
+        ...state,
+        ...action.payload.paymentsState,
+      };
+    },
+  },
 });
 
 export const {

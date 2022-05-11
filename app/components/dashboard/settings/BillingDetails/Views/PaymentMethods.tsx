@@ -56,14 +56,15 @@ const PaymentMethods: React.FC<Props> = ({ countries }) => {
   return (
     <>
       <div className={styles.wrapper}>
-        {data.map((method) => (
-          <PaymentMethod
-            {...method}
-            key={method.id}
-            onDelete={handleDelete}
-            onSetAsDefault={handleSetAsDefault}
-          />
-        ))}
+        {data &&
+          data.map((method) => (
+            <PaymentMethod
+              {...method}
+              key={method.id}
+              onDelete={handleDelete}
+              onSetAsDefault={handleSetAsDefault}
+            />
+          ))}
         <div className={styles.newMethod}>
           <Button
             label={textForKey('add_new_card')}

@@ -563,3 +563,13 @@ export const currenciesMap = {
   usd: '$',
   ron: 'lei',
 };
+
+export const SubscriptionStatuses = {
+  unpaid: 'unpaid',
+  active: 'active',
+  canceled: 'canceled',
+  trialing: 'trialing',
+  incomplete: 'incomplete',
+  incomplete_expired: 'incomplete_expired',
+  past_due: 'past_due',
+};
