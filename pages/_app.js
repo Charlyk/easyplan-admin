@@ -351,6 +351,7 @@ EasyApp.getInitialProps = wrapper.getInitialAppProps(
       };
       store.dispatch(setAppData(appData));
       store.dispatch(setSubscriptionInfo(subscription));
+      console.log('this console.log', subscription);
     } catch (e) {
       console.error('App', e.message);
     }

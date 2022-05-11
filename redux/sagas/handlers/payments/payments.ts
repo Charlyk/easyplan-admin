@@ -17,6 +17,7 @@ import {
   requestBillingPeriodChange,
   requestCancelSubscription,
 } from 'redux/sagas/requests/payments/payments';
+import { showErrorNotification } from 'redux/slices/globalNotificationsSlice';
 import {
   dispatchFetchSubscriptionInfo,
   setSubscriptionInfo,
@@ -48,6 +49,11 @@ function* handleRequestSubscriptionInfo(_action: PayloadAction) {
   } catch (error) {
     const errorResponse = error as ErrorResponse;
     yield put(
+      showErrorNotification(
+        error.response?.data.message ?? errorResponse.message,
+      ),
+    );
+    yield put(
       setSubscriptionInfoError(
         errorResponse.response?.data.message ?? errorResponse.message,
       ),
@@ -64,6 +70,11 @@ function* handleFetchInvoices(_action: PayloadAction) {
   } catch (error) {
     const errorResponse = error as ErrorResponse;
     yield put(
+      showErrorNotification(
+        error.response?.data.message ?? errorResponse.message,
+      ),
+    );
+    yield put(
       setInvoicesError(
         errorResponse.response?.data.message ?? errorResponse.message,
       ),
@@ -79,6 +90,11 @@ function* handleFetchPaymentMethods(_action: PayloadAction) {
     yield put(setPaymentMethods(response.data));
   } catch (error) {
     const errorResponse = error as ErrorResponse;
+    yield put(
+      showErrorNotification(
+        error.response?.data.message ?? errorResponse.message,
+      ),
+    );
     yield put(
       setPaymentMethodsError(
         errorResponse.response?.data.message ?? errorResponse.message,
@@ -97,6 +113,11 @@ function* handleAddPaymentMethod(action: PayloadAction<PaymentCardData>) {
     yield put(setPaymentMethods(response.data));
   } catch (error) {
     const errorResponse = error as ErrorResponse;
+    yield put(
+      showErrorNotification(
+        error.response?.data.message ?? errorResponse.message,
+      ),
+    );
     yield put(
       setPaymentMethodsError(
         errorResponse.response?.data.message ?? errorResponse.message,
@@ -117,6 +138,11 @@ function* handleDeletePaymentMethod(
   } catch (error) {
     const errorResponse = error as ErrorResponse;
     yield put(
+      showErrorNotification(
+        error.response?.data.message ?? errorResponse.message,
+      ),
+    );
+    yield put(
       setPaymentMethodsError(
         errorResponse.response?.data.message ?? errorResponse.message,
       ),
@@ -132,6 +158,11 @@ function* handleSetPaymentMethodAsDefault(
     yield put(stateSetPaymentMethodAsDefault(action.payload));
   } catch (error) {
     const errorResponse = error as ErrorResponse;
+    yield put(
+      showErrorNotification(
+        error.response?.data.message ?? errorResponse.message,
+      ),
+    );
     yield put(
       setPaymentMethodsError(
         errorResponse.response?.data.message ?? errorResponse.message,
@@ -152,6 +183,11 @@ function* handlePurchaseSeats(
   } catch (error) {
     const errorResponse = error as ErrorResponse;
     yield put(
+      showErrorNotification(
+        error.response?.data.message ?? errorResponse.message,
+      ),
+    );
+    yield put(
       setSubscriptionInfoError(
         errorResponse.response?.data.message ?? errorResponse.message,
       ),
@@ -168,6 +204,11 @@ function* handleRemoveSeats(action: PayloadAction<{ seats: number }>) {
     yield put(setSubscriptionInfo(response.data));
   } catch (error) {
     const errorResponse = error as ErrorResponse;
+    yield put(
+      showErrorNotification(
+        error.response?.data.message ?? errorResponse.message,
+      ),
+    );
     yield put(
       setSubscriptionInfoError(
         errorResponse.response?.data.message ?? errorResponse.message,
@@ -186,6 +227,11 @@ function* handleBillingPeriodChange(
   } catch (error) {
     const errorResponse = error as ErrorResponse;
     yield put(
+      showErrorNotification(
+        error.response?.data.message ?? errorResponse.message,
+      ),
+    );
+    yield put(
       setSubscriptionInfoError(
         errorResponse.response?.data.message ?? errorResponse.message,
       ),
@@ -200,6 +246,11 @@ function* handleCancelSubscription(_action: PayloadAction) {
     yield put(setSubscriptionInfo(response.data));
   } catch (error) {
     const errorResponse = error as ErrorResponse;
+    yield put(
+      showErrorNotification(
+        error.response?.data.message ?? errorResponse.message,
+      ),
+    );
     yield put(
       setSubscriptionInfoError(
         errorResponse.response?.data.message ?? errorResponse.message,
