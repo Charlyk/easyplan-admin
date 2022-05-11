@@ -112,7 +112,7 @@ const paymentSlice = createSlice({
     [HYDRATE]: (state, action) => {
       return {
         ...state,
-        ...action.payload.paymentsSlice,
+        ...action.payload.paymentsState,
       };
     },
   },

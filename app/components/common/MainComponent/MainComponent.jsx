@@ -106,7 +106,8 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
 
     const subscriptionStatus =
       subscription.status === SubscriptionStatuses.unpaid ||
-      subscription.status === SubscriptionStatuses.incomplete_expired;
+      subscription.status === SubscriptionStatuses.incomplete_expired ||
+      subscription.status === SubscriptionStatuses.canceled;
 
     return correctUser && subscriptionStatus;
   }, [subscription]);
