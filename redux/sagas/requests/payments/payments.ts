@@ -64,3 +64,9 @@ export async function requestBillingPeriodChange(data: {
 export async function requestCancelSubscription() {
   return axios.delete('/api/payments/subscription');
 }
+
+export async function requestRetryPayment(): Promise<
+  AxiosResponse<PaymentSubscription>
+> {
+  return axios.put('/api/payments/invoices');
+}

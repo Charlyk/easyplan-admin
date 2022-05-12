@@ -59,6 +59,7 @@ import {
   purchaseSeatsWatcher,
   billingPeriodChangeWatcher,
   cancelSubscriptionWatcher,
+  retryPaymentWatcher,
 } from './handlers';
 
 export default function* rootSaga() {
@@ -122,5 +123,6 @@ export default function* rootSaga() {
     purchaseSeatsWatcher(),
     billingPeriodChangeWatcher(),
     cancelSubscriptionWatcher(),
+    retryPaymentWatcher(),
   ]);
 }

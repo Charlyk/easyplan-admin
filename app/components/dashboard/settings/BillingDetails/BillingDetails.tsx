@@ -3,10 +3,15 @@ import { Button } from '@easyplanpro/easyplan-components';
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
+import Alert from '@material-ui/lab/Alert';
 import { formatInTimeZone } from 'date-fns-tz';
 import dynamic from 'next/dynamic';
 import { useSelector, useDispatch } from 'react-redux';
-import { DateLocales } from 'app/utils/constants';
+import {
+  DateLocales,
+  SubscriptionStatuses,
+  PaymentStatuses,
+} from 'app/utils/constants';
 import formatAmountWithSymbol from 'app/utils/formatAmountWithSymbol';
 import { textForKey } from 'app/utils/localization';
 import {
@@ -18,11 +23,13 @@ import {
   paymentsPaymentMethodsSelector,
   isPaymentDataLoadingSelector,
   paymentsInvoicesSelector,
+  paymentsNewCardModalSelector,
 } from 'redux/selectors/paymentsSelector';
 import {
   dispatchFetchSubscriptionInfo,
   dispatchFetchPaymentMethods,
   dispatchFetchInvoices,
+  dispatchRetryPayment,
 } from 'redux/slices/paymentSlice';
 import styles from './BillingDetails.module.scss';
 import {
@@ -33,6 +40,7 @@ import {
 const PaymentHistory = dynamic(() => import('./Views/PaymentHistory'));
 const PaymentMethods = dynamic(() => import('./Views/PaymentMethods'));
 const SeatsManagement = dynamic(() => import('./Views/SeatsManagement'));
+const NewCardModal = dynamic(() => import('./NewCardModal/NewCardModal'));
 const PaymentPlan = dynamic(import('./Views/PaymentPlan'));
 
 const BillingDetails: React.FC<BillingDetailsProps> = ({ countries }) => {
@@ -46,6 +54,7 @@ const BillingDetails: React.FC<BillingDetailsProps> = ({ countries }) => {
     paymentsPaymentMethodsSelector,
   );
   const { loading: invoicesLoading } = useSelector(paymentsInvoicesSelector);
+  const modalOpen = useSelector(paymentsNewCardModalSelector);
   const isDataLoading = useSelector(isPaymentDataLoadingSelector);
   const timeZone = useSelector(clinicTimeZoneSelector);
   const appLanguage = useSelector(appLanguageSelector);
@@ -59,6 +68,20 @@ const BillingDetails: React.FC<BillingDetailsProps> = ({ countries }) => {
   const loading = useMemo(() => {
     return subscriptionLoading || paymentMethodLoading || invoicesLoading;
   }, [subscriptionLoading, paymentMethodLoading, invoicesLoading]);
+
+  const shouldRenderAlert = useMemo(() => {
+    const { paymentStatus, status } = subscriptionData;
+    const correspondingSubscriptionStatus =
+      status === SubscriptionStatuses.unpaid ||
+      status === SubscriptionStatuses.incomplete_expired;
+
+    const correspondingPaymentStatus =
+      paymentStatus === PaymentStatuses.draft ||
+      paymentStatus === PaymentStatuses.open ||
+      paymentStatus === PaymentStatuses.uncollectible;
+
+    return correspondingSubscriptionStatus || correspondingPaymentStatus;
+  }, [subscriptionData]);
 
   useEffect(() => {
     dispatch(dispatchFetchInvoices());
@@ -74,6 +97,10 @@ const BillingDetails: React.FC<BillingDetailsProps> = ({ countries }) => {
     handleViewModeSwitch('payment-history');
   };
 
+  const handleRetryPayment = () => {
+    dispatch(dispatchRetryPayment());
+  };
+
   if (loading) {
     return (
       <div className={styles.loadingWrapper}>
@@ -84,7 +111,21 @@ const BillingDetails: React.FC<BillingDetailsProps> = ({ countries }) => {
 
   return (
     <>
+      {modalOpen && <NewCardModal countries={countries} />}
       <div className={styles.wrapper}>
+        {shouldRenderAlert && (
+          <Alert
+            severity={'warning'}
+            classes={{ message: styles.alertContainer }}
+          >
+            <Box display={'flex'} alignItems={'center'}>
+              <Typography>{textForKey('transaction_unsuccessful')}</Typography>
+              <Button variant={'outlined'} onClick={handleRetryPayment}>
+                {textForKey('retry_payment')}
+              </Button>
+            </Box>
+          </Alert>
+        )}
         <div className={styles.introHeader}>
           <div className={styles.infoBox}>
             <Typography className={styles.infoBoxHeader}>
@@ -127,7 +168,8 @@ const BillingDetails: React.FC<BillingDetailsProps> = ({ countries }) => {
               }}
             >
               {formatInTimeZone(
-                subscriptionData.nextPayment === ''
+                subscriptionData.nextPayment === '' ||
+                  !subscriptionData.nextPayment
                   ? new Date()
                   : subscriptionData.nextPayment,
                 timeZone,

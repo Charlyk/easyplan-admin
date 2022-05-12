@@ -1764,6 +1764,7 @@ export default {
     add_seats: 'Adaugă locuri',
     months: 'luni',
     transaction_unsuccessful: 'Tranzacție nereușită',
+    retry_payment: 'Reîncearcă plata',
     go_to: 'Mergeți la',
   },
   ru: {

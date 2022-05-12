@@ -12,10 +12,7 @@ import jcb from 'public/images/cards/jcb.svg';
 import mastercard from 'public/images/cards/mastercard.svg';
 import unionpay from 'public/images/cards/unionpay.png';
 import visa from 'public/images/cards/visa.svg';
-import {
-  paymentsNewCardModalSelector,
-  paymentsPaymentMethodsSelector,
-} from 'redux/selectors/paymentsSelector';
+import { paymentsPaymentMethodsSelector } from 'redux/selectors/paymentsSelector';
 import {
   dispatchDeletePaymentMethod,
   dispatchSetPaymentMethodAsDefault,
@@ -23,7 +20,6 @@ import {
 } from 'redux/slices/paymentSlice';
 import { PaymentMethod as PaymentMethodType } from 'types/api';
 import { Country } from 'types/api';
-import NewCardModal from '../NewCardModal';
 import styles from './ViewStyles/PaymentMethods.module.scss';
 
 const imagesMap = {
@@ -40,11 +36,9 @@ type Props = {
   countries: Country[];
 };
 
-const PaymentMethods: React.FC<Props> = ({ countries }) => {
+const PaymentMethods: React.FC<Props> = () => {
   const dispatch = useDispatch();
   const { data } = useSelector(paymentsPaymentMethodsSelector);
-  const modalOpen = useSelector(paymentsNewCardModalSelector);
-
   const handleOpenModal = () => dispatch(openNewCardModal());
 
   const handleDelete = (id: string) =>
@@ -75,7 +69,6 @@ const PaymentMethods: React.FC<Props> = ({ countries }) => {
           />
         </div>
       </div>
-      {modalOpen && <NewCardModal countries={countries} />}
     </>
   );
 };

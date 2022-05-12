@@ -6,6 +6,8 @@ export type PaymentSubscription = {
   nextAmount: number;
   nextCurrency: string;
   interval: 'MONTH' | 'YEAR';
+  paymentStatus: string;
+  status: string;
 };
 
 export type PaymentInvoices = {

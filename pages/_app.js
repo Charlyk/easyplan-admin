@@ -49,7 +49,9 @@ import 'moment/locale/ro';
 import 'app/styles/base/base.scss';
 import 'react-h5-audio-player/src/styles.scss';
 import 'app/utils';
-import { useAnalytics } from '../app/utils/hooks';
+import createEmotionCache from 'app/utils/createEmotionCache';
+import { useAnalytics } from 'app/utils/hooks';
+import { CacheProvider } from '@emotion/react';
 
 const AppointmentModal = dynamic(() =>
   import(
@@ -68,7 +70,13 @@ const ChangeLogModal = dynamic(() =>
   import('app/components/common/modals/ChangeLogsModal'),
 );
 
-const EasyApp = ({ Component, pageProps }) => {
+const clientEmotionCache = createEmotionCache();
+
+const EasyApp = ({
+  Component,
+  pageProps,
+  emotionCache = clientEmotionCache,
+}) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const tawkMessengerRef = useRef(null);
@@ -255,62 +263,66 @@ const EasyApp = ({ Component, pageProps }) => {
           content='minimum-scale=1, initial-scale=1, width=device-width'
         />
       </Head>
-      <DndProvider backend={HTML5Backend}>
-        <ThemeContainer>
-          <ThemeProvider theme={theme}>
-            <React.Fragment>
-              <CssBaseline />
-              <PubNubProvider client={pubnubClient}>
-                <NotificationsProvider>
-                  <React.Fragment>
-                    {isDev && (
-                      <Typography className='develop-indicator'>Dev</Typography>
-                    )}
-                    {logout && (
-                      <ConfirmationModal
-                        title={textForKey('Logout')}
-                        message={textForKey('logout message')}
-                        onConfirm={handleUserLogout}
-                        onClose={handleCancelLogout}
-                        isLoading={isLoading}
-                        show={logout}
+      <CacheProvider value={emotionCache}>
+        <DndProvider backend={HTML5Backend}>
+          <ThemeContainer>
+            <ThemeProvider theme={theme}>
+              <React.Fragment>
+                <CssBaseline />
+                <PubNubProvider client={pubnubClient}>
+                  <NotificationsProvider>
+                    <React.Fragment>
+                      {isDev && (
+                        <Typography className='develop-indicator'>
+                          Dev
+                        </Typography>
+                      )}
+                      {logout && (
+                        <ConfirmationModal
+                          title={textForKey('Logout')}
+                          message={textForKey('logout message')}
+                          onConfirm={handleUserLogout}
+                          onClose={handleCancelLogout}
+                          isLoading={isLoading}
+                          show={logout}
+                        />
+                      )}
+                      {changeLogModal.open && (
+                        <ChangeLogModal
+                          {...changeLogModal}
+                          onClose={handleCloseChangeLogModal}
+                        />
+                      )}
+                      {appointmentModal?.open && <AppointmentModal />}
+                      {imageModal.open && (
+                        <FullScreenImageModal
+                          {...imageModal}
+                          onClose={handleCloseImageModal}
+                        />
+                      )}
+                      {!currentPage.includes('confirmation') &&
+                      !currentPage.includes('facebook') ? (
+                        <TawkMessengerReact
+                          propertyId='619407696bb0760a4942ea33'
+                          widgetId='1fkl3ptc4'
+                          ref={tawkMessengerRef}
+                          onLoad={handleTawkMessengerLoad}
+                        />
+                      ) : null}
+                      <NextNprogress
+                        color='#29D'
+                        startPosition={0.3}
+                        height={2}
                       />
-                    )}
-                    {changeLogModal.open && (
-                      <ChangeLogModal
-                        {...changeLogModal}
-                        onClose={handleCloseChangeLogModal}
-                      />
-                    )}
-                    {appointmentModal?.open && <AppointmentModal />}
-                    {imageModal.open && (
-                      <FullScreenImageModal
-                        {...imageModal}
-                        onClose={handleCloseImageModal}
-                      />
-                    )}
-                    {!currentPage.includes('confirmation') &&
-                    !currentPage.includes('facebook') ? (
-                      <TawkMessengerReact
-                        propertyId='619407696bb0760a4942ea33'
-                        widgetId='1fkl3ptc4'
-                        ref={tawkMessengerRef}
-                        onLoad={handleTawkMessengerLoad}
-                      />
-                    ) : null}
-                    <NextNprogress
-                      color='#29D'
-                      startPosition={0.3}
-                      height={2}
-                    />
-                    <Component {...pageProps} />
-                  </React.Fragment>
-                </NotificationsProvider>
-              </PubNubProvider>
-            </React.Fragment>
-          </ThemeProvider>
-        </ThemeContainer>
-      </DndProvider>
+                      <Component {...pageProps} />
+                    </React.Fragment>
+                  </NotificationsProvider>
+                </PubNubProvider>
+              </React.Fragment>
+            </ThemeProvider>
+          </ThemeContainer>
+        </DndProvider>
+      </CacheProvider>
     </React.Fragment>
   );
 };
