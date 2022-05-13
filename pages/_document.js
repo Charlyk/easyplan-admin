@@ -31,6 +31,8 @@ class AppDocument extends Document {
       />
     ));
 
+    console.log('Emotion Style Tags: ', emotionStyleTags);
+
     return {
       ...initialProps,
       // Styles fragment is rendered after the app and page rendering finish.
@@ -38,10 +40,7 @@ class AppDocument extends Document {
         <>
           {initialProps.styles}
           {sheets.getStyleElement()}
-          {[
-            ...React.Children.toArray(initialProps.styles),
-            ...emotionStyleTags,
-          ]}
+          {emotionStyleTags}
         </>
       ),
     };
