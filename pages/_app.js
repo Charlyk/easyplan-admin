@@ -13,6 +13,7 @@ import NextNprogress from 'nextjs-progressbar';
 import { PubNubProvider } from 'pubnub-react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { I18n } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import { END } from 'redux-saga';
 import {
@@ -34,13 +35,15 @@ import { pubnubClient } from 'pubnubUtils';
 import { setImageModal } from 'redux/actions/imageModalActions';
 import initialState from 'redux/initialState';
 import {
+  appLanguageSelector,
   currentClinicSelector,
   currentUserSelector,
 } from 'redux/selectors/appDataSelector';
-import { appointmentModalSelector } from 'redux/selectors/appointmentsSelector';
+import { appointmentModalSelector } from 'redux/selectors/appointmentModalSelector';
 import { imageModalSelector } from 'redux/selectors/imageModalSelector';
 import { logoutSelector } from 'redux/selectors/rootSelector';
 import { setAppData } from 'redux/slices/appDataSlice';
+import { closeAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
 import { triggerUserLogOut } from 'redux/slices/mainReduxSlice';
 import { setSubscriptionInfo } from 'redux/slices/paymentSlice';
 import { handleRemoteMessageReceived } from 'redux/slices/pubnubMessagesSlice';
@@ -53,9 +56,9 @@ import createEmotionCache from 'app/utils/createEmotionCache';
 import { useAnalytics } from 'app/utils/hooks';
 import { CacheProvider } from '@emotion/react';
 
-const AppointmentModal = dynamic(() =>
+const AddAppointmentModal = dynamic(() =>
   import(
-    'app/components/dashboard/calendar/modals/AppointmentModal/AppointmentModal'
+    'app/components/dashboard/calendar/modals/AddAppointmentModal/AddAppointmentModal'
   ),
 );
 
@@ -91,6 +94,7 @@ const EasyApp = ({
   const logout = useSelector(logoutSelector);
   const [logEvent] = useAnalytics();
   const currentPage = router.asPath;
+  const locale = useSelector(appLanguageSelector);
 
   useEffect(() => {
     dispatch(setAppData(pageProps.appData));
@@ -144,6 +148,10 @@ const EasyApp = ({
 
   const handlePubnubMessageReceived = (message) => {
     dispatch(handleRemoteMessageReceived(message));
+  };
+
+  const handleAppointmentModalClose = () => {
+    dispatch(closeAppointmentModal());
   };
 
   const handleTawkMessengerLoad = () => {
@@ -265,6 +273,10 @@ const EasyApp = ({
       </Head>
       <CacheProvider value={emotionCache}>
         <DndProvider backend={HTML5Backend}>
+          <I18n
+            locale={locale ?? 'ro'}
+            messages={require(`../public/localization/${locale ?? 'ro'}.json`)}
+          >
           <ThemeContainer>
             <ThemeProvider theme={theme}>
               <React.Fragment>
@@ -320,9 +332,11 @@ const EasyApp = ({
                 </PubNubProvider>
               </React.Fragment>
             </ThemeProvider>
+             </I18n>
           </ThemeContainer>
         </DndProvider>
       </CacheProvider>
+
     </React.Fragment>
   );
 };
