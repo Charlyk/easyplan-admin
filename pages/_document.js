@@ -30,9 +30,6 @@ class AppDocument extends Document {
         dangerouslySetInnerHTML={{ __html: style.css }}
       />
     ));
-
-    console.log('Emotion Style Tags: ', emotionStyleTags);
-
     return {
       ...initialProps,
       // Styles fragment is rendered after the app and page rendering finish.
