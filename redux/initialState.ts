@@ -286,6 +286,8 @@ const initialState: ReduxState = {
       loading: false,
       error: null,
       data: {
+        status: '',
+        paymentStatus: '',
         id: '',
         availableSeats: 0,
         nextPayment: '',

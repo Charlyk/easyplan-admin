@@ -4,7 +4,11 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { HeaderKeys } from 'app/utils/constants';
 import getSubdomain from 'app/utils/getSubdomain';
 import updatedServerUrl from 'app/utils/updateServerUrl';
-import { PaymentInvoices, ServerResponse } from 'types/api';
+import {
+  PaymentInvoices,
+  PaymentSubscription,
+  ServerResponse,
+} from 'types/api';
 import authorized from '../authorized';
 
 async function fetchInvoices(
@@ -24,11 +28,37 @@ async function fetchInvoices(
   });
 }
 
+async function retryPayment(
+  req: NextApiRequest,
+): Promise<AxiosResponse<ServerResponse<PaymentSubscription>>> {
+  const { clinic_id: clinicId, auth_token: authToken } = cookie.parse(
+    req.headers.cookie,
+  );
+
+  return axios.put(
+    `${updatedServerUrl()}/payments/retry`,
+    {},
+    {
+      headers: {
+        [HeaderKeys.authorization]: authToken,
+        [HeaderKeys.clinicId]: clinicId,
+        [HeaderKeys.subdomain]: getSubdomain(req),
+        [HeaderKeys.contentType]: 'application/json',
+      },
+    },
+  );
+}
+
 export default authorized(async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     switch (req.method) {
       case 'GET': {
         const response = await fetchInvoices(req);
+        res.json(response.data.data);
+        break;
+      }
+      case 'PUT': {
+        const response = await retryPayment(req);
         res.json(response.data.data);
         break;
       }

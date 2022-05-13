@@ -573,3 +573,9 @@ export const SubscriptionStatuses = {
   incomplete_expired: 'incomplete_expired',
   past_due: 'past_due',
 };
+
+export const PaymentStatuses = {
+  draft: 'draft',
+  open: 'open',
+  uncollectible: 'uncollectible',
+};

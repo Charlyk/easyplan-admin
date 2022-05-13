@@ -101,6 +101,9 @@ const paymentSlice = createSlice({
     clearPaymentMethodsError(state) {
       state.paymentMethods.error = null;
     },
+    dispatchRetryPayment(state) {
+      state.isDataLoading = true;
+    },
     openNewCardModal(state) {
       state.modalOpen = true;
     },
@@ -121,6 +124,7 @@ const paymentSlice = createSlice({
 export const {
   dispatchAddNewPaymentMethod,
   dispatchFetchSubscriptionInfo,
+  dispatchRetryPayment,
   dispatchSetPaymentMethodAsDefault,
   dispatchChangeBillingPeriod,
   dispatchCancelSubcription,

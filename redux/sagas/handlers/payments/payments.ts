@@ -16,6 +16,7 @@ import {
   requestRemoveSeats,
   requestBillingPeriodChange,
   requestCancelSubscription,
+  requestRetryPayment,
 } from 'redux/sagas/requests/payments/payments';
 import { showErrorNotification } from 'redux/slices/globalNotificationsSlice';
 import {
@@ -37,6 +38,7 @@ import {
   dispatchRemoveSeats,
   dispatchChangeBillingPeriod,
   dispatchCancelSubcription,
+  dispatchRetryPayment,
 } from 'redux/slices/paymentSlice';
 import { ErrorResponse, PaymentCardData } from 'types/api';
 
@@ -257,6 +259,31 @@ function* handleCancelSubscription(_action: PayloadAction) {
       ),
     );
   }
+}
+
+function* handleRetryPayment() {
+  try {
+    const response: SagaReturnType<typeof requestRetryPayment> = yield call(
+      requestRetryPayment,
+    );
+    yield put(setSubscriptionInfo(response.data));
+  } catch (error) {
+    const errorResponse = error as ErrorResponse;
+    yield put(
+      showErrorNotification(
+        errorResponse?.response?.data?.message ?? errorResponse.message,
+      ),
+    );
+    yield put(
+      setSubscriptionInfoError(
+        errorResponse.response?.data.message ?? errorResponse.message,
+      ),
+    );
+  }
+}
+
+export function* retryPaymentWatcher() {
+  yield takeLatest(dispatchRetryPayment.type, handleRetryPayment);
 }
 
 export function* cancelSubscriptionWatcher() {

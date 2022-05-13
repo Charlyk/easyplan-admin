@@ -25,11 +25,13 @@ import {
 } from 'redux/selectors/appDataSelector';
 import {
   isPaymentDataLoadingSelector,
+  paymentsPaymentMethodsSelector,
   paymentsSubscriptionSelector,
 } from 'redux/selectors/paymentsSelector';
 import {
   dispatchPurchaseSeats,
   dispatchRemoveSeats,
+  openNewCardModal,
 } from 'redux/slices/paymentSlice';
 import styles from './ViewStyles/SeatsManagement.module.scss';
 
@@ -45,6 +47,7 @@ const SeatsManagement: React.FC<Props> = ({ onCancel }) => {
   const initialRenderRef = useRef(false);
   const [noOfSeats, setNoOfSeats] = useState('1');
   const { data: subscription } = useSelector(paymentsSubscriptionSelector);
+  const { data: paymentMethods } = useSelector(paymentsPaymentMethodsSelector);
   const doctors = useSelector(clinicDoctorsSelector);
   const appLanguage = useSelector(appLanguageSelector);
   const timeZone = useSelector(clinicTimeZoneSelector);
@@ -198,6 +201,10 @@ const SeatsManagement: React.FC<Props> = ({ onCancel }) => {
   }, [parsedNoOfSeats, subscription.availableSeats, isAddingSeats]);
 
   const handleSeats = () => {
+    if (!paymentMethods || paymentMethods.length > 0) {
+      dispatch(openNewCardModal());
+      return;
+    }
     if (isAddingSeats) {
       dispatch(
         dispatchPurchaseSeats({
