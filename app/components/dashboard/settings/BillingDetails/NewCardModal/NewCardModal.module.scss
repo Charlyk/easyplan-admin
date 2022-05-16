@@ -15,13 +15,44 @@
     position: absolute !important;
     right: 2em !important;
     top: 1em !important;
+    span {
+      padding: 0;
+
+      & svg {
+        width: 25px;
+        height: 25px
+      }
+    }
   }
 }
 
+.headline {
+  color: #3a83dc;
+  margin: 0;
+}
 
+.error {
+  color: #ef568e;
+}
+
+.countrySelect {
+  width: 100%;
+}
+
+.flexWrapper {
+  display: flex;
+
+  &> * {
+    width: 100%;
+  }
+
+  &>*:first-of-type {
+    margin-right: 1em;
+  }
+}
 
 .container > *:not(:last-child) {
-  margin-bottom: .5em;
+  margin-bottom: .9em;
 }
 
 .container input[type='number'] {

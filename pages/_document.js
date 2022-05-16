@@ -32,6 +32,7 @@ class AppDocument extends Document {
     ));
     return {
       ...initialProps,
+      emotionStyleTags,
       // Styles fragment is rendered after the app and page rendering finish.
       styles: (
         <>
@@ -47,6 +48,7 @@ class AppDocument extends Document {
     return (
       <Html lang={this.props.locale}>
         <Head>
+          {this.props.emotionStyleTags}
           <link rel='icon' href='/favicon.ico' />
           <link
             rel='apple-touch-icon'
@@ -80,10 +82,9 @@ class AppDocument extends Document {
             href='https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap'
           />
         </Head>
-        <body style={{ '#country-data': { zIndex: 2000 } }}>
+        <body>
           <Main />
           <NextScript />
-          <div id='modal-root' />
         </body>
       </Html>
     );
