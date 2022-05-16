@@ -18,7 +18,9 @@ const paymentSlice = createSlice({
     setSubscriptionInfo(state, action: PayloadAction<PaymentSubscription>) {
       state.subscriptionInfo.loading = false;
       state.isDataLoading = false;
-      state.subscriptionInfo.data = action.payload;
+      if (!action.payload) {
+        state.subscriptionInfo.data = action.payload;
+      }
     },
     setSubscriptionInfoError(state, action: PayloadAction<string | null>) {
       state.subscriptionInfo.loading = false;
