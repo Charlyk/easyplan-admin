@@ -380,6 +380,10 @@ EasyApp.getInitialProps = wrapper.getInitialAppProps(
       // update moment default timezone
       moment.tz.setDefault(currentClinic.timeZone);
 
+      console.log('current user: ', currentUser);
+      console.log('current clinic: ', currentClinic);
+      console.log('subscription: ', subscription);
+
       // store global data in redux
       const cookies = ctx.req?.headers?.cookie ?? '';
       const appData = {
@@ -389,7 +393,9 @@ EasyApp.getInitialProps = wrapper.getInitialAppProps(
         cookies,
       };
       store.dispatch(setAppData(appData));
-      store.dispatch(setSubscriptionInfo(subscription));
+      if (subscription) {
+        store.dispatch(setSubscriptionInfo(subscription));
+      }
     } catch (e) {
       console.error('App', e.message);
     }
