@@ -36,11 +36,11 @@ import {
   BillingDetailsViewMode,
   BillingDetailsProps,
 } from './BillingDetails.types';
+import NewCardModal from './NewCardModal';
 
 const PaymentHistory = dynamic(() => import('./Views/PaymentHistory'));
 const PaymentMethods = dynamic(() => import('./Views/PaymentMethods'));
 const SeatsManagement = dynamic(() => import('./Views/SeatsManagement'));
-const NewCardModal = dynamic(() => import('./NewCardModal/NewCardModal'));
 const PaymentPlan = dynamic(import('./Views/PaymentPlan'));
 
 const BillingDetails: React.FC<BillingDetailsProps> = ({ countries }) => {

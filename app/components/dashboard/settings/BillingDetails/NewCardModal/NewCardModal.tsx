@@ -1,15 +1,13 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import {
-  TextField,
-  SelectMenu,
-  Typography,
-  Spacer,
-  LoadingButton,
-  IconButton,
-  theme,
-} from '@easyplanpro/easyplan-components';
-import { SelectChangeEvent, Modal, Box } from '@mui/material';
+import { IconButton } from '@easyplanpro/easyplan-components';
+import Box from '@material-ui/core/Box';
+import Modal from '@material-ui/core/Modal';
+import Typography from '@material-ui/core/Typography';
+import { SelectChangeEvent } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
+import EASSelect from 'app/components/common/EASSelect';
+import EASTextField from 'app/components/common/EASTextField';
+import LoadingButton from 'app/components/common/LoadingButton';
 import { textForKey } from 'app/utils/localization';
 import {
   paymentsPaymentMethodsSelector,
@@ -64,49 +62,38 @@ const NewCardModal: React.FC<NewCardModalProps> = ({ countries }) => {
   const years = useMemo(() => {
     const currentYear = new Date().getFullYear();
     const yearsArr = [];
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 11; i++) {
       yearsArr.push({ id: currentYear + i, name: String(currentYear + i) });
     }
 
     return [{ id: -1, name: textForKey('payment_yy') }, ...yearsArr];
   }, []);
 
-  const handleValidationDateChange = (
+  const handleExpirationMonthChange = (
     evt: SelectChangeEvent<string | number>,
   ) => {
-    const { value, name } = evt.target;
-    setCardFormData((cardFormData) => ({ ...cardFormData, [name]: value }));
-  };
-
-  const handleCardFormTextChange = (
-    evt: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const { name, value } = evt.target;
-    setCardFormData((cardFormData) => ({ ...cardFormData, [name]: value }));
-
-    if (error) {
-      dispatch(setPaymentMethodsError(null));
-    }
-  };
-
-  const handleAddressFormTextChange = (
-    evt: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const { name, value } = evt.target;
-    setAddressFormData((addressFormData) => ({
-      ...addressFormData,
-      [name]: value,
+    const { value } = evt.target;
+    setCardFormData((cardFormData) => ({
+      ...cardFormData,
+      expiryMonth: value as number,
     }));
-    if (error) {
-      dispatch(setPaymentMethodsError(null));
-    }
   };
 
-  const handleCountryChange = (evt: SelectChangeEvent<string | number>) => {
-    const { name, value } = evt.target;
+  const handleExpirationYearChange = (
+    evt: SelectChangeEvent<string | number>,
+  ) => {
+    const { value } = evt.target;
+    setCardFormData((cardFormData) => ({
+      ...cardFormData,
+      expiryYear: value as number,
+    }));
+  };
+
+  const handleCountryChange = (evt: any) => {
+    const { value } = evt.target;
     setAddressFormData((addressFormData) => ({
       ...addressFormData,
-      [name]: value,
+      ['country']: value,
     }));
     if (error) {
       dispatch(setPaymentMethodsError(null));
@@ -164,133 +151,144 @@ const NewCardModal: React.FC<NewCardModalProps> = ({ countries }) => {
   };
 
   return (
-    <Modal open={modalOpen} onBackdropClick={handleCloseModal}>
+    <Modal open={modalOpen} onClose={handleCloseModal}>
       <form className={styles.container} onSubmit={handleSubmit}>
         <IconButton
           icon={'close-icon'}
           className={styles.closeBtn}
           onClick={handleCloseModal}
         />
-        <Typography variant={'titleSmall'}>
-          {textForKey('payment_title')}
-        </Typography>
-        <Typography variant='uppercaseSmall' color={theme.palette.primary.main}>
+        <Typography variant={'body1'}>{textForKey('payment_title')}</Typography>
+        <Typography variant='h6' classes={{ root: styles.headline }}>
           {textForKey('payment_info_card')}
         </Typography>
-        <Spacer direction='vertical' size={1.5} />
-        <TextField
-          label={textForKey('payment_card_holder')}
+        <EASTextField
+          fieldLabel={textForKey('payment_card_holder')}
           fullWidth
           value={cardFormData.cardHolder}
           name='cardHolder'
-          onChange={handleCardFormTextChange}
+          onChange={(value) =>
+            setCardFormData({ ...cardFormData, cardHolder: value as string })
+          }
         />
-        <TextField
-          label={textForKey('payment_card_number')}
+        <EASTextField
+          fieldLabel={textForKey('payment_card_number')}
           fullWidth
           type={'number'}
           inputMode='numeric'
           value={cardFormData.cardNumber}
           name='cardNumber'
-          onChange={handleCardFormTextChange}
+          onChange={(value) =>
+            setCardFormData({ ...cardFormData, cardNumber: value as string })
+          }
         />
         <div className={styles.flexContainer}>
-          <SelectMenu
+          <EASSelect
             options={months}
             value={cardFormData.expiryMonth}
             label={textForKey('payment_valid_till')}
-            onChange={handleValidationDateChange}
-            name='expiryMonth'
+            onChange={handleExpirationMonthChange}
+            labelId='expiryMonth'
           />
-          <SelectMenu
+          <EASSelect
             options={years}
             value={cardFormData.expiryYear}
-            onChange={handleValidationDateChange}
-            name='expiryYear'
+            onChange={handleExpirationYearChange}
+            labelId='expiryYear'
           />
-          <TextField
-            label={'CVV'}
+          <EASTextField
+            fieldLabel={'CVV'}
             value={cardFormData.cvc}
             name='cvc'
-            onChange={handleCardFormTextChange}
+            onChange={(value) =>
+              setCardFormData({ ...cardFormData, cvc: value as string })
+            }
           />
         </div>
-        <Spacer direction='vertical' size={2.5} />
-        <Typography variant='uppercaseSmall' color={theme.palette.primary.main}>
+        <Typography variant='h6' classes={{ root: styles.headline }}>
           {textForKey('payment_info_address')}
         </Typography>
-        <Spacer direction='vertical' size={1.5} />
-        <SelectMenu
+        <EASSelect
+          rootClass={styles.countrySelect}
           options={countries}
           value={addressFormData.country}
-          fullWidth
           label={textForKey('payment_country')}
-          name={'country'}
+          labelId={'country'}
           onChange={handleCountryChange}
         />
-        <TextField
-          label={textForKey('payment_city')}
+        <EASTextField
+          fieldLabel={textForKey('payment_city')}
           fullWidth
           name='city'
           value={addressFormData.city}
-          onChange={handleAddressFormTextChange}
+          onChange={(value) =>
+            setAddressFormData({ ...addressFormData, city: value as string })
+          }
         />
-        <TextField
-          label={textForKey('payment_address1')}
+        <EASTextField
+          fieldLabel={textForKey('payment_address1')}
           fullWidth
           name='addressLine1'
           value={addressFormData.addressLine1}
-          onChange={handleAddressFormTextChange}
+          onChange={(value) =>
+            setAddressFormData({
+              ...addressFormData,
+              addressLine1: value as string,
+            })
+          }
         />
-        <TextField
-          label={textForKey('payment_address2')}
+        <EASTextField
+          fieldLabel={textForKey('payment_address2')}
           fullWidth
           name='addressLine2'
           value={addressFormData.addressLine2}
-          onChange={handleAddressFormTextChange}
-          topHelperText={textForKey('optional')}
+          onChange={(value) =>
+            setAddressFormData({
+              ...addressFormData,
+              addressLine2: value as string,
+            })
+          }
         />
-        <Box display='flex' sx={{ '&>*:first-child': { mr: '1em' } }}>
-          <TextField
-            label={textForKey('payment_zip')}
+        <div className={styles.flexWrapper}>
+          <EASTextField
+            fieldLabel={textForKey('payment_zip')}
             fullWidth
             name='zip'
             value={addressFormData.zip}
-            onChange={handleAddressFormTextChange}
+            onChange={(value) =>
+              setAddressFormData({ ...addressFormData, zip: value as string })
+            }
           />
-          <TextField
-            label={textForKey('payment_state')}
-            topHelperText={textForKey('optional')}
+          <EASTextField
+            fieldLabel={textForKey('payment_state')}
             fullWidth
             name='state'
             value={addressFormData.state}
-            onChange={handleAddressFormTextChange}
+            onChange={(value) =>
+              setAddressFormData({ ...addressFormData, state: value as string })
+            }
           />
-        </Box>
+        </div>
         <Box
           display='flex'
-          justifyContent='flex-start'
+          justifyContent='space-between'
           marginTop={'1.5em'}
           alignItems={'center'}
         >
           <LoadingButton
-            label='Submit'
             variant='contained'
-            size={'medium'}
             disabled={!isFormValid()}
-            loading={loading}
+            isLoading={loading}
             type={'submit'}
-            sx={{ mr: '1.5em' }}
-          />
-          <Typography
-            variant='overlineLarge'
-            color={theme.palette.primary.main}
           >
+            {textForKey('submit')}
+          </LoadingButton>
+          <Typography variant='caption' classes={{ root: styles.headline }}>
             * {textForKey('payment_info_no_payment')}
           </Typography>
         </Box>
         {error && (
-          <Typography variant='bodySmall' color={theme.palette.error.main}>
+          <Typography variant='caption' classes={{ root: styles.error }}>
             {error}
           </Typography>
         )}

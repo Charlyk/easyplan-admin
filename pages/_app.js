@@ -66,7 +66,7 @@ const FullScreenImageModal = dynamic(() =>
   import('app/components/common/modals/FullScreenImageModal'),
 );
 const ConfirmationModal = dynamic(() =>
-  import('../app/components/common/modals/ConfirmationModal'),
+  import('../app/components/common/modals/ConfirmationModal/ConfirmationModal'),
 );
 
 const ChangeLogModal = dynamic(() =>
@@ -389,7 +389,9 @@ EasyApp.getInitialProps = wrapper.getInitialAppProps(
         cookies,
       };
       store.dispatch(setAppData(appData));
-      store.dispatch(setSubscriptionInfo(subscription));
+      if (subscription) {
+        store.dispatch(setSubscriptionInfo(subscription));
+      }
     } catch (e) {
       console.error('App', e.message);
     }
