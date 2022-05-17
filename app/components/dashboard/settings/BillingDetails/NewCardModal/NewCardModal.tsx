@@ -248,7 +248,6 @@ const NewCardModal: React.FC<NewCardModalProps> = ({ countries }) => {
               addressLine2: value as string,
             })
           }
-          // helperText={textForKey('optional')}
         />
         <div className={styles.flexWrapper}>
           <EASTextField
@@ -262,7 +261,6 @@ const NewCardModal: React.FC<NewCardModalProps> = ({ countries }) => {
           />
           <EASTextField
             fieldLabel={textForKey('payment_state')}
-            // topHelperText={textForKey('optional')}
             fullWidth
             name='state'
             value={addressFormData.state}
