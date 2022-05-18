@@ -614,7 +614,7 @@ const AddAppointmentModal = ({
           )}
         </Box>
         {datePicker}
-        {createPatientModalComponent}
+        {createPatientModal.open && createPatientModalComponent}
       </Box>
     </EASModal>
   );

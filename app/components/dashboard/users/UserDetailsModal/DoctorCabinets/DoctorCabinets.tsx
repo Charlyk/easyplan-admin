@@ -90,7 +90,7 @@ const DoctorCabinets: React.FC<Props> = ({ user }) => {
           <Typography className={styles.cabinetEmptyText}>
             {`${textForKey('no results')} ...`}
           </Typography>
-          <Link href='/settings?menu=appSettings'>
+          <Link href='/settings/app-settings'>
             <a className={styles.cabinetEmptyLink}>
               {textForKey('add_cabinet')}
             </a>

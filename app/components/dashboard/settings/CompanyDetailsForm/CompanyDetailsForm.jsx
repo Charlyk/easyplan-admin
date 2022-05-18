@@ -61,6 +61,11 @@ const CompanyDetailsForm = ({ countries }) => {
     localDispatch,
   ] = useReducer(reducer, initialState);
 
+  const phoneCountry = useMemo(() => {
+    return currentClinic.country.slice(0, 2);
+  }, [currentClinic.country]);
+
+  console.log(phoneCountry);
   const mappedCountries = useMemo(() => {
     return countries.map((item) => ({
       ...item,
@@ -294,6 +299,7 @@ const CompanyDetailsForm = ({ countries }) => {
             value={data.phoneNumber || ''}
             fieldLabel={textForKey('Phone number')}
             onChange={handlePhoneChange('phoneNumber')}
+            country={phoneCountry}
           />
 
           <EASPhoneInput
@@ -301,6 +307,7 @@ const CompanyDetailsForm = ({ countries }) => {
             value={data.telegramNumber || ''}
             fieldLabel={textForKey('Telegram')}
             onChange={handlePhoneChange('telegramNumber')}
+            country={phoneCountry}
           />
 
           <EASPhoneInput
@@ -308,6 +315,7 @@ const CompanyDetailsForm = ({ countries }) => {
             value={data.viberNumber || ''}
             fieldLabel={textForKey('Viber')}
             onChange={handlePhoneChange('viberNumber')}
+            country={phoneCountry}
           />
 
           <EASPhoneInput
@@ -315,6 +323,7 @@ const CompanyDetailsForm = ({ countries }) => {
             value={data.whatsappNumber || ''}
             fieldLabel={textForKey('Whatsapp')}
             onChange={handlePhoneChange('whatsappNumber')}
+            country={phoneCountry}
           />
         </div>
         <div className={styles.right}>

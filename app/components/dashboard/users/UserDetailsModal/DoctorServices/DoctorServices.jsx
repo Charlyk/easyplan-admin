@@ -4,10 +4,13 @@ import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
 import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
+import { clinicCurrencySelector } from 'redux/selectors/appDataSelector';
 import DoctorServiceItem from '../DoctorServiceItem';
 import styles from './DoctorServices.module.scss';
 
 const DoctorServices = ({ show, data, onChange, clinicServices }) => {
+  const clinicCurrency = useSelector(clinicCurrencySelector);
   const handleServiceSelected = (service, price, percentage, isSelected) => {
     let newList = cloneDeep(data.services);
     if (isSelected) {
@@ -44,6 +47,7 @@ const DoctorServices = ({ show, data, onChange, clinicServices }) => {
           doctorService={data.services.find(
             (item) => item.serviceId === service.id,
           )}
+          clinicCurrency={clinicCurrency}
           onSelected={handleServiceSelected}
           selected={data.services.some((item) => item.serviceId === service.id)}
         />

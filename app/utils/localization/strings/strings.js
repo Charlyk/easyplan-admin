@@ -1178,7 +1178,7 @@ export default {
     appointments: 'Programări',
     'enter new note': 'Introduceți o nouă notiță',
     'no data here yet': 'Încă nu sunt date aici',
-    create: 'Crează',
+    create: 'Creează',
     'create patient': 'Adaugă pacient',
     'delete patient': 'Șterge pacient',
     delete_patient_message:

@@ -68,7 +68,7 @@ const PatientsSearchField = ({
 
   const handleSearchQueryChange = (event) => {
     const query = event.target.value;
-    if (query.length < 3) {
+    if (query.length < 1) {
       setPatients([]);
       setIsLoading(false);
       return;
