@@ -53,8 +53,6 @@ const SeatsManagement: React.FC<Props> = ({ onCancel }) => {
   const timeZone = useSelector(clinicTimeZoneSelector);
   const isDataLoading = useSelector(isPaymentDataLoadingSelector);
 
-  console.log('payment-method: ', paymentMethods);
-
   useEffect(() => {
     if (!isDataLoading && initialRenderRef.current) {
       setNoOfSeats('1');
