@@ -48,6 +48,12 @@ const AppointmentPatient: React.FC<AppointmentPatientProps> = ({
   });
 
   useEffect(() => {
+    return () => {
+      dispatch(setCreatedPatient(null));
+    };
+  }, []);
+
+  useEffect(() => {
     if (open) {
       dispatch(setCreatedPatient(null));
       setPatientData(initialState);

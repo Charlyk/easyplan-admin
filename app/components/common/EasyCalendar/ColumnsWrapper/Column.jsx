@@ -11,6 +11,7 @@ import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import createContainerHours from 'app/utils/createContainerHours';
 import { textForKey } from 'app/utils/localization';
 import { clinicDoctorsSelector } from 'redux/selectors/appDataSelector';
+import { calendarViewModeSelector } from 'redux/selectors/scheduleSelector';
 import { requestUpdateScheduleDateAndDoctor } from 'redux/slices/calendarData';
 import { showErrorNotification } from 'redux/slices/globalNotificationsSlice';
 import { dragItemTypes } from 'types';
@@ -37,6 +38,7 @@ const Column = ({
     onAddSchedule(startHour, endHour, column.doctorId, column.date, column.id);
   };
   const clinicDoctors = useSelector(clinicDoctorsSelector);
+  const calendarViewMode = useSelector(calendarViewModeSelector);
   const [selectDoctorsModal, setSelectDoctorsModal] = useState(false);
   const [schedule, setSchedule] = useState({});
   const [body, setBody] = useState({
@@ -76,7 +78,7 @@ const Column = ({
       const doctorServices = selectedDoctor[0]?.services;
       const body = {
         doctorId: column?.doctorId,
-        cabinetId: null,
+        cabinetId: calendarViewMode === 'week' ? schedule.cabinetId : null,
         startDate,
         doctorServices,
       };

@@ -201,7 +201,7 @@ const SeatsManagement: React.FC<Props> = ({ onCancel }) => {
   }, [parsedNoOfSeats, subscription.availableSeats, isAddingSeats]);
 
   const handleSeats = () => {
-    if (!paymentMethods || paymentMethods.length > 0) {
+    if (!paymentMethods || paymentMethods.length === 0) {
       dispatch(openNewCardModal());
       return;
     }

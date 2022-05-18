@@ -4,10 +4,13 @@ import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
 import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
+import { clinicCurrencySelector } from 'redux/selectors/appDataSelector';
 import DoctorServiceItem from '../DoctorServiceItem';
 import styles from './DoctorBracesSettings.module.scss';
 
 const DoctorBracesSettings = ({ show, data, onChange, clinicBraces }) => {
+  const clinicCurrency = useSelector(clinicCurrencySelector);
   const handleServiceSelected = (service, price, percentage, isSelected) => {
     let newList = cloneDeep(data.braces);
     if (!isSelected) {
@@ -44,6 +47,7 @@ const DoctorBracesSettings = ({ show, data, onChange, clinicBraces }) => {
     <div className={classes} style={{ height: show ? 'unset' : 0 }}>
       {sortedBraces.map((service) => (
         <DoctorServiceItem
+          clinicCurrency={clinicCurrency}
           key={`${service.id}-service`}
           service={service}
           doctorService={data.braces.find(
