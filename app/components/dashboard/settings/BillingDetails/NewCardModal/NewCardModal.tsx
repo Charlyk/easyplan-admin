@@ -12,6 +12,7 @@ import { textForKey } from 'app/utils/localization';
 import {
   paymentsPaymentMethodsSelector,
   paymentsNewCardModalSelector,
+  isPaymentDataLoadingSelector,
 } from 'redux/selectors/paymentsSelector';
 import {
   clearPaymentMethodsError,
@@ -41,8 +42,9 @@ const defaultAddressValue = {
 
 const NewCardModal: React.FC<NewCardModalProps> = ({ countries }) => {
   const dispatch = useDispatch();
-  const { loading, error } = useSelector(paymentsPaymentMethodsSelector);
+  const { error } = useSelector(paymentsPaymentMethodsSelector);
   const modalOpen = useSelector(paymentsNewCardModalSelector);
+  const loading = useSelector(isPaymentDataLoadingSelector);
   const [cardFormData, setCardFormData] = useState(defaultCardValues);
   const [addressFormData, setAddressFormData] = useState(defaultAddressValue);
 
@@ -277,7 +279,7 @@ const NewCardModal: React.FC<NewCardModalProps> = ({ countries }) => {
         >
           <LoadingButton
             variant='contained'
-            disabled={!isFormValid()}
+            disabled={!isFormValid() || loading}
             isLoading={loading}
             type={'submit'}
           >

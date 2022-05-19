@@ -64,11 +64,16 @@
     align-items: center;
     background-color: #fff;
 }
+.alertIcon {
+    align-items: center;
+}
 
 .alertContainer {
     display: flex;
     justify-content: center;
     width: 100%;
+
+
 
     button {
         margin-left: 1em;
