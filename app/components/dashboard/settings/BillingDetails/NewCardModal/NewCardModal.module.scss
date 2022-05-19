@@ -65,6 +65,10 @@
   align-items: flex-end;
 }
 
+.minWidthSelector {
+  min-width: 55px;
+}
+
 .flexContainer .input {
   justify-self: flex-end;
   width: min-content;

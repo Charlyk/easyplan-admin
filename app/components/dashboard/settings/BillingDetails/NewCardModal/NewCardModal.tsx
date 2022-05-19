@@ -197,6 +197,7 @@ const NewCardModal: React.FC<NewCardModalProps> = ({ countries }) => {
             value={cardFormData.expiryYear}
             onChange={handleExpirationYearChange}
             labelId='expiryYear'
+            rootClass={styles.minWidthSelector}
           />
           <EASTextField
             fieldLabel={'CVV'}
