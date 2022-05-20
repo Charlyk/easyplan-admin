@@ -1,9 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
+import Alert from '@material-ui/lab/Alert';
+import Link from 'next/link';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
 import { EmailRegex, Role } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
+import { paymentsSubscriptionSelector } from 'redux/selectors/paymentsSelector';
 import EASModal from '../EASModal';
 import styles from './InviteUserModal.module.scss';
 
@@ -33,6 +39,11 @@ const InviteUserModal = ({
   const [email, setEmail] = useState('');
   const [role, setRole] = useState(type || Role.reception);
   const isEmailValid = email.length === 0 || email.match(EmailRegex);
+  const { data: subscription } = useSelector(paymentsSubscriptionSelector);
+
+  const doctorSelectedAndInsufficientSeats = useMemo(() => {
+    return role === Role.doctor && subscription.availableSeats === 0;
+  }, [subscription.availableServices, role]);
 
   useEffect(() => {
     if (!open) {
@@ -67,7 +78,9 @@ const InviteUserModal = ({
       title={textForKey('Invite user')}
       primaryBtnText={textForKey('Invite')}
       isPositiveLoading={isLoading}
-      isPositiveDisabled={!email.match(EmailRegex)}
+      isPositiveDisabled={
+        !email.match(EmailRegex) || doctorSelectedAndInsufficientSeats
+      }
     >
       <form className={styles.content} onSubmit={handleInviteUser}>
         <EASTextField
@@ -86,6 +99,19 @@ const InviteUserModal = ({
           value={role}
           onChange={handleRoleChange}
         />
+        {doctorSelectedAndInsufficientSeats && (
+          <Alert severity={'warning'} classes={{ root: styles.alertContainer }}>
+            <Box display={'flex'} alignItems={'center'}>
+              <Typography>{} </Typography>
+              <Typography>
+                {textForKey('insufficient_seats')}. {textForKey('go_to')}{' '}
+                <Link href={'/settings/billing-details'}>
+                  <a>{textForKey('billing_details')}</a>
+                </Link>
+              </Typography>
+            </Box>
+          </Alert>
+        )}
       </form>
       {error && (
         <span className={styles.errorMessage}>{textForKey(error)}</span>

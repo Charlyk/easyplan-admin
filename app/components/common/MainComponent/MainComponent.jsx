@@ -10,7 +10,11 @@ import InfoContainer from 'app/components/common/InfoContainer';
 import IconClose from 'app/components/icons/iconClose';
 import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
-import { Role, SubscriptionStatuses } from 'app/utils/constants';
+import {
+  PaymentStatuses,
+  Role,
+  SubscriptionStatuses,
+} from 'app/utils/constants';
 import getCallRecordUrl from 'app/utils/getCallRecordUrl';
 import paths from 'app/utils/paths';
 import { loginUrl } from 'eas.config';
@@ -101,14 +105,20 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
 
   const showPaymentWarning = useMemo(() => {
     const { roleInClinic } = currentUser.userClinic;
+    const { status, paymentStatus } = subscription;
     const correctUser =
       roleInClinic === Role.admin || roleInClinic === Role.manager;
 
     const subscriptionStatus =
-      subscription.status === SubscriptionStatuses.unpaid ||
-      subscription.status === SubscriptionStatuses.incomplete_expired;
+      status === SubscriptionStatuses.unpaid ||
+      status === SubscriptionStatuses.incomplete_expired;
 
-    return correctUser && subscriptionStatus;
+    const correspondingPaymentStatus =
+      paymentStatus === PaymentStatuses.draft ||
+      paymentStatus === PaymentStatuses.open ||
+      paymentStatus === PaymentStatuses.uncollectible;
+
+    return correctUser && subscriptionStatus && correspondingPaymentStatus;
   }, [subscription]);
 
   useEffect(() => {

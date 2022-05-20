@@ -7,6 +7,7 @@ import Alert from '@material-ui/lab/Alert';
 import { formatInTimeZone } from 'date-fns-tz';
 import dynamic from 'next/dynamic';
 import { useSelector, useDispatch } from 'react-redux';
+import LoadingButton from 'app/components/common/LoadingButton';
 import {
   DateLocales,
   SubscriptionStatuses,
@@ -116,13 +117,16 @@ const BillingDetails: React.FC<BillingDetailsProps> = ({ countries }) => {
         {shouldRenderAlert && (
           <Alert
             severity={'warning'}
-            classes={{ message: styles.alertContainer }}
+            classes={{ message: styles.alertContainer, icon: styles.alertIcon }}
           >
             <Box display={'flex'} alignItems={'center'}>
               <Typography>{textForKey('transaction_unsuccessful')}</Typography>
-              <Button variant={'outlined'} onClick={handleRetryPayment}>
+              <LoadingButton
+                onClick={handleRetryPayment}
+                isLoading={isDataLoading}
+              >
                 {textForKey('retry_payment')}
-              </Button>
+              </LoadingButton>
             </Box>
           </Alert>
         )}

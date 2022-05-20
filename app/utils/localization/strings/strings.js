@@ -876,6 +876,7 @@ export default {
     months: 'luni',
     transaction_unsuccessful: '<h1>Tranzacție nereușită</h1>',
     go_to: 'Mergeți la',
+    insufficient_seats: 'Locuri insuficiente',
   },
   ro: {
     analytics: 'Analitică',
@@ -1764,6 +1765,7 @@ export default {
     transaction_unsuccessful: 'Tranzacție nereușită',
     retry_payment: 'Reîncearcă plata',
     go_to: 'Mergeți la',
+    insufficient_seats: 'Locuri insuficiente',
   },
   ru: {
     analytics: 'Aналитика',
@@ -2640,5 +2642,6 @@ export default {
     months: 'luni',
     transaction_unsuccessful: 'Tranzacție nereușită',
     go_to: 'Mergeți la',
+    insufficient_seats: 'Locuri insuficiente',
   },
 };
