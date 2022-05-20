@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import CalendarNoDataView from 'app/components/common/CalendarNoDataView';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import getCurrentWeek from 'app/utils/getCurrentWeek';
@@ -15,6 +15,7 @@ import {
   dayHoursSelector,
   filteredSchedulesSelector,
 } from 'redux/selectors/scheduleSelector';
+import { setSelectedDoctor } from '../../../../../redux/slices/calendarData';
 import styles from './CalendarWeekView.module.scss';
 
 const EasyCalendar = dynamic(() =>
@@ -29,12 +30,17 @@ const CalendarWeekView = ({
   onScheduleSelect,
   onCreateSchedule,
 }) => {
+  const dispatch = useDispatch();
   const router = useRouter();
   const isManager = useSelector(isManagerSelector);
   const schedules = useSelector(filteredSchedulesSelector);
   const hours = useSelector(dayHoursSelector);
   const doctors = useSelector(calendarDoctorsSelector);
   const week = getCurrentWeek(viewDate);
+
+  useEffect(() => {
+    dispatch(setSelectedDoctor(doctorId));
+  }, []);
 
   const handleDayClick = (day) => {
     const date = moment(day.id).toDate();

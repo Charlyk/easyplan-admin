@@ -57,16 +57,25 @@ const calendarData = createSlice({
       state.isLoading = false;
       state.schedules = mapSchedules(action.payload);
     },
+    setSelectedDoctor(state, action: PayloadAction<string | number>) {
+      state.selectedDoctor = action.payload;
+    },
     addNewSchedule(state, action: PayloadAction<Schedule>) {
       state.isLoading = false;
       const newSchedule = action.payload;
       const viewDate = moment(state.viewDate);
       const viewMode = state.viewMode;
       const scheduleDate = moment(newSchedule.startTime);
+      const selectedDoctor = state.selectedDoctor;
+
+      const weekViewCondition =
+        viewMode === 'week' &&
+        viewDate.isSame(scheduleDate, 'week') &&
+        String(newSchedule.doctorId) === String(selectedDoctor);
 
       const canAddSchedule =
+        weekViewCondition ||
         (viewMode === 'day' && viewDate.isSame(scheduleDate, 'date')) ||
-        (viewMode === 'week' && viewDate.isSame(scheduleDate, 'week')) ||
         (viewMode === 'month' && viewDate.isSame(scheduleDate, 'month'));
 
       const isScheduleAlreadyAdded = state.schedules.some((scheduleGroup) =>
@@ -254,6 +263,7 @@ export const {
   setViewDate,
   setViewMode,
   updateFilterData,
+  setSelectedDoctor,
 } = calendarData.actions;
 
 export default calendarData.reducer;
