@@ -15,7 +15,7 @@ import {
   dayHoursSelector,
   filteredSchedulesSelector,
 } from 'redux/selectors/scheduleSelector';
-import { setSelectedDoctor } from '../../../../../redux/slices/calendarData';
+import { setSelectedDoctor } from 'redux/slices/calendarData';
 import styles from './CalendarWeekView.module.scss';
 
 const EasyCalendar = dynamic(() =>
