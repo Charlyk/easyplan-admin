@@ -578,4 +578,5 @@ export const PaymentStatuses = {
   draft: 'draft',
   open: 'open',
   uncollectible: 'uncollectible',
+  trialing: 'trialing',
 };

@@ -42,6 +42,21 @@
   }
 }
 
+.testModeWrapper {
+  padding: .8em 1.2em;
+  border-radius: 4px;
+  border: 1px solid #3a83dc;
+
+  .testModeLabel {
+    font-size: 14px !important;
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: bold !important;
+    color: #3a83dc !important;
+    line-height: 1;
+  }
+}
+
 .pageHeader {
   max-width: 100%;
   padding: 1rem 1.8rem 1.8rem;
