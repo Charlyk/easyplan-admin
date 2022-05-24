@@ -877,6 +877,8 @@ export default {
     transaction_unsuccessful: '<h1>Tranzacție nereușită</h1>',
     go_to: 'Mergeți la',
     insufficient_seats: 'Locuri insuficiente',
+    trial_days_left_notification: 'Days of trial left',
+    trial_day_left_notification: 'Day of trial left',
   },
   ro: {
     analytics: 'Analitică',
@@ -1766,6 +1768,8 @@ export default {
     retry_payment: 'Reîncearcă plata',
     go_to: 'Mergeți la',
     insufficient_seats: 'Locuri insuficiente',
+    trial_days_left_notification: 'Zile de probă rămase',
+    trial_day_left_notification: 'Zi de probă rămasă',
   },
   ru: {
     analytics: 'Aналитика',
@@ -2643,5 +2647,7 @@ export default {
     transaction_unsuccessful: 'Tranzacție nereușită',
     go_to: 'Mergeți la',
     insufficient_seats: 'Locuri insuficiente',
+    trial_days_left_notification: 'Zi(le) de proba ramase',
+    trial_day_left_notification: 'Day of trial left',
   },
 };

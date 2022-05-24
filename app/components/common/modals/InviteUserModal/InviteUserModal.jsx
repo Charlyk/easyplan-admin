@@ -10,6 +10,7 @@ import EASTextField from 'app/components/common/EASTextField';
 import { EmailRegex, Role } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import { paymentsSubscriptionSelector } from 'redux/selectors/paymentsSelector';
+import { invitationsSelector } from 'redux/selectors/usersListSelector';
 import EASModal from '../EASModal';
 import styles from './InviteUserModal.module.scss';
 
@@ -39,10 +40,22 @@ const InviteUserModal = ({
   const [email, setEmail] = useState('');
   const [role, setRole] = useState(type || Role.reception);
   const isEmailValid = email.length === 0 || email.match(EmailRegex);
+  const invitations = useSelector(invitationsSelector);
   const { data: subscription } = useSelector(paymentsSubscriptionSelector);
 
   const doctorSelectedAndInsufficientSeats = useMemo(() => {
-    return role === Role.doctor && subscription.availableSeats === 0;
+    const doctorsInvitesSent = invitations.filter(
+      (invitation) => invitation.roleInClinic === Role.doctor,
+    );
+
+    const availableSeatsLeftAfterInviteSent =
+      subscription.availableSeats - doctorsInvitesSent.length;
+
+    return (
+      role === Role.doctor &&
+      (subscription.availableSeats === 0 ||
+        availableSeatsLeftAfterInviteSent < 1)
+    );
   }, [subscription.availableServices, role]);
 
   useEffect(() => {

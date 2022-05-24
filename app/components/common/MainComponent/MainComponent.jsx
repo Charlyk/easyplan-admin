@@ -118,7 +118,10 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
       paymentStatus === PaymentStatuses.open ||
       paymentStatus === PaymentStatuses.uncollectible;
 
-    return correctUser && subscriptionStatus && correspondingPaymentStatus;
+    const correspondingStatus =
+      subscriptionStatus || correspondingPaymentStatus;
+
+    return correctUser && correspondingStatus;
   }, [subscription]);
 
   useEffect(() => {
