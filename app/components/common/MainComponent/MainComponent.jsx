@@ -121,7 +121,11 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
     const correspondingStatus =
       subscriptionStatus || correspondingPaymentStatus;
 
-    return correctUser && correspondingStatus;
+    return (
+      correctUser &&
+      !router.asPath.includes('billing-details') &&
+      correspondingStatus
+    );
   }, [subscription]);
 
   useEffect(() => {
