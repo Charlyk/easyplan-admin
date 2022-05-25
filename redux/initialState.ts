@@ -71,6 +71,7 @@ const initialState: ReduxState = {
     isFetchingDetails: false,
     viewDate: null,
     viewMode: 'day',
+    selectedDoctor: -1,
     filterData: {
       searchQuery: '',
       serviceId: -1,

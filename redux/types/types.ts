@@ -51,6 +51,7 @@ export interface CalendarDataState {
   closeDetails: boolean;
   isFetchingDetails: boolean;
   viewDate: string | null;
+  selectedDoctor: string | number;
   viewMode: 'day' | 'week' | 'month';
   filterData: FilterData;
 }
