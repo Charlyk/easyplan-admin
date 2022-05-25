@@ -138,8 +138,6 @@ const NewCardModal: React.FC<NewCardModalProps> = ({ countries }) => {
       returnUrl,
     };
 
-    console.log(returnUrl);
-
     dispatch(dispatchAddNewPaymentMethod(body));
   };
 
