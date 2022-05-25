@@ -65,7 +65,6 @@ const CompanyDetailsForm = ({ countries }) => {
     return currentClinic.country.slice(0, 2);
   }, [currentClinic.country]);
 
-  console.log(phoneCountry);
   const mappedCountries = useMemo(() => {
     return countries.map((item) => ({
       ...item,

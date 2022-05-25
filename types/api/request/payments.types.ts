@@ -4,6 +4,7 @@ export type PaymentCardData = {
   expiryYear: number;
   cvc: string;
   cardHolder: string;
+  returnUrl: string;
   address: {
     country: string;
     city: string;
@@ -12,4 +13,9 @@ export type PaymentCardData = {
     state?: string;
     zip: string;
   };
+};
+
+export type VerifyCardData = {
+  methodId: string;
+  intentId: string;
 };

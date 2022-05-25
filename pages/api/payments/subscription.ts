@@ -41,6 +41,23 @@ async function cancelSubscription(
   });
 }
 
+async function verifyPaymentMethod(
+  req: NextApiRequest,
+): Promise<AxiosResponse<ServerResponse<any>>> {
+  const { clinic_id: clinicId, auth_token: authToken } = cookie.parse(
+    req.headers.cookie,
+  );
+
+  return axios.put(`${updatedServerUrl()}/payments/verify-card`, req.body, {
+    headers: {
+      [HeaderKeys.authorization]: authToken,
+      [HeaderKeys.clinicId]: clinicId,
+      [HeaderKeys.subdomain]: getSubdomain(req),
+      [HeaderKeys.contentType]: 'application/json',
+    },
+  });
+}
+
 export default authorized(async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     switch (req.method) {
@@ -54,8 +71,13 @@ export default authorized(async (req: NextApiRequest, res: NextApiResponse) => {
         res.json(response.data.data);
         break;
       }
+      case 'PUT': {
+        const response = await verifyPaymentMethod(req);
+        res.json(response.data.data);
+        break;
+      }
       default: {
-        res.setHeader('Allow', ['GET', 'DELETE']);
+        res.setHeader('Allow', ['GET', 'DELETE', 'PUT']);
         res.status(405).end(`Method ${req.method} Not Allowed`);
         break;
       }

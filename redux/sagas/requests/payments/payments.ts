@@ -4,6 +4,8 @@ import {
   PaymentInvoices,
   PaymentMethod,
   PaymentCardData,
+  PaymentAction,
+  VerifyCardData,
 } from 'types/api';
 
 export async function requestSubscriptionInfo(): Promise<
@@ -26,8 +28,14 @@ export async function requestPaymentMethods(): Promise<
 
 export async function postNewPaymentMethod(
   data: PaymentCardData,
-): Promise<AxiosResponse<PaymentMethod[]>> {
+): Promise<AxiosResponse<PaymentAction>> {
   return axios.post('/api/payments/methods', data);
+}
+
+export async function verifyPaymentMethod(
+  data: VerifyCardData,
+): Promise<AxiosResponse<PaymentAction>> {
+  return axios.put('/api/payments/subscription', data);
 }
 
 export async function deletePaymentMethod(

@@ -5,6 +5,8 @@ import {
   PaymentMethod,
   PaymentInvoices,
   PaymentCardData,
+  PaymentAction,
+  VerifyCardData,
 } from 'types/api';
 import initialState from '../initialState';
 
@@ -59,6 +61,12 @@ const paymentSlice = createSlice({
     ) {
       state.isDataLoading = true;
     },
+    dispatchVerifyPaymentMethod(
+      _state,
+      _action: PayloadAction<VerifyCardData>,
+    ) {
+      // no-op for no empty function eslint
+    },
     dispatchDeletePaymentMethod(state, _action: PayloadAction<{ id: string }>) {
       state.isDataLoading = true;
     },
@@ -87,6 +95,9 @@ const paymentSlice = createSlice({
       _action: PayloadAction<{ seats: number; interval: 'MONTH' | 'YEAR' }>,
     ) {
       state.isDataLoading = true;
+    },
+    setPaymentActions(state, action: PayloadAction<PaymentAction>) {
+      state.paymentActions.data = action.payload;
     },
     dispatchRemoveSeats(state, _action: PayloadAction<{ seats: number }>) {
       state.isDataLoading = true;
@@ -130,6 +141,7 @@ export const {
   dispatchSetPaymentMethodAsDefault,
   dispatchChangeBillingPeriod,
   dispatchCancelSubcription,
+  dispatchVerifyPaymentMethod,
   setSubscriptionInfo,
   setSubscriptionInfoError,
   dispatchFetchPaymentMethods,
@@ -145,6 +157,7 @@ export const {
   dispatchPurchaseSeats,
   dispatchRemoveSeats,
   clearPaymentMethodsError,
+  setPaymentActions,
 } = paymentSlice.actions;
 
 export default paymentSlice.reducer;

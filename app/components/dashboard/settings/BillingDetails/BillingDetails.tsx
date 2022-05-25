@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Alert from '@material-ui/lab/Alert';
 import { formatInTimeZone } from 'date-fns-tz';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
 import { useSelector, useDispatch } from 'react-redux';
 import LoadingButton from 'app/components/common/LoadingButton';
 import {
@@ -25,12 +26,14 @@ import {
   isPaymentDataLoadingSelector,
   paymentsInvoicesSelector,
   paymentsNewCardModalSelector,
+  paymentsActionSelector,
 } from 'redux/selectors/paymentsSelector';
 import {
   dispatchFetchSubscriptionInfo,
   dispatchFetchPaymentMethods,
   dispatchFetchInvoices,
   dispatchRetryPayment,
+  dispatchVerifyPaymentMethod,
 } from 'redux/slices/paymentSlice';
 import styles from './BillingDetails.module.scss';
 import {
@@ -45,6 +48,7 @@ const SeatsManagement = dynamic(() => import('./Views/SeatsManagement'));
 const PaymentPlan = dynamic(import('./Views/PaymentPlan'));
 
 const BillingDetails: React.FC<BillingDetailsProps> = ({ countries }) => {
+  const router = useRouter();
   const dispatch = useDispatch();
   const [selectedView, setSelectedView] =
     useState<BillingDetailsViewMode>('payment-history');
@@ -54,6 +58,7 @@ const BillingDetails: React.FC<BillingDetailsProps> = ({ countries }) => {
   const { loading: paymentMethodLoading, data: paymentMethods } = useSelector(
     paymentsPaymentMethodsSelector,
   );
+  const { data: paymentActions } = useSelector(paymentsActionSelector);
   const { loading: invoicesLoading } = useSelector(paymentsInvoicesSelector);
   const modalOpen = useSelector(paymentsNewCardModalSelector);
   const isDataLoading = useSelector(isPaymentDataLoadingSelector);
@@ -89,6 +94,30 @@ const BillingDetails: React.FC<BillingDetailsProps> = ({ countries }) => {
     dispatch(dispatchFetchPaymentMethods());
     dispatch(dispatchFetchSubscriptionInfo());
   }, []);
+
+  useEffect(() => {
+    if (!paymentActions) return;
+    if (paymentActions.status !== 'succeeded') {
+      localStorage.setItem('intentId', paymentActions.intentId);
+      localStorage.setItem('methodId', paymentActions.methodId);
+      window.open(paymentActions.redirectUrl, '_current');
+    }
+  }, [paymentActions]);
+
+  useEffect(() => {
+    if (router.query.verify && paymentActions?.status !== 'succeeded') {
+      const intentId = localStorage.getItem('intentId');
+      const methodId = localStorage.getItem('methodId');
+
+      if (!intentId || !methodId) return;
+
+      dispatch(dispatchVerifyPaymentMethod({ intentId, methodId }));
+    }
+    if (paymentActions?.status === 'succeeded' && router.query.verify) {
+      localStorage.removeItem('intentId');
+      localStorage.removeItem('methodId');
+    }
+  }, [router.query.verify, paymentActions]);
 
   const handleViewModeSwitch = (newMode: BillingDetailsViewMode) => {
     setSelectedView(newMode);
