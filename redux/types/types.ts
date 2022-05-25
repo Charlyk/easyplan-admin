@@ -35,6 +35,7 @@ import {
   AppointmentsDoctorsResponse,
   AppointmentServiceResponse,
   CalendarSchedulesResponse,
+  PaymentAction,
   PaymentInvoices,
   PaymentMethod,
   PaymentSubscription,
@@ -286,6 +287,7 @@ export type PaymentsState = {
   subscriptionInfo: WithQuery<PaymentSubscription>;
   invoicesInfo: WithQuery<PaymentInvoices[]>;
   paymentMethods: WithQuery<PaymentMethod[]>;
+  paymentActions: WithQuery<PaymentAction>;
   modalOpen: boolean;
   isDataLoading: boolean;
 };

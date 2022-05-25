@@ -11,7 +11,7 @@ import { environment, loginUrl } from 'eas.config';
 import { getCurrentUser, signOut } from 'middleware/api/auth';
 import checkIsAuthenticated from '../../app/utils/checkIsAuthenticated';
 
-const Redirect = ({ clinicId }) => {
+const Redirect = ({ clinicId, path }) => {
   const router = useRouter();
 
   useEffect(() => {
@@ -34,6 +34,7 @@ const Redirect = ({ clinicId }) => {
       const redirectUrl = getRedirectUrlForUser(
         response.data,
         environment === 'local' ? process.env.DEFAULT_CLINIC : subdomain,
+        path,
       );
       if (redirectUrl == null || router.asPath === redirectUrl) {
         return;
@@ -68,7 +69,7 @@ export default connect((state) => state)(Redirect);
 
 export const getServerSideProps = async ({ res, query }) => {
   try {
-    const { token, clinicId } = query;
+    const { token, clinicId, path } = query;
 
     // check if token is valid
     const isAuthenticated = await checkIsAuthenticated(token, clinicId);
@@ -83,7 +84,7 @@ export const getServerSideProps = async ({ res, query }) => {
 
     // set cookies
     setCookies(res, token, clinicId);
-    return { props: { clinicId } };
+    return { props: { clinicId, path: path || null } };
   } catch (error) {
     console.error('Redirect', error.message);
     return handleRequestError(error);

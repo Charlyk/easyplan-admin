@@ -60,6 +60,7 @@ import {
   billingPeriodChangeWatcher,
   cancelSubscriptionWatcher,
   retryPaymentWatcher,
+  verifyCardWatcher,
 } from './handlers';
 
 export default function* rootSaga() {
@@ -124,5 +125,6 @@ export default function* rootSaga() {
     billingPeriodChangeWatcher(),
     cancelSubscriptionWatcher(),
     retryPaymentWatcher(),
+    verifyCardWatcher(),
   ]);
 }

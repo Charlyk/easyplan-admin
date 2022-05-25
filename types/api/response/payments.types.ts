@@ -28,3 +28,11 @@ export type PaymentMethod = {
   isDefault: boolean;
   holder: string;
 };
+
+export type PaymentAction = {
+  methodId: string;
+  status: 'requires_action' | string;
+  intentId: string;
+  redirectUrl: string;
+  cards?: PaymentMethod[];
+};

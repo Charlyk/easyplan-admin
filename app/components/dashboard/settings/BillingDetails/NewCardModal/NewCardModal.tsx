@@ -9,6 +9,11 @@ import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
 import LoadingButton from 'app/components/common/LoadingButton';
 import { textForKey } from 'app/utils/localization';
+import { appBaseUrl } from 'eas.config';
+import {
+  authTokenSelector,
+  currentClinicSelector,
+} from 'redux/selectors/appDataSelector';
 import {
   paymentsPaymentMethodsSelector,
   paymentsNewCardModalSelector,
@@ -45,6 +50,8 @@ const NewCardModal: React.FC<NewCardModalProps> = ({ countries }) => {
   const { error } = useSelector(paymentsPaymentMethodsSelector);
   const modalOpen = useSelector(paymentsNewCardModalSelector);
   const loading = useSelector(isPaymentDataLoadingSelector);
+  const currentClinic = useSelector(currentClinicSelector);
+  const authToken = useSelector(authTokenSelector);
   const [cardFormData, setCardFormData] = useState(defaultCardValues);
   const [addressFormData, setAddressFormData] = useState(defaultAddressValue);
 
@@ -110,12 +117,25 @@ const NewCardModal: React.FC<NewCardModalProps> = ({ countries }) => {
 
     if (!selectedCountry) return;
 
+    const queryParams = new URLSearchParams({
+      verify: 'true',
+      token: `${authToken}`,
+      clinicId: `${currentClinic.id}`,
+      path: '/settings/billing-details?verify=true',
+    }).toString();
+
+    const returnUrl = `${appBaseUrl.replace(
+      'app',
+      currentClinic.domainName,
+    )}/redirect?${queryParams}`;
+
     const body = {
       ...cardFormData,
       address: {
         ...addressFormData,
         country: selectedCountry.iso2,
       },
+      returnUrl,
     };
 
     dispatch(dispatchAddNewPaymentMethod(body));

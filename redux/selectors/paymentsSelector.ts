@@ -13,6 +13,11 @@ export const paymentsPaymentMethodsSelector = createSelector(
   (payments) => payments.paymentMethods,
 );
 
+export const paymentsActionSelector = createSelector(
+  paymentsRootSelector,
+  (payments) => payments.paymentActions,
+);
+
 export const paymentsInvoicesSelector = createSelector(
   paymentsRootSelector,
   (payments) => payments.invoicesInfo,

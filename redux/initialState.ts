@@ -283,6 +283,11 @@ const initialState: ReduxState = {
   paymentsState: {
     modalOpen: false,
     isDataLoading: false,
+    paymentActions: {
+      data: null,
+      loading: false,
+      error: null,
+    },
     subscriptionInfo: {
       loading: false,
       error: null,

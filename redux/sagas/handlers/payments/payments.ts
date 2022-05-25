@@ -17,6 +17,7 @@ import {
   requestBillingPeriodChange,
   requestCancelSubscription,
   requestRetryPayment,
+  verifyPaymentMethod,
 } from 'redux/sagas/requests/payments/payments';
 import { showErrorNotification } from 'redux/slices/globalNotificationsSlice';
 import {
@@ -39,8 +40,10 @@ import {
   dispatchChangeBillingPeriod,
   dispatchCancelSubcription,
   dispatchRetryPayment,
+  setPaymentActions,
+  dispatchVerifyPaymentMethod,
 } from 'redux/slices/paymentSlice';
-import { ErrorResponse, PaymentCardData } from 'types/api';
+import { ErrorResponse, PaymentCardData, VerifyCardData } from 'types/api';
 
 function* handleRequestSubscriptionInfo(_action: PayloadAction) {
   try {
@@ -111,8 +114,10 @@ function* handleAddPaymentMethod(action: PayloadAction<PaymentCardData>) {
       postNewPaymentMethod,
       action.payload,
     );
+    const { cards, ...paymentActions } = response.data;
     yield put(closeNewCardModal());
-    yield put(setPaymentMethods(response.data));
+    yield put(setPaymentMethods(cards));
+    yield put(setPaymentActions(paymentActions));
   } catch (error) {
     const errorResponse = error as ErrorResponse;
     yield put(
@@ -122,6 +127,25 @@ function* handleAddPaymentMethod(action: PayloadAction<PaymentCardData>) {
     );
     yield put(
       setPaymentMethodsError(
+        errorResponse.response?.data.message ?? errorResponse.message,
+      ),
+    );
+  }
+}
+
+function* handleVerifyPaymentMethod(action: PayloadAction<VerifyCardData>) {
+  try {
+    const response: SagaReturnType<typeof verifyPaymentMethod> = yield call(
+      verifyPaymentMethod,
+      action.payload,
+    );
+    const { cards, ...paymentActions } = response.data;
+    yield put(setPaymentMethods(cards));
+    yield put(setPaymentActions(paymentActions));
+  } catch (err) {
+    const errorResponse = err as ErrorResponse;
+    yield put(
+      showErrorNotification(
         errorResponse.response?.data.message ?? errorResponse.message,
       ),
     );
@@ -280,6 +304,10 @@ function* handleRetryPayment() {
       ),
     );
   }
+}
+
+export function* verifyCardWatcher() {
+  yield takeLatest(dispatchVerifyPaymentMethod.type, handleVerifyPaymentMethod);
 }
 
 export function* retryPaymentWatcher() {
