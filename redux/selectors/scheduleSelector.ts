@@ -97,3 +97,8 @@ export const pauseSelector = createSelector(
       return { ...item, schedules: filteredPauses };
     }),
 );
+
+export const calendarViewModeSelector = createSelector(
+  calendarDataSelector,
+  (calendarData) => calendarData.viewMode,
+);

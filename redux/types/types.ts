@@ -35,6 +35,10 @@ import {
   AppointmentsDoctorsResponse,
   AppointmentServiceResponse,
   CalendarSchedulesResponse,
+  PaymentAction,
+  PaymentInvoices,
+  PaymentMethod,
+  PaymentSubscription,
 } from 'types/api';
 
 export interface CalendarDataState {
@@ -47,6 +51,7 @@ export interface CalendarDataState {
   closeDetails: boolean;
   isFetchingDetails: boolean;
   viewDate: string | null;
+  selectedDoctor: string | number;
   viewMode: 'day' | 'week' | 'month';
   filterData: FilterData;
 }
@@ -278,6 +283,15 @@ export interface AppointmentsState {
 export type PatientsState = WithQuery<PaginatedResponse<Patient>>;
 export type PatientsAutocompleteState = WithQuery<Patient[]>;
 
+export type PaymentsState = {
+  subscriptionInfo: WithQuery<PaymentSubscription>;
+  invoicesInfo: WithQuery<PaymentInvoices[]>;
+  paymentMethods: WithQuery<PaymentMethod[]>;
+  paymentActions: WithQuery<PaymentAction>;
+  modalOpen: boolean;
+  isDataLoading: boolean;
+};
+
 export interface ReduxState {
   updateCategories: boolean;
   updateServices: boolean;
@@ -329,4 +343,5 @@ export interface ReduxState {
   patients: PatientsState;
   patientsAutocomplete: PatientsAutocompleteState;
   appointments: AppointmentsState;
+  paymentsState: PaymentsState;
 }

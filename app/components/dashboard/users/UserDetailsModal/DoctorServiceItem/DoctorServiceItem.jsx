@@ -7,7 +7,8 @@ import SwitchButton from 'app/components/common/SwitchButton';
 import styles from './DoctorServiceItem.module.scss';
 
 const DoctorServiceItem = (props) => {
-  const { service, selected, onSelected, doctorService, clinic } = props;
+  const { service, selected, onSelected, doctorService, clinicCurrency } =
+    props;
   const [price, setPrice] = useState('');
   const [percentage, setPercentage] = useState('');
 
@@ -65,7 +66,7 @@ const DoctorServiceItem = (props) => {
           onChange={handlePriceChange}
           endAdornment={
             <Typography className={styles.adornment}>
-              {clinic?.currency || 'MDL'}
+              {clinicCurrency || 'MDL'}
             </Typography>
           }
         />

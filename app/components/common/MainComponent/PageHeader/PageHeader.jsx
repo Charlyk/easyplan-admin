@@ -3,6 +3,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
+import { differenceInDays } from 'date-fns';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
@@ -20,13 +21,14 @@ import IconNotifications from 'app/components/icons/iconNotifications';
 import IconPlus from 'app/components/icons/iconPlus';
 import IconTurnOff from 'app/components/icons/iconTurnOff';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
-import { Role } from 'app/utils/constants';
+import { PaymentStatuses, Role } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import { setPaymentModal } from 'redux/actions/actions';
 import {
   currentClinicSelector,
   userClinicSelector,
 } from 'redux/selectors/appDataSelector';
+import { paymentsSubscriptionSelector } from 'redux/selectors/paymentsSelector';
 import styles from './PageHeader.module.scss';
 
 const ActionsSheet = dynamic(() =>
@@ -66,10 +68,19 @@ const PageHeader = ({
   const [isActionsOpen, setIsActionsOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState(['', '']);
   const userClinic = useSelector(userClinicSelector);
+  const { data: subscription } = useSelector(paymentsSubscriptionSelector);
 
   const canRegisterPayments = useMemo(() => {
     return userClinic?.canRegisterPayments;
   }, [userClinic]);
+
+  const daysLeftTillTrialOver = useMemo(() => {
+    return differenceInDays(new Date(subscription.nextPayment), new Date());
+  }, [subscription]);
+
+  const showTrialNotification = useMemo(() => {
+    return subscription.status === PaymentStatuses.trialing;
+  }, [subscription]);
 
   useEffect(() => {
     setIsMounted(true);
@@ -160,6 +171,16 @@ const PageHeader = ({
         </div>
       )}
       <div className={styles.actions}>
+        {showTrialNotification && daysLeftTillTrialOver > 0 && (
+          <div className={styles.testModeWrapper}>
+            <Typography className={styles.testModeLabel}>
+              {daysLeftTillTrialOver}{' '}
+              {daysLeftTillTrialOver > 1
+                ? textForKey('trial_days_left_notification')
+                : textForKey('trial_day_left_notification')}
+            </Typography>
+          </div>
+        )}
         <IconButton className={styles.helpBtn} onClick={handleHelpBtnClick}>
           <IconHelpQuestion fill='#3a83dc' />
         </IconButton>

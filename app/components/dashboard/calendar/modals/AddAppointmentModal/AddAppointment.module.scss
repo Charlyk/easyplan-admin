@@ -1,0 +1,220 @@
+.add-appointment-root {
+  .modalPaper {
+    width: 500px;
+    max-width: 95%;
+
+    .inputGroup {
+      width: 100%;
+      display: flex;
+
+      .formGroup {
+        flex: 1;
+
+        &:first-child {
+          margin-right: 5px !important;
+        }
+      }
+    }
+  }
+
+  .simpleField {
+    margin-top: 10px;
+  }
+
+  .phoneInput {
+    margin-top: 10px;
+  }
+
+  .urgentCheck {
+    margin-top: 5px;
+    user-select: none;
+    margin-bottom: 0;
+
+    .urgentLabel {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-size: 14px;
+      color: #ec3276;
+      cursor: pointer;
+    }
+  }
+
+  .tabsRoot {
+    min-height: 30px;
+  }
+
+  .tabsIndicator {
+    background-color: #3A83DC;
+  }
+
+  .tabItem {
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-size: 11px !important;
+    height: 30px;
+    min-height: 30px;
+    text-transform: none;
+  }
+
+  .patientNameContainer {
+    display: flex;
+
+    .nameField {
+      width: 50%;
+      margin-right: 10px;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  :global(.rbt-menu) > :global(.dropdown-item) {
+    padding: .2rem 1rem;
+  }
+
+  .patient-result-item {
+    display: flex;
+    align-items: center;
+
+    .patient-avatar-wrapper {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin-right: .5rem;
+
+      svg, img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .patient-info-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+
+      .patient-name {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-size: 14px;
+        color: #34344E;
+        cursor: pointer;
+      }
+
+      .patient-phone {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-size: 12px;
+        color: #34344E;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .modeWrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    .patientModeButton {
+      user-select: none;
+      margin-top: .2rem;
+      outline: none;
+      display: flex;
+      align-self: flex-end;
+      justify-content: flex-end;
+
+      &.disabled {
+        opacity: 0.5;
+        pointer-events: none;
+      }
+
+      span {
+        outline: none;
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-size: .75rem;
+        margin-bottom: 0;
+        color: #3A83DC;
+        cursor: pointer;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  .result-item-text {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-size: 13px;
+    color: #34344E;
+    cursor: pointer;
+  }
+
+  :global(.rbt-aux) {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: .5rem;
+  }
+
+  :global(.custom-select) {
+    height: 2.1rem;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-size: 13px;
+  }
+
+  .date-and-time-group {
+    width: 100%;
+
+    :global(.form-control[readonly]) {
+      background-color: white;
+    }
+
+    .date-form-group {
+      width: 60%;
+    }
+
+    .date-append {
+      width: 40%;
+    }
+  }
+
+  .timeContainer {
+    display: flex;
+    width: 100%;
+    margin-top: 10px;
+
+    .timeSelect {
+      width: 50%;
+      margin-right: 10px;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+.appointment-date-picker-root {
+  z-index: 2000;
+  .calendar-paper {
+    :global(.rdrMonthAndYearWrapper) {
+      padding-top: 0;
+      height: 30px;
+    }
+
+    :global(.rdrMonths) {
+      :global(.rdrMonth) {
+        padding: 0;
+      }
+    }
+  }
+}

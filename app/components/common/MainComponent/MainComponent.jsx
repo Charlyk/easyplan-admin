@@ -6,9 +6,15 @@ import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import AudioPlayer from 'react-h5-audio-player';
 import { useDispatch, useSelector } from 'react-redux';
+import InfoContainer from 'app/components/common/InfoContainer';
 import IconClose from 'app/components/icons/iconClose';
 import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
+import {
+  PaymentStatuses,
+  Role,
+  SubscriptionStatuses,
+} from 'app/utils/constants';
 import getCallRecordUrl from 'app/utils/getCallRecordUrl';
 import paths from 'app/utils/paths';
 import { loginUrl } from 'eas.config';
@@ -37,6 +43,7 @@ import {
   patientXRayModalSelector,
   paymentModalSelector,
 } from 'redux/selectors/modalsSelector';
+import { paymentsSubscriptionSelector } from 'redux/selectors/paymentsSelector';
 import {
   isImportModalOpenSelector,
   patientDetailsSelector,
@@ -90,10 +97,36 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
   const reminderModal = useSelector(createReminderModalSelector);
   const isExchangeRatesModalOpen = useSelector(isExchangeRateModalOpenSelector);
   const clinicAccessChange = useSelector(userClinicAccessChangeSelector);
+  const { data: subscription } = useSelector(paymentsSubscriptionSelector);
   let childrenProps = children.props;
   if (provideAppData) {
     childrenProps = { ...childrenProps, currentUser, currentClinic, authToken };
   }
+
+  const showPaymentWarning = useMemo(() => {
+    const { roleInClinic } = currentUser.userClinic;
+    const { status, paymentStatus } = subscription;
+    const correctUser =
+      roleInClinic === Role.admin || roleInClinic === Role.manager;
+
+    const subscriptionStatus =
+      status === SubscriptionStatuses.unpaid ||
+      status === SubscriptionStatuses.incomplete_expired;
+
+    const correspondingPaymentStatus =
+      paymentStatus === PaymentStatuses.draft ||
+      paymentStatus === PaymentStatuses.open ||
+      paymentStatus === PaymentStatuses.uncollectible;
+
+    const correspondingStatus =
+      subscriptionStatus || correspondingPaymentStatus;
+
+    return (
+      correctUser &&
+      !router.asPath.includes('billing-details') &&
+      correspondingStatus
+    );
+  }, [subscription]);
 
   useEffect(() => {
     if (newReminder == null || newReminder.assignee.id !== currentUser.id) {
@@ -304,6 +337,7 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
             onCreateClinic={handleCreateClinic}
           />
           <div className={styles.dataContainer}>
+            {showPaymentWarning && <InfoContainer />}
             <PageHeader
               currentClinic={currentClinic}
               title={headerTitle}

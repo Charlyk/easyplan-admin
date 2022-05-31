@@ -57,12 +57,17 @@ import {
   Schedule,
   ShortInvoice,
 } from 'types';
+import { PaymentSubscription } from '../../../../types/api';
+import { setSubscriptionInfo } from '../../../slices/paymentSlice';
 
 export function* handlePubnubMessage(event: PayloadAction<PubnubMessage>) {
   try {
     const { action, payload: messagePayload } = event.payload.message;
     const payload = messagePayload != null ? JSON.parse(messagePayload) : null;
     switch (action) {
+      case MessageAction.SubscriptionUpdated:
+        yield call(handleUpdateSubscription, payload);
+        break;
       case MessageAction.NewUserInvited:
       case MessageAction.InvitationRemoved:
       case MessageAction.ClinicInvitationAccepted:
@@ -136,6 +141,10 @@ export function* handlePubnubMessage(event: PayloadAction<PubnubMessage>) {
   } catch (error) {
     console.error('error receiving message', error);
   }
+}
+
+function* handleUpdateSubscription(subscription: PaymentSubscription) {
+  yield put(setSubscriptionInfo(subscription));
 }
 
 function* updateScheduleDetails(detailsId: number) {

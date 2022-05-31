@@ -71,6 +71,7 @@ const initialState: ReduxState = {
     isFetchingDetails: false,
     viewDate: null,
     viewMode: 'day',
+    selectedDoctor: -1,
     filterData: {
       searchQuery: '',
       serviceId: -1,
@@ -278,6 +279,40 @@ const initialState: ReduxState = {
     data: [],
     loading: false,
     error: null,
+  },
+  paymentsState: {
+    modalOpen: false,
+    isDataLoading: false,
+    paymentActions: {
+      data: null,
+      loading: false,
+      error: null,
+    },
+    subscriptionInfo: {
+      loading: false,
+      error: null,
+      data: {
+        status: '',
+        paymentStatus: '',
+        id: '',
+        availableSeats: 0,
+        nextPayment: '',
+        nextAmount: 0,
+        nextCurrency: '',
+        totalSeats: 0,
+        interval: 'MONTH',
+      },
+    },
+    paymentMethods: {
+      loading: false,
+      error: null,
+      data: null,
+    },
+    invoicesInfo: {
+      loading: false,
+      error: null,
+      data: null,
+    },
   },
 };
 

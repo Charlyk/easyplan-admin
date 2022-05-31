@@ -155,7 +155,7 @@ const CalendarDayView = ({
   };
 
   const handleOpenClinicSettings = async () => {
-    await router.push({ pathname: '/settings', search: 'menu=workingHours' });
+    await router.push({ pathname: '/settings/working-hours' });
   };
 
   /**

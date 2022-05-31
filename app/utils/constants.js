@@ -557,3 +557,26 @@ export const DateLocales = {
 };
 
 export const AppLanguages = ['ro', 'ru', 'en'];
+
+export const currenciesMap = {
+  eur: '€',
+  usd: '$',
+  ron: 'lei',
+};
+
+export const SubscriptionStatuses = {
+  unpaid: 'unpaid',
+  active: 'active',
+  canceled: 'canceled',
+  trialing: 'trialing',
+  incomplete: 'incomplete',
+  incomplete_expired: 'incomplete_expired',
+  past_due: 'past_due',
+};
+
+export const PaymentStatuses = {
+  draft: 'draft',
+  open: 'open',
+  uncollectible: 'uncollectible',
+  trialing: 'trialing',
+};

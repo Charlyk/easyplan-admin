@@ -32,7 +32,7 @@ const EASAutocomplete = ({
   const [inputValue, setInputValue] = useState(value?.label ?? '');
 
   const mappedOptions = useMemo(() => {
-    if (canCreate && inputValue.length > 3) {
+    if (canCreate && inputValue.length > 0) {
       return [
         ...options,
         {

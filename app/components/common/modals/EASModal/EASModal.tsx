@@ -27,7 +27,7 @@ interface Props {
   children?: any;
   isPositiveDisabled?: any;
   isDestroyDisabled?: boolean | null;
-  note?: boolean | string;
+  note?: boolean | string | JSX.Element;
   onClose: () => void;
   onDestroyClick?: () => void;
   onPrimaryClick?: () => void;

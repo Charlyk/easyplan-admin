@@ -1,0 +1,66 @@
+.wrapper {
+  width: 100%;
+  .content {
+    display: grid;
+    grid-template-columns:1fr;
+    grid-auto-rows: max-content;
+    gap: 1em;
+
+    .gridCell {
+      display: grid;
+      grid-template-columns: min-content 1fr;
+      grid-template-rows: repeat(2, min-content);
+      align-items: center;
+      gap: 1em;
+      min-height: 100px;
+      .verticalDivider {
+        height: 100%;
+        min-height: 20px;
+        border-left: 0.5px solid rgb(24, 113, 223);
+        border-right: 0.5px solid rgb(24, 113, 223);
+        align-self: center;
+        justify-self: center;
+        grid-column: 1/2;
+        grid-row: 2/3;
+      }
+      .header {
+        grid-column: 2/3;
+        grid-row: 1/2;
+      }
+      .cellContent {
+        grid-column: 2/3;
+        grid-row: 2/3;
+        .checkboxWrapper {
+          display: flex;
+          .checkbox {
+            padding: 1em 3em;
+            margin-bottom: 1em;
+            border-radius: 6px;
+            display: flex;
+          }
+        }
+
+      }
+    }
+  }
+  .btnWrapper {
+    margin-left: 1em;
+    & > :first-of-type {
+      margin-right: 1.5em;
+    }
+
+    .cancelButton {
+      background-color: hsl(338, 83%, 56%);
+    }
+
+  }
+}
+
+.divider {
+  width: 100%;
+  border-bottom: 1px solid #035787;
+  margin: 1em 0;
+}
+
+
+

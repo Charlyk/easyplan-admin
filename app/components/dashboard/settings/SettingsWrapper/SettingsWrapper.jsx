@@ -15,6 +15,7 @@ const CompanyDetailsForm = dynamic(() => import('../CompanyDetailsForm'));
 const SecuritySettings = dynamic(() => import('../SecuritySettings'));
 const SettingsMenu = dynamic(() => import('../SettingsMenu'));
 const CrmSettings = dynamic(() => import('../CrmSettings'));
+const BillingDetails = dynamic(() => import('../BillingDetails'));
 
 const SettingsForm = {
   companyDetails: 'company-details',
@@ -24,6 +25,7 @@ const SettingsForm = {
   appSettings: 'app-settings',
   bracesSettings: 'braces-settings',
   crmSettings: 'crm-settings',
+  billingDetails: 'billing-details',
 };
 
 const SettingsWrapper = ({
@@ -57,6 +59,9 @@ const SettingsWrapper = ({
         {selectedMenu === SettingsForm.securitySettings && <SecuritySettings />}
         {selectedMenu === SettingsForm.appSettings && <ApplicationSettings />}
         {selectedMenu === SettingsForm.bracesSettings && <BracesSettings />}
+        {selectedMenu === SettingsForm.billingDetails && (
+          <BillingDetails countries={countries} />
+        )}
         {selectedMenu === SettingsForm.crmSettings && (
           <CrmSettings
             facebookCode={facebookCode}

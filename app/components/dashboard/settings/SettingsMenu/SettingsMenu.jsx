@@ -19,6 +19,7 @@ const managersMenuItems = [
   { name: 'crm_settings', url: 'crm-settings' },
   { name: 'Braces settings', url: 'braces-settings' },
   { name: 'Working hours', url: 'working-hours' },
+  { name: 'billing_details', url: 'billing-details' },
 ];
 
 const generalMenuItems = [

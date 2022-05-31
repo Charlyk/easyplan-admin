@@ -1,0 +1,84 @@
+.wrapper {
+    width: 100%;
+    padding: 1.5em 3em;
+    background-color: #fff;
+    border-radius: 4px;
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    overflow: hidden;
+    max-height: 100%;
+    height: 100%;
+
+    .introHeader {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);;
+        gap: 1em;
+        margin: 1em 0;
+        .infoBox {
+            padding: 1em 2em;
+            border-radius: 6px;
+            border: 1px solid #3a83dc;
+            &Header {
+                font-family: Inter, sans-serif !important;
+                font-style: normal !important;
+            }
+
+            &Amount {
+                font-family: Inter, sans-serif !important;
+                font-style: normal !important;
+                font-size: 18px !important;
+                color: hsl(338, 83%, 56%);
+                margin: .2em 0;
+            }
+
+            &Link {
+                font-family: Inter, sans-serif !important;
+                font-style: normal !important;
+                font-size: 13px !important;
+                color: #3a83dc !important;
+                cursor: pointer;
+            }
+        }
+    }
+    .content {
+        width: 100%;
+        overflow: auto;
+        height: 100%;
+        max-height: calc(100% - 180px);
+        .btnWrapper {
+            min-height: 3.5em;
+            display: flex;
+            align-items: center;
+            text-transform: none !important;
+            justify-content: space-between;
+            margin-right: 1em;
+        }
+    }
+}
+
+.loadingWrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+}
+.alertIcon {
+    align-items: center;
+}
+
+.alertContainer {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+
+
+
+    button {
+        margin-left: 1em;
+    }
+}
+
+
+

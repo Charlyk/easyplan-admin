@@ -28,15 +28,12 @@ import {
   isFetchingUsersSelector,
   usersSelector,
 } from 'redux/selectors/usersListSelector';
-import {
-  fetchClinicUsers,
-  removeInvitation,
-  setNewInvitation,
-} from 'redux/slices/usersListSlice';
+import { fetchClinicUsers } from 'redux/slices/usersListSlice';
 import styles from './UsersList.module.scss';
 import reducer, {
   initialState,
   setInvitationToDelete,
+  setIsInvitingExistent,
   setShowInvitationSent,
   setIsUserModalOpen,
   setSelectedFilter,
@@ -126,12 +123,8 @@ const UsersList = () => {
     return inviteUser({ emailAddress: email, role });
   };
 
-  const handleInviteCanceled = (email, type, id) => {
-    localDispatch(setShowInviteModal({ open: true, type, email }));
-    dispatch(removeInvitation(id));
-  };
-
-  const handleTimeoutExpired = async (email, role) => {
+  const handleInviteUser = async (email, role) => {
+    localDispatch(setIsInvitingExistent(true));
     try {
       await sendInvitation(email, role);
       await fetchUsers();
@@ -144,19 +137,10 @@ const UsersList = () => {
         toast.error(error.message);
         localDispatch(setIsInvitingExistentError(error.message));
       }
+    } finally {
+      closeInviteModal();
+      localDispatch(setIsInvitingExistent(false));
     }
-  };
-
-  const handleInviteUser = (email, role) => {
-    dispatch(
-      setNewInvitation({
-        email,
-        role,
-        isRecentCreated: true,
-        id: Date.now().toString(),
-      }),
-    );
-    closeInviteModal();
   };
 
   const openInviteModal = (type = Role.reception) => {
@@ -326,17 +310,14 @@ const UsersList = () => {
 
   return (
     <div className={styles.usersRoot}>
-      {showInviteModal.open && (
-        <InviteUserModal
-          error={invitingExistentError}
-          isLoading={isInvitingExistent}
-          open={showInviteModal.open}
-          type={showInviteModal.type}
-          email={showInviteModal.email}
-          onInvite={handleInviteUser}
-          onClose={closeInviteModal}
-        />
-      )}
+      <InviteUserModal
+        error={invitingExistentError}
+        isLoading={isInvitingExistent}
+        open={showInviteModal.open}
+        type={showInviteModal.type}
+        onInvite={handleInviteUser}
+        onClose={closeInviteModal}
+      />
 
       <ConfirmationModal
         show={Boolean(userToDelete)}
@@ -403,12 +384,9 @@ const UsersList = () => {
                   invitations.map((item) => (
                     <UserItem
                       isInvitation={true}
-                      isRecentCreated={item.isRecentCreated ?? false}
                       isInviting={
                         isInviting.userId === item.id && isInviting.loading
                       }
-                      onInviteCanceled={handleInviteCanceled}
-                      onTimeoutExpired={handleTimeoutExpired}
                       onResend={handleResendInvitation}
                       user={item}
                       key={`invitation-${item.id}`}
