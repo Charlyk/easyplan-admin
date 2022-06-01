@@ -1,5 +1,5 @@
 import { AppLocale } from 'types';
-import strings from './strings/strings';
+import strings from './strings/localization';
 
 /**
  * Update localization language
