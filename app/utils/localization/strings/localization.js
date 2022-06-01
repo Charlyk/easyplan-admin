@@ -878,6 +878,7 @@ export default {
     yearly: 'Annually',
     yes: 'Yes',
     yesterday: 'Yesterday',
+    x_ray_image: 'X-Ray image',
   },
   ro: {
     'about clinic': 'Despre clinică',
@@ -1766,6 +1767,7 @@ export default {
     yearly: 'Anual',
     yes: 'Da',
     yesterday: 'Ieri',
+    x_ray_image: 'Imagine X-Ray',
   },
   ru: {
     'about clinic': 'О клинике',
@@ -2650,5 +2652,6 @@ export default {
     yearly: 'ежегодно',
     yes: 'Да',
     yesterday: 'Вчера',
+    x_ray_image: 'Pадиографический снимок',
   },
 };
