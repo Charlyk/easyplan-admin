@@ -9,7 +9,6 @@ import { Role } from 'app/utils/constants';
 import { AppLanguages } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import { setAppLanguage } from 'app/utils/localization';
-import * as jsonStrings from 'app/utils/localization/strings/localization.json';
 import { appLanguageSelector } from 'redux/selectors/appDataSelector';
 import { dispatchUpdateUserLanguage } from 'redux/slices/appDataSlice';
 import styles from './SettingsMenu.module.scss';
@@ -38,9 +37,6 @@ const SettingsMenu = ({ onSelect, currentOption, selectedClinic }) => {
     setAppLanguage(key);
     dispatch(dispatchUpdateUserLanguage(key));
   };
-
-  const parsedStrings = JSON.parse(jsonStrings);
-  console.log(parsedStrings);
 
   return (
     <div className={styles['settings-menu']}>
