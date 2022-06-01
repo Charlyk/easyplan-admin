@@ -43,6 +43,11 @@ const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
       birthday,
       isLoading,
       showBirthdayPicker,
+      idnp,
+      identityCardSeries,
+      identityCardNumber,
+      employerCertificate,
+      address,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
@@ -98,6 +103,26 @@ const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
 
   const handleBirthdayChange = (newDate) => {
     localDispatch(actions.setBirthday(newDate));
+  };
+
+  const handleIdnpChange = (value) => {
+    localDispatch(actions.setIDNP(value));
+  };
+
+  const handleIdentityCardSeriesChange = (value) => {
+    localDispatch(actions.setIdentityCardSeries(value));
+  };
+
+  const handleIdentityCardNumberChange = (value) => {
+    localDispatch(actions.setIdentityCardNumber(value));
+  };
+
+  const handleAddressChange = (value) => {
+    localDispatch(actions.setAddress(value));
+  };
+
+  const handleEmployerCertificateChange = (value) => {
+    localDispatch(actions.setEmployerCertificate(value));
   };
 
   const handlePhoneChange = (value, country, event) => {
@@ -192,6 +217,25 @@ const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
         />
 
         <EASTextField
+          fieldLabel={textForKey('identity_card') + `(${textForKey('series')})`}
+          containerClass={styles.simpleField}
+          onChange={handleIdentityCardSeriesChange}
+          value={identityCardSeries}
+        />
+        <EASTextField
+          fieldLabel={textForKey('identity_card') + `(${textForKey('number')})`}
+          containerClass={styles.simpleField}
+          onChange={handleIdentityCardNumberChange}
+          value={identityCardNumber}
+        />
+        <EASTextField
+          fieldLabel={textForKey('idnp')}
+          containerClass={styles.simpleField}
+          onChange={handleIdnpChange}
+          value={idnp}
+        />
+
+        <EASTextField
           readOnly
           ref={birthdayPickerAnchor}
           fieldLabel={textForKey('Birthday')}
@@ -207,7 +251,18 @@ const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
           rootClass={styles.simpleField}
           onChange={handleLanguageChange}
         />
-
+        <EASTextField
+          fieldLabel={textForKey('address')}
+          containerClass={styles.simpleField}
+          onChange={handleAddressChange}
+          value={address}
+        />
+        <EASTextField
+          fieldLabel={textForKey('employer_certificate')}
+          containerClass={styles.simpleField}
+          onChange={handleEmployerCertificateChange}
+          value={employerCertificate}
+        />
         <EASSelect
           label={textForKey('patient_source')}
           labelId='patient-source-select'

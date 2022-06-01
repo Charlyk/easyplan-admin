@@ -6,6 +6,11 @@ export const initialState = {
   lastName: '',
   phoneNumber: '',
   isPhoneValid: false,
+  idnp: '',
+  identityCardSeries: '',
+  identityCardNumber: '',
+  address: '',
+  employerCertificate: '',
   language: 'ro',
   source: 'Unknown',
   phoneCountry: { countryCode: 'md', dialCode: '373' },
@@ -27,12 +32,27 @@ const reducerTypes = {
   resetState: 'resetState',
   setLanguage: 'setLanguage',
   setSource: 'setSource',
+  setIDNP: 'setIdnp',
+  setIdentityCardSeries: 'setIdentityCardSeries',
+  setIdentityCardNumber: 'setIdentityCardNumber',
+  setAddress: 'setAddress',
+  setEmployerCertificate: 'setEmployerCertificate',
 };
 
 export const actions = generateReducerActions(reducerTypes);
 
 export const reducer = (state, action) => {
   switch (action.type) {
+    case reducerTypes.setIDNP:
+      return { ...state, idnp: action.payload };
+    case reducerTypes.setIdentityCardSeries:
+      return { ...state, identityCardSeries: action.payload };
+    case reducerTypes.setIdentityCardNumber:
+      return { ...state, identityCardNumber: action.payload };
+    case reducerTypes.setAddress:
+      return { ...state, address: action.payload };
+    case reducerTypes.setEmployerCertificate:
+      return { ...state, employerCertificate: action.payload };
     case reducerTypes.setFirstName:
       return { ...state, firstName: action.payload };
     case reducerTypes.setLastName:
