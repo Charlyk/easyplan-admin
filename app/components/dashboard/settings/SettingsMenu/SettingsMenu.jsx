@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import clsx from 'clsx';
+import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import IconNext from 'app/components/icons/iconNext';
@@ -27,11 +28,18 @@ const generalMenuItems = [
 ];
 
 const SettingsMenu = ({ onSelect, currentOption, selectedClinic }) => {
+  const router = useRouter();
   const dispatch = useDispatch();
   const appLanguage = useSelector(appLanguageSelector);
+  const [languageOnRender] = useState(appLanguage);
   const isSelected = (type) => {
     return currentOption === type;
   };
+
+  useEffect(() => {
+    if (appLanguage === languageOnRender) return;
+    router.reload();
+  }, [appLanguage, languageOnRender]);
 
   const handleLanguageButtonClick = (key) => {
     setAppLanguage(key);
