@@ -45,8 +45,6 @@ const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
       showBirthdayPicker,
       idnp,
       identityCardSeries,
-      identityCardNumber,
-      employerCertificate,
       address,
     },
     localDispatch,
@@ -74,6 +72,9 @@ const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
         lastName: lastName.length > 0 ? lastName : null,
         email: email.length > 0 ? email : null,
         countryCode: phoneCountry.dialCode,
+        personalId: idnp,
+        homeAddress: address,
+        identityCard: identityCardSeries,
       };
       await requestCreatePatient(requestBody, null, {
         [HeaderKeys.authorization]: authToken,
@@ -113,16 +114,8 @@ const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
     localDispatch(actions.setIdentityCardSeries(value));
   };
 
-  const handleIdentityCardNumberChange = (value) => {
-    localDispatch(actions.setIdentityCardNumber(value));
-  };
-
   const handleAddressChange = (value) => {
     localDispatch(actions.setAddress(value));
-  };
-
-  const handleEmployerCertificateChange = (value) => {
-    localDispatch(actions.setEmployerCertificate(value));
   };
 
   const handlePhoneChange = (value, country, event) => {
@@ -215,18 +208,11 @@ const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
           }
           onChange={handlePatientEmailChange}
         />
-
         <EASTextField
-          fieldLabel={textForKey('identity_card') + `(${textForKey('series')})`}
+          fieldLabel={textForKey('identity_card')}
           containerClass={styles.simpleField}
           onChange={handleIdentityCardSeriesChange}
           value={identityCardSeries}
-        />
-        <EASTextField
-          fieldLabel={textForKey('identity_card') + `(${textForKey('number')})`}
-          containerClass={styles.simpleField}
-          onChange={handleIdentityCardNumberChange}
-          value={identityCardNumber}
         />
         <EASTextField
           fieldLabel={textForKey('idnp')}
@@ -256,12 +242,6 @@ const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
           containerClass={styles.simpleField}
           onChange={handleAddressChange}
           value={address}
-        />
-        <EASTextField
-          fieldLabel={textForKey('employer_certificate')}
-          containerClass={styles.simpleField}
-          onChange={handleEmployerCertificateChange}
-          value={employerCertificate}
         />
         <EASSelect
           label={textForKey('patient_source')}

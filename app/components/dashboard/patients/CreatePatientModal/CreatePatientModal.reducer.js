@@ -32,7 +32,7 @@ const reducerTypes = {
   resetState: 'resetState',
   setLanguage: 'setLanguage',
   setSource: 'setSource',
-  setIDNP: 'setIdnp',
+  setIDNP: 'setIDNP',
   setIdentityCardSeries: 'setIdentityCardSeries',
   setIdentityCardNumber: 'setIdentityCardNumber',
   setAddress: 'setAddress',
