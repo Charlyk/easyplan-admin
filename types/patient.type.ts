@@ -16,6 +16,9 @@ export type Patient = {
   label?: string | null;
   source?: PatientSource | null;
   tags?: Tag[] | [];
+  address?: string | null;
+  identityCard: string | null;
+  identificationNumber: number | null;
 };
 
 export enum PatientSource {
