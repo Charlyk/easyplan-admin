@@ -11,6 +11,9 @@ export const initialState = {
   phoneNumber: '',
   discount: 0,
   euroDebt: 0,
+  address: '',
+  identificationNumber: '',
+  identityCard: '',
   language: 'ro',
   source: 'Unknown',
   allTags: [],
@@ -59,6 +62,9 @@ const patientPersonalDataSlice = createSlice({
         language,
         source,
         tags,
+        address,
+        identificationNumber,
+        identityCard,
       } = action.payload;
 
       state.firstName = firstName;
@@ -73,6 +79,9 @@ const patientPersonalDataSlice = createSlice({
       state.discount = String(discount || '0');
       state.isPhoneValid = true;
       state.tags = tags ?? [];
+      state.address = address;
+      state.identityCard = identityCard;
+      state.identificationNumber = identificationNumber;
     },
     setShowDatePicker(state, action) {
       state.showDatePicker = action.payload;
@@ -91,6 +100,15 @@ const patientPersonalDataSlice = createSlice({
     },
     setSource(state, action) {
       state.source = action.payload;
+    },
+    setAddress(state, action) {
+      state.address = action.payload;
+    },
+    setIdentificationNumber(state, action) {
+      state.identificationNumber = action.payload;
+    },
+    setIdentityCard(state, action) {
+      state.identityCard = action.payload;
     },
     setAllTags(state, action) {
       state.allTags = action.payload.map((item) => ({
@@ -128,6 +146,9 @@ export const {
   setAllTags,
   addPatientTag,
   removeTag,
+  setAddress,
+  setIdentificationNumber,
+  setIdentityCard,
 } = patientPersonalDataSlice.actions;
 
 export default patientPersonalDataSlice.reducer;
