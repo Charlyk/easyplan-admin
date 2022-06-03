@@ -52,6 +52,9 @@ import reducer, {
   setAllTags,
   removeTag,
   addPatientTag,
+  setAddress,
+  setIdentificationNumber,
+  setIdentityCard,
 } from './PatientPersonalData.reducer';
 
 const EasyDatePicker = dynamic(
@@ -93,6 +96,9 @@ const PatientPersonalData: React.FC<Props> = ({
       source,
       allTags,
       tags,
+      address,
+      identificationNumber,
+      identityCard,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
@@ -147,6 +153,15 @@ const PatientPersonalData: React.FC<Props> = ({
         localDispatch(
           setEuroDebt(adjustValueToNumber(newValue, Number.MAX_VALUE)),
         );
+        break;
+      case 'address':
+        localDispatch(setAddress(newValue));
+        break;
+      case 'identityCard':
+        localDispatch(setIdentityCard(newValue));
+        break;
+      case 'identificationNumber':
+        localDispatch(setIdentificationNumber(newValue));
         break;
     }
   };
@@ -223,6 +238,9 @@ const PatientPersonalData: React.FC<Props> = ({
       birthday: birthday ? moment(birthday).format('YYYY-MM-DD') : null,
       countryCode: country.dialCode,
       discount: discount ? parseInt(`${discount}`) : 0,
+      homeAddress: address,
+      personalId: identificationNumber,
+      identityCard,
     };
 
     try {
@@ -320,6 +338,27 @@ const PatientPersonalData: React.FC<Props> = ({
           containerClass={styles.simpleField}
           fieldLabel={textForKey('Euro Debt')}
           onChange={(value) => handleFormChange('euroDebt', value)}
+        />
+
+        <EASTextField
+          fieldLabel={textForKey('idnp')}
+          containerClass={styles.simpleField}
+          value={identificationNumber}
+          onChange={(value) => handleFormChange('identificationNumber', value)}
+        />
+
+        <EASTextField
+          fieldLabel={textForKey('identity_card')}
+          containerClass={styles.simpleField}
+          value={identityCard}
+          onChange={(value) => handleFormChange('identityCard', value)}
+        />
+
+        <EASTextField
+          fieldLabel={textForKey('address')}
+          containerClass={styles.simpleField}
+          value={address}
+          onChange={(value) => handleFormChange('address', value)}
         />
 
         <EASPhoneInput
