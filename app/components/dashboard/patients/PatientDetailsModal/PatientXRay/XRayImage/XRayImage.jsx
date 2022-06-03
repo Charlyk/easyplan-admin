@@ -7,7 +7,8 @@ import IconTrash from 'app/components/icons/iconTrash';
 import styles from './XRayImage.module.scss';
 
 const XRayImage = ({ image, onImageClick, onImageDelete }) => {
-  const handleImageClick = () => {
+  const handleImageClick = (evt) => {
+    evt.stopPropagation();
     onImageClick?.(image);
   };
 
