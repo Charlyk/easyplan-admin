@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import PhoneIcon from '@material-ui/icons/Call';
@@ -7,12 +7,18 @@ import FailedCallIcon from '@material-ui/icons/CallMissed';
 import IncomeCallIcon from '@material-ui/icons/CallReceived';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import TextField from 'app/components/common/EASTextField';
 import formatSeconds from 'app/utils/formatSeconds';
 import getCallRecordUrl from 'app/utils/getCallRecordUrl';
 import { textForKey } from 'app/utils/localization';
+import { dispatchUpdateCallRecords } from '../../../../../dashboard/patients/PatientDetailsModal/PatientPhoneRecords/PatientPhoneRecords.reducer';
 import styles from './PhoneCallItem.module.scss';
 
 const PhoneCallItem = ({ call, onPlayAudio }) => {
+  const dispatch = useDispatch();
+  const [isEdited, setIsEdited] = useState(false);
+  const [inputValue, setInputValue] = useState(call.comment ?? '');
   const dateText = useMemo(() => {
     if (call == null) {
       return '-';
@@ -74,6 +80,23 @@ const PhoneCallItem = ({ call, onPlayAudio }) => {
     }
   };
 
+  const onEditClick = () => {
+    setIsEdited(true);
+  };
+
+  const onCancelClick = () => {
+    setIsEdited(false);
+  };
+
+  const handleInputValueChange = (value) => {
+    setInputValue(value);
+  };
+
+  const handleSaveComment = () => {
+    dispatch(dispatchUpdateCallRecords({ id: call.id, comment: inputValue }));
+    onCancelClick();
+  };
+
   return (
     <div className={styles.phoneCall}>
       <div className={styles.iconWrapper}>
@@ -123,6 +146,61 @@ const PhoneCallItem = ({ call, onPlayAudio }) => {
         <Typography className={styles.detailsLabel}>
           {textForKey(`call_${call.status}`)}
         </Typography>
+        <div className={styles.commentWrapper}>
+          {isEdited ? (
+            <TextField
+              className={styles.input}
+              size={'small'}
+              value={inputValue}
+              onChange={handleInputValueChange}
+            />
+          ) : (
+            <Typography className={styles.detailsLabel}>
+              {call.comment ?? textForKey('no_comment_label')}
+            </Typography>
+          )}
+          {isEdited ? (
+            <>
+              <Button
+                variant={'outlined'}
+                classes={{
+                  root: styles.editBtn,
+                  label: styles.editBtnLabel,
+                  outlined: styles.outlinedBtn,
+                  disabled: styles.disabledBtn,
+                }}
+                onClick={handleSaveComment}
+              >
+                {textForKey('save')}
+              </Button>
+              <Button
+                classes={{
+                  root: styles.editBtn,
+                  label: styles.editBtnLabel,
+                  outlined: styles.outlinedBtn,
+                  disabled: styles.disabledBtn,
+                }}
+                variant={'outlined'}
+                onClick={onCancelClick}
+              >
+                {textForKey('cancel')}
+              </Button>
+            </>
+          ) : (
+            <Button
+              variant={'outlined'}
+              classes={{
+                root: styles.editBtn,
+                label: styles.editBtnLabel,
+                outlined: styles.outlinedBtn,
+                disabled: styles.disabledBtn,
+              }}
+              onClick={onEditClick}
+            >
+              {textForKey(call.comment ? 'edit' : 'add_comment')}
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );

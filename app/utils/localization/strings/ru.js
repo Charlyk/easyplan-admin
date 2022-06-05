@@ -882,4 +882,6 @@ export default {
   identity_card: 'Удостоверение личности',
   series: 'Серия',
   idnp: 'ИДНП',
+  add_comment: 'Добавить комментарий',
+  no_comment_label: 'Комментариев к звонку нет.',
 };

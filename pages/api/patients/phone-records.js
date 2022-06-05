@@ -23,6 +23,26 @@ async function fetchPhoneRecords(req) {
   );
 }
 
+async function updatePhoneRecord(req) {
+  const { clinic_id: clinicId, auth_token: authToken } = cookie.parse(
+    req.headers.cookie,
+  );
+
+  const { id: callRecordId } = req.query;
+
+  return axios.put(
+    `${updatedServerUrl(req)}/patients/call-records/${callRecordId}`,
+    req.body,
+    {
+      headers: {
+        [HeaderKeys.authorization]: authToken,
+        [HeaderKeys.clinicId]: clinicId,
+        [HeaderKeys.subdomain]: getSubdomain(req),
+      },
+    },
+  );
+}
+
 export default authorized(async (req, res) => {
   switch (req.method) {
     case 'GET': {
@@ -32,8 +52,15 @@ export default authorized(async (req, res) => {
       }
       break;
     }
+    case 'PUT': {
+      const data = await handler(updatePhoneRecord, req, res);
+      if (data) {
+        res.json(data);
+      }
+      break;
+    }
     default:
-      res.setHeader('Allow', ['GET']);
+      res.setHeader('Allow', ['GET', 'PUT']);
       res.status(405).end(`Method ${req.method} Not Allowed`);
       break;
   }

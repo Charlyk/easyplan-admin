@@ -880,4 +880,6 @@ export default {
   identity_card: 'Carte de identitate',
   series: 'Serie',
   idnp: 'IDNP',
+  add_comment: 'Add a comment',
+  no_comment_label: 'This call has no comments',
 };

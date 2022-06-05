@@ -61,6 +61,11 @@
       margin-right: 10px;
     }
 
+    .outlinedBtn {
+      border-color: #3A83DC;
+      padding: 0 10px;
+    }
+
     .detailsWrapper {
       display: flex;
       align-items: center;
@@ -85,15 +90,35 @@
         color: #3A83DC;
       }
 
-      .outlinedBtn {
-        border-color: #3A83DC;
-        padding: 0 10px;
-      }
+
 
       .downloadBtn {
         padding: 0 10px;
         color: #3A83DC;
       }
     }
+
+    .editBtn {
+      color: #3A83DC;
+      margin-left: 1em;
+    }
+
+    .editBtnLabel {
+        font-family: Inter, sans-serif !important;
+        font-style: normal !important;
+        font-weight: normal !important;
+        font-size: 13px !important;
+        color: #3A83DC;
+    }
+
+    .commentWrapper {
+      display: flex;
+      align-items: center;
+
+      .input {
+        width: 300px;
+      }
+    }
+
   }
 }
