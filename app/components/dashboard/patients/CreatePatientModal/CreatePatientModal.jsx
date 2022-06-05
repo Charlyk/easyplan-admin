@@ -43,6 +43,9 @@ const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
       birthday,
       isLoading,
       showBirthdayPicker,
+      idnp,
+      identityCardSeries,
+      address,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
@@ -69,6 +72,9 @@ const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
         lastName: lastName.length > 0 ? lastName : null,
         email: email.length > 0 ? email : null,
         countryCode: phoneCountry.dialCode,
+        personalId: idnp,
+        homeAddress: address,
+        identityCard: identityCardSeries,
       };
       await requestCreatePatient(requestBody, null, {
         [HeaderKeys.authorization]: authToken,
@@ -98,6 +104,18 @@ const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
 
   const handleBirthdayChange = (newDate) => {
     localDispatch(actions.setBirthday(newDate));
+  };
+
+  const handleIdnpChange = (value) => {
+    localDispatch(actions.setIDNP(value));
+  };
+
+  const handleIdentityCardSeriesChange = (value) => {
+    localDispatch(actions.setIdentityCardSeries(value));
+  };
+
+  const handleAddressChange = (value) => {
+    localDispatch(actions.setAddress(value));
   };
 
   const handlePhoneChange = (value, country, event) => {
@@ -190,6 +208,18 @@ const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
           }
           onChange={handlePatientEmailChange}
         />
+        <EASTextField
+          fieldLabel={textForKey('identity_card')}
+          containerClass={styles.simpleField}
+          onChange={handleIdentityCardSeriesChange}
+          value={identityCardSeries}
+        />
+        <EASTextField
+          fieldLabel={textForKey('idnp')}
+          containerClass={styles.simpleField}
+          onChange={handleIdnpChange}
+          value={idnp}
+        />
 
         <EASTextField
           readOnly
@@ -207,7 +237,12 @@ const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
           rootClass={styles.simpleField}
           onChange={handleLanguageChange}
         />
-
+        <EASTextField
+          fieldLabel={textForKey('address')}
+          containerClass={styles.simpleField}
+          onChange={handleAddressChange}
+          value={address}
+        />
         <EASSelect
           label={textForKey('patient_source')}
           labelId='patient-source-select'

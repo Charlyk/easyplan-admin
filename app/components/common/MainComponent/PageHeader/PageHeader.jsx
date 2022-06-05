@@ -206,6 +206,11 @@ const PageHeader = ({
             className={styles.avatarImage}
             placeholder={<IconAvatar />}
           />
+          {user.fullName && (
+            <Typography className={styles.userLabel}>
+              {user?.fullName}
+            </Typography>
+          )}
         </div>
         <IconButton
           ref={actionsAnchor}
