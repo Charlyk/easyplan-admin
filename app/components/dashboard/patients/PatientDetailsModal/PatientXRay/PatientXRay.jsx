@@ -19,6 +19,7 @@ import {
 import { updateXRaySelector } from 'redux/selectors/rootSelector';
 import styles from './PatientXRay.module.scss';
 import XRayImage from './XRayImage';
+import 'react-awesome-lightbox/build/style.css';
 
 const ConfirmationModal = dynamic(() =>
   import('../../../../common/modals/ConfirmationModal'),
@@ -31,6 +32,7 @@ const PatientXRay = ({ patient, onAddXRay }) => {
   const [imageToView, setImageToView] = useState(null);
   const [deleteModal, setDeleteModal] = useState({ show: false, image: null });
   const [isFetching, setIsFetching] = useState(false);
+  const [disableOnClose, setDisableOnClose] = useState(false);
   const [state, setState] = useState({
     images: [],
   });
@@ -38,6 +40,14 @@ const PatientXRay = ({ patient, onAddXRay }) => {
   useEffect(() => {
     fetchImages();
   }, [patient, updateXRay]);
+
+  useEffect(() => {
+    if (disableOnClose) {
+      setTimeout(() => {
+        setDisableOnClose(false);
+      }, 300);
+    }
+  }, [disableOnClose]);
 
   const fetchImages = async () => {
     setIsFetching(true);
@@ -61,6 +71,7 @@ const PatientXRay = ({ patient, onAddXRay }) => {
   };
 
   const handleImageClick = (image) => {
+    setDisableOnClose(true);
     setImageToView(image);
   };
 
@@ -94,9 +105,13 @@ const PatientXRay = ({ patient, onAddXRay }) => {
     <div className={styles.patientXRay}>
       {imageToView && (
         <Lightbox
-          title={textForKey(`${imageToView.imageType} phase`)}
+          title={textForKey(
+            imageToView.imageType
+              ? `${imageToView.imageType} phase`
+              : 'x_ray_image',
+          )}
           image={urlToAWS(imageToView.imageUrl)}
-          onClose={handleCloseImageView}
+          onClose={disableOnClose ? undefined : handleCloseImageView}
         />
       )}
       <ConfirmationModal
