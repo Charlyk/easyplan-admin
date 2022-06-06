@@ -117,6 +117,7 @@
   "birthday": "Date of birth",
   "birthdaycongrats": "Birthday greetings",
   "birthdaycongratsdesc": "This message will be sent to patients on their birthday (if indicated)",
+  "message language": "The language in which the message is written",
   "block_access": "Block access",
   "braces": "Dental appliance",
   "braces service": "Service for dental appliance",

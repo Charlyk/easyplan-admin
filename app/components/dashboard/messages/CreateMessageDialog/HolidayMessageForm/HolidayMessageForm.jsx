@@ -2,8 +2,8 @@ import React, { useEffect, useReducer, useRef } from 'react';
 import Typography from '@material-ui/core/Typography';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
+import { useTranslate } from 'react-polyglot';
 import EASTextField from 'app/components/common/EASTextField';
-import { textForKey } from 'app/utils/localization';
 import {
   availableHours,
   charactersRegex,
@@ -35,6 +35,7 @@ const HolidayMessageForm = ({
   onLanguageChange,
   onSubmit,
 }) => {
+  const textForKey = useTranslate();
   const datePickerAnchor = useRef(null);
   const availableTags = tags.filter((item) =>
     item.availableFor.includes(messageTypeEnum.HolidayCongrats),
@@ -148,7 +149,7 @@ const HolidayMessageForm = ({
     <div className={styles.holidayMessageRoot}>
       <form className={styles.formContainer} onSubmit={handleSubmit}>
         <Typography className={styles.formTitle}>
-          {textForKey(messageTypeEnum.HolidayCongrats)}
+          {textForKey(messageTypeEnum.HolidayCongrats.toLowerCase())}
         </Typography>
         {showDatePicker && datePicker}
         <MainMessageForm
@@ -172,7 +173,7 @@ const HolidayMessageForm = ({
           readOnly
           ref={datePickerAnchor}
           containerClass={styles.simpleField}
-          fieldLabel={textForKey('Date')}
+          fieldLabel={textForKey('date')}
           value={moment(messageDate).format('DD MMMM')}
           onPointerUp={handleShowDatePicker}
         />

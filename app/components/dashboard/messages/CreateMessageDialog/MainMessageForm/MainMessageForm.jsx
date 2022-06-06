@@ -1,11 +1,10 @@
 import React from 'react';
 import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
+import { useTranslate } from 'react-polyglot';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextarea from 'app/components/common/EASTextarea';
 import EASTextField from 'app/components/common/EASTextField';
-import { textForKey } from 'app/utils/localization';
 import {
   getRealMessageLength,
   languages,
@@ -29,6 +28,8 @@ const MainMessageForm = ({
   onMessageHourChange,
   onTagClick,
 }) => {
+  const textForKey = useTranslate();
+
   const getMessageLength = (language) => {
     return getRealMessageLength(language, message, currentClinic);
   };
@@ -44,7 +45,7 @@ const MainMessageForm = ({
     <div className={styles.formContainer}>
       <EASTextField
         containerClass={styles.simpleField}
-        fieldLabel={textForKey('Message title')}
+        fieldLabel={textForKey('message title')}
         value={messageTitle}
         helperText={textForKey('messagetitledesc')}
         onChange={onMessageTitleChange}
@@ -52,7 +53,7 @@ const MainMessageForm = ({
 
       <EASSelect
         rootClass={styles.simpleField}
-        label={textForKey('Message language')}
+        label={textForKey('message language')}
         labelId='language-select'
         value={language}
         onChange={onLanguageChange}
@@ -63,7 +64,7 @@ const MainMessageForm = ({
         containerClass={styles.simpleField}
         error={isLengthExceeded}
         value={message[language]}
-        fieldLabel={textForKey('Message text')}
+        fieldLabel={textForKey('message text')}
         onChange={onMessageChange}
         helperText={
           <span className={styles.helperText}>
@@ -88,7 +89,7 @@ const MainMessageForm = ({
             className={styles['tag-label']}
             onClick={onTagClick(tag)}
           >
-            #{tag.label}
+            #{textForKey(tag.label)}
           </Box>
         ))}
       </div>
@@ -96,7 +97,7 @@ const MainMessageForm = ({
       {!hideHour && (
         <EASSelect
           rootClass={styles.simpleField}
-          label={textForKey('Send notification at')}
+          label={textForKey('send notification at')}
           options={getMappedHours(availableHours)}
           onChange={onMessageHourChange}
           value={hourToSend}

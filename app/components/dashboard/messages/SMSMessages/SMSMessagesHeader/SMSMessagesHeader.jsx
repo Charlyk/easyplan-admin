@@ -1,11 +1,12 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import IconPlus from 'app/components/icons/iconPlus';
-import { textForKey } from 'app/utils/localization';
 import styles from './SMSMessagesHeader.module.scss';
 
 const SMSMessagesHeader = ({ canCreate, onCreate }) => {
+  const textForKey = useTranslate();
   return (
     <div className={styles['create-message-header']}>
       {canCreate && (
@@ -14,7 +15,7 @@ const SMSMessagesHeader = ({ canCreate, onCreate }) => {
           disabled={!canCreate}
           onClick={onCreate}
         >
-          {textForKey('Create message')}
+          {textForKey('create message')}
           <IconPlus fill='#fff' />
         </Button>
       )}

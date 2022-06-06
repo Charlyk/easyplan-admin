@@ -13,8 +13,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Toolbar from '@material-ui/core/Toolbar';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import NotificationsContext from 'app/context/notificationsContext';
-import { textForKey } from 'app/utils/localization';
 import { createMessage, updateMessage } from 'middleware/api/messages';
 import BottomSheetDialog from '../../../common/BottomSheetDialog';
 import BirthdayMessageForm from './BirthdayMessageForm';
@@ -45,6 +45,7 @@ const CreateMessageDialog = ({
   onClose,
   onCreateMessage,
 }) => {
+  const textForKey = useTranslate();
   const toast = useContext(NotificationsContext);
   const [
     { selectedMenu, currentLanguage, maxLength, message, isLoading },
@@ -214,8 +215,8 @@ const CreateMessageDialog = ({
 
   const title =
     initialMessage == null
-      ? textForKey('Create message')
-      : textForKey('Edit message');
+      ? textForKey('create message')
+      : textForKey('edit message');
 
   return (
     <BottomSheetDialog
@@ -248,7 +249,9 @@ const CreateMessageDialog = ({
                   primaryTypographyProps={{
                     className: styles.listItemText,
                   }}
-                  primary={textForKey(messageTypeEnum.ScheduleNotification)}
+                  primary={textForKey(
+                    messageTypeEnum.ScheduleNotification.toLowerCase(),
+                  )}
                 />
               </ListItem>
             )}
@@ -267,7 +270,9 @@ const CreateMessageDialog = ({
                   primaryTypographyProps={{
                     className: styles.listItemText,
                   }}
-                  primary={textForKey(messageTypeEnum.PromotionalMessage)}
+                  primary={textForKey(
+                    messageTypeEnum.PromotionalMessage.toLowerCase(),
+                  )}
                 />
               </ListItem>
             )}
@@ -286,7 +291,9 @@ const CreateMessageDialog = ({
                   primaryTypographyProps={{
                     className: styles.listItemText,
                   }}
-                  primary={textForKey(messageTypeEnum.HolidayCongrats)}
+                  primary={textForKey(
+                    messageTypeEnum.HolidayCongrats.toLowerCase(),
+                  )}
                 />
               </ListItem>
             )}
@@ -305,7 +312,9 @@ const CreateMessageDialog = ({
                   primaryTypographyProps={{
                     className: styles.listItemText,
                   }}
-                  primary={textForKey(messageTypeEnum.BirthdayCongrats)}
+                  primary={textForKey(
+                    messageTypeEnum.BirthdayCongrats.toLowerCase(),
+                  )}
                 />
               </ListItem>
             )}
@@ -324,7 +333,9 @@ const CreateMessageDialog = ({
                   primaryTypographyProps={{
                     className: styles.listItemText,
                   }}
-                  primary={textForKey(messageTypeEnum.OnetimeMessage)}
+                  primary={textForKey(
+                    messageTypeEnum.OnetimeMessage.toLowerCase(),
+                  )}
                 />
               </ListItem>
             )}

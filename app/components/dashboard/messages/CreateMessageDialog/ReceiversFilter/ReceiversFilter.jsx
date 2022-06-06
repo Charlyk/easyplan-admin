@@ -10,11 +10,11 @@ import Typography from '@material-ui/core/Typography';
 import debounce from 'lodash/debounce';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
+import { useTranslate } from 'react-polyglot';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
 import NotificationsContext from 'app/context/notificationsContext';
 import { ScheduleStatuses } from 'app/utils/constants';
-import { textForKey } from 'app/utils/localization';
 import { fetchAllServices } from 'middleware/api/services';
 import styles from './ReceiversFilter.module.scss';
 import reducer, {
@@ -43,6 +43,7 @@ const ReceiversFilter = ({
   recipientsCount,
   onChange,
 }) => {
+  const textForKey = useTranslate();
   const toast = useContext(NotificationsContext);
   const pickerRef = useRef(null);
   const [
@@ -77,7 +78,7 @@ const ReceiversFilter = ({
 
   const rangeLabel = useMemo(() => {
     if (rangeObj == null) {
-      return textForKey('All time');
+      return textForKey('all time');
     }
     return `${moment(rangeObj.startDate).format('DD MMM YYYY')} - ${moment(
       rangeObj.endDate,
@@ -210,12 +211,12 @@ const ReceiversFilter = ({
         />
 
         <Typography className={styles.formTitle}>
-          {textForKey('Receivers filter')}
+          {textForKey('receivers filter')}
         </Typography>
         <div className={styles.recipientsCount}>
           {recipientsCount > -1 && (
             <Typography className={styles.recipientsLabel}>
-              {textForKey('Receivers')}: ~ {recipientsCount}{' '}
+              {textForKey('receivers')}: ~ {recipientsCount}{' '}
               {textForKey('patients').toLowerCase()}
             </Typography>
           )}
@@ -226,12 +227,12 @@ const ReceiversFilter = ({
           multiple
           checkable
           rootClass={styles.simpleSelect}
-          label={textForKey('Statuses')}
+          label={textForKey('statuses')}
           labelId='statuses-select-label'
           options={ScheduleStatuses}
           defaultOption={{
             id: 'All',
-            name: textForKey('All statuses'),
+            name: textForKey('all statuses'),
           }}
           value={selectedStatuses.map((item) => item.id)}
           onChange={handleStatusChange}

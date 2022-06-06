@@ -9,9 +9,9 @@ import Typography from '@material-ui/core/Typography';
 import debounce from 'lodash/debounce';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
+import { useTranslate } from 'react-polyglot';
 import EASTextField from 'app/components/common/EASTextField';
 import NotificationsContext from 'app/context/notificationsContext';
-import { textForKey } from 'app/utils/localization';
 import { countMessageRecipients } from 'middleware/api/messages';
 import {
   availableHours,
@@ -48,6 +48,7 @@ const PromotionalMessageForm = ({
   onLanguageChange,
   onSubmit,
 }) => {
+  const textForKey = useTranslate();
   const toast = useContext(NotificationsContext);
   const datePickerAnchor = useRef(null);
   const availableTags = tags.filter((item) =>
@@ -212,7 +213,7 @@ const PromotionalMessageForm = ({
     <div className={styles.promotionalMessageRoot}>
       <form className={styles.formContainer} onSubmit={handleSubmit}>
         <Typography className={styles.formTitle}>
-          {textForKey(messageTypeEnum.PromotionalMessage)}
+          {textForKey(messageTypeEnum.PromotionalMessage.toLowerCase())}
         </Typography>
         {showDatePicker && datePicker}
         <MainMessageForm
@@ -236,7 +237,7 @@ const PromotionalMessageForm = ({
           readOnly
           ref={datePickerAnchor}
           containerClass={styles.simpleField}
-          fieldLabel={textForKey('Date')}
+          fieldLabel={textForKey('date')}
           value={moment(messageDate).format('DD MMMM')}
           onPointerUp={handleShowDatePicker}
         />

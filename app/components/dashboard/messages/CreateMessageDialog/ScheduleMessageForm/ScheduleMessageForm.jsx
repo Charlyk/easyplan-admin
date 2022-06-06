@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 import Typography from '@material-ui/core/Typography';
 import moment from 'moment-timezone';
-import { textForKey } from 'app/utils/localization';
+import { useTranslate } from 'react-polyglot';
 import {
   availableHours,
   charactersRegex,
@@ -28,6 +28,7 @@ const ScheduleMessageForm = ({
   onLanguageChange,
   onSubmit,
 }) => {
+  const textForKey = useTranslate();
   const availableTags = tags.filter((item) =>
     item.availableFor.includes(messageTypeEnum.ScheduleNotification),
   );
@@ -103,7 +104,7 @@ const ScheduleMessageForm = ({
     <div className={styles.scheduleMessageRoot}>
       <form className={styles.formContainer} onSubmit={handleSubmit}>
         <Typography className={styles.formTitle}>
-          {textForKey(messageTypeEnum.ScheduleNotification)}
+          {textForKey(messageTypeEnum.ScheduleNotification.toLowerCase())}
         </Typography>
         <MainMessageForm
           currentClinic={currentClinic}
