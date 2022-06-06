@@ -3,10 +3,10 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import orderBy from 'lodash/orderBy';
 import { useRouter } from 'next/router';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingButton from 'app/components/common/LoadingButton';
 import IconFacebookSm from 'app/components/icons/iconMetaLogo';
-import { textForKey } from 'app/utils/localization';
 import { appBaseUrl } from 'eas.config';
 import { saveClinicFacebookPage } from 'middleware/api/clinic';
 import { generateFacebookAccessToken } from 'middleware/api/facebook';
@@ -25,6 +25,7 @@ const FacebookIntegration: React.FC<FacebookIntegrationProps> = ({
   facebookToken,
   facebookCode,
 }) => {
+  const textForKey = useTranslate();
   const router = useRouter();
   const dispatch = useDispatch();
   const currentClinic = useSelector(currentClinicSelector);
@@ -36,7 +37,7 @@ const FacebookIntegration: React.FC<FacebookIntegrationProps> = ({
 
   const title = useMemo(() => {
     if (facebookPages == null || !Array.isArray(facebookPages)) {
-      return textForKey('Connect facebook page for CRM');
+      return textForKey('connect facebook page');
     }
     return textForKey(
       'connected_facebook_page',
@@ -132,7 +133,7 @@ const FacebookIntegration: React.FC<FacebookIntegrationProps> = ({
           className='positive-button'
           onClick={handleConnectClick}
         >
-          {textForKey('Connect')}
+          {textForKey('connect')}
         </LoadingButton>
       </Box>
     </div>

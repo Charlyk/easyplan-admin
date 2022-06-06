@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import EASPhoneInput from 'app/components/common/EASPhoneInput';
 import EASTextField from 'app/components/common/EASTextField';
@@ -8,7 +9,6 @@ import IconSuccess from 'app/components/icons/iconSuccess';
 import { EmailRegex } from 'app/utils/constants';
 import imageToBase64 from 'app/utils/imageToBase64';
 import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
-import { textForKey } from 'app/utils/localization';
 import {
   currentUserSelector,
   isUpdatingProfileSelector,
@@ -21,6 +21,7 @@ import {
 import styles from './AccountSettings.module.scss';
 
 const AccountSettings = () => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const currentUser = useSelector(currentUserSelector);
   const isLoading = useSelector(isUpdatingProfileSelector);
@@ -118,7 +119,7 @@ const AccountSettings = () => {
   return (
     <div className={styles['account-settings']}>
       <span className={styles['form-title']}>
-        {textForKey('Account settings')}
+        {textForKey('account settings')}
       </span>
       <UploadAvatar
         currentAvatar={data.avatarFile || data.avatarUrl}
@@ -127,7 +128,7 @@ const AccountSettings = () => {
       <EASTextField
         type='text'
         containerClass={styles.simpleField}
-        fieldLabel={textForKey('Last name')}
+        fieldLabel={textForKey('last name')}
         value={data.lastName || ''}
         onChange={(value) => handleFormChange('lastName', value)}
       />
@@ -135,7 +136,7 @@ const AccountSettings = () => {
       <EASTextField
         type='text'
         containerClass={styles.simpleField}
-        fieldLabel={textForKey('First name')}
+        fieldLabel={textForKey('first name')}
         value={data.firstName || ''}
         onChange={(value) => handleFormChange('firstName', value)}
       />
@@ -145,7 +146,7 @@ const AccountSettings = () => {
         containerClass={styles.simpleField}
         error={!isEmailValid}
         helperText={isEmailValid ? null : textForKey('email_invalid_message')}
-        fieldLabel={textForKey('Email')}
+        fieldLabel={textForKey('email')}
         value={data.email || ''}
         onChange={(value) => handleFormChange('email', value)}
       />
@@ -155,7 +156,7 @@ const AccountSettings = () => {
           type='password'
           autoComplete='new-password'
           containerClass={styles.simpleField}
-          fieldLabel={textForKey('Current password')}
+          fieldLabel={textForKey('current password')}
           value={data.oldPassword || ''}
           onChange={(value) => handleFormChange('oldPassword', value)}
         />
@@ -163,7 +164,7 @@ const AccountSettings = () => {
 
       <EASPhoneInput
         rootClass={styles.simpleField}
-        fieldLabel={textForKey('Phone number')}
+        fieldLabel={textForKey('phone number')}
         value={data.phoneNumber || ''}
         onChange={handlePhoneChange}
       />
@@ -174,7 +175,7 @@ const AccountSettings = () => {
         isLoading={isLoading}
         disabled={isLoading || !isFormValid()}
       >
-        {textForKey('Save')}
+        {textForKey('save')}
         {!isLoading && <IconSuccess />}
       </LoadingButton>
     </div>

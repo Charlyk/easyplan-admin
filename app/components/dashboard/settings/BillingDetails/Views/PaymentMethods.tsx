@@ -3,8 +3,8 @@ import { Button } from '@easyplanpro/easyplan-components';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import Image from 'next/image';
+import { useTranslate } from 'react-polyglot';
 import { useSelector, useDispatch } from 'react-redux';
-import { textForKey } from 'app/utils/localization';
 import amex from 'public/images/cards/amex.svg';
 import diners from 'public/images/cards/diners.svg';
 import discover from 'public/images/cards/discover.svg';
@@ -37,6 +37,7 @@ type Props = {
 };
 
 const PaymentMethods: React.FC<Props> = () => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const { data } = useSelector(paymentsPaymentMethodsSelector);
   const handleOpenModal = () => dispatch(openNewCardModal());
@@ -91,6 +92,7 @@ export const PaymentMethod: React.FC<
   onDelete,
   onSetAsDefault,
 }) => {
+  const textForKey = useTranslate();
   const [showBtns, setShowBtns] = useState(false);
 
   const handlePointerEnter = () => setShowBtns(true);

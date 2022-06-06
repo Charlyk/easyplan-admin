@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import SwitchButton from 'app/components/common/SwitchButton';
-import { textForKey } from 'app/utils/localization';
 import styles from './ClinicSettings.module.scss';
 import {
   dispatchFetchSettings,
@@ -12,6 +12,7 @@ import {
 import { clinicSettingsSelector } from './ClinicSettings.selector';
 
 const ClinicSettings: React.FC = () => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const { settings } = useSelector(clinicSettingsSelector);
 

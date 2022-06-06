@@ -7,6 +7,7 @@ import Alert from '@material-ui/lab/Alert';
 import { formatInTimeZone } from 'date-fns-tz';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+import { useTranslate } from 'react-polyglot';
 import { useSelector, useDispatch } from 'react-redux';
 import LoadingButton from 'app/components/common/LoadingButton';
 import {
@@ -15,7 +16,6 @@ import {
   PaymentStatuses,
 } from 'app/utils/constants';
 import formatAmountWithSymbol from 'app/utils/formatAmountWithSymbol';
-import { textForKey } from 'app/utils/localization';
 import {
   appLanguageSelector,
   clinicTimeZoneSelector,
@@ -48,6 +48,7 @@ const SeatsManagement = dynamic(() => import('./Views/SeatsManagement'));
 const PaymentPlan = dynamic(import('./Views/PaymentPlan'));
 
 const BillingDetails: React.FC<BillingDetailsProps> = ({ countries }) => {
+  const textForKey = useTranslate();
   const router = useRouter();
   const dispatch = useDispatch();
   const [selectedView, setSelectedView] =

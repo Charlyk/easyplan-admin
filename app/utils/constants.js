@@ -90,13 +90,13 @@ export function createHoursList() {
 }
 
 export const days = [
-  textForKey('Sunday'),
-  textForKey('Monday'),
-  textForKey('Tuesday'),
-  textForKey('Wednesday'),
-  textForKey('Thursday'),
-  textForKey('Friday'),
-  textForKey('Saturday'),
+  'sunday',
+  'monday',
+  'tuesday',
+  'wednesday',
+  'thursday',
+  'friday',
+  'saturday',
 ];
 
 export const Statuses = [

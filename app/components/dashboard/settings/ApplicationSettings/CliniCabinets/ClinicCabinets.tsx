@@ -1,11 +1,11 @@
 import React, { KeyboardEvent, useState, useEffect, useRef, memo } from 'react';
 import Typography from '@material-ui/core/Typography';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch } from 'react-redux';
 import EASTextField from 'app/components/common/EASTextField';
 import ConfirmationModal from 'app/components/common/modals/ConfirmationModal';
 import OptionsSelectionModal from 'app/components/common/modals/OptionsSelectionModal';
 import { useSelector } from 'app/hooks/useTypedSelector';
-import { textForKey } from 'app/utils/localization';
 import onRequestError from 'app/utils/onRequestError';
 import {
   getAllCabinetsInfo,
@@ -27,6 +27,7 @@ import CabinetItem from '../CabinetItem';
 import styles from './ClinicCabinets.module.scss';
 
 const ClinicCabinets: React.FC = () => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const inputRef = useRef(null);
   const cabinets = useSelector(cabinetsSelector);

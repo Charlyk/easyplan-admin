@@ -6,9 +6,9 @@ import {
   Button,
   theme,
 } from '@easyplanpro/easyplan-components';
+import { useTranslate } from 'react-polyglot';
 import { useSelector, useDispatch } from 'react-redux';
 import ConfirmationModal from 'app/components/common/modals/ConfirmationModal';
-import { textForKey } from 'app/utils/localization';
 import { paymentsSubscriptionSelector } from 'redux/selectors/paymentsSelector';
 import {
   dispatchCancelSubcription,
@@ -21,6 +21,7 @@ type Props = {
 };
 
 const PaymentPlan: React.FC<Props> = () => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const [modalOpen, setModalOpen] = useState(false);
   const { data: subscription } = useSelector(paymentsSubscriptionSelector);
