@@ -3,14 +3,16 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import IconDelete from 'app/components/icons/iconDelete';
 import IconEdit from 'app/components/icons/iconEdit';
 import IconRefresh from 'app/components/icons/iconRefresh';
 import formattedAmount from 'app/utils/formattedAmount';
-import { textForKey } from 'app/utils/localization';
 import styles from './ServiceRow.module.scss';
 
 const ServiceRow = ({ service, onEditService, onDeleteService }) => {
+  const textForKey = useTranslate();
+
   const handleEditService = () => {
     onEditService(service);
   };
@@ -64,7 +66,7 @@ const ServiceRow = ({ service, onEditService, onDeleteService }) => {
             }}
             onPointerUp={handleEditService}
           >
-            {textForKey('Edit')} <IconEdit />
+            {textForKey('edit')} <IconEdit />
           </Button>
           <Button
             variant='outlined'
@@ -82,7 +84,7 @@ const ServiceRow = ({ service, onEditService, onDeleteService }) => {
             }}
             onPointerUp={handleDeleteService}
           >
-            {service.deleted ? textForKey('Restore') : textForKey('Delete')}{' '}
+            {service.deleted ? textForKey('restore') : textForKey('delete')}{' '}
             {service.deleted ? <IconRefresh fill='#00E987' /> : <IconDelete />}
           </Button>
         </div>
