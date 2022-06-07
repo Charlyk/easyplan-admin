@@ -11,12 +11,12 @@ import Moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import CalendarNoDataView from 'app/components/common/CalendarNoDataView';
 import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import isOutOfBounds from 'app/utils/isOutOfBounds';
-import { textForKey } from 'app/utils/localization';
 import { fetchSchedulesHours } from 'middleware/api/schedules';
 import {
   calendarDoctorsSelector,
@@ -46,6 +46,7 @@ const CalendarDayView = ({
   onScheduleSelect,
   onCreateSchedule,
 }) => {
+  const textForKey = useTranslate();
   const router = useRouter();
   const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);

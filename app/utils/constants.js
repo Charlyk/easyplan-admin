@@ -102,7 +102,7 @@ export const days = [
 export const Statuses = [
   {
     id: 'Pending',
-    name: textForKey('Pending'),
+    name: 'pending',
     color: '#ffb653',
     icon: <IconAppointmentCalendar />,
     statusIcon: null,
@@ -111,7 +111,7 @@ export const Statuses = [
   },
   {
     id: 'Confirmed',
-    name: textForKey('Confirmed'),
+    name: 'confirmed',
     color: '#5d76cb',
     icon: <IconCheckMark />,
     statusIcon: null,
@@ -120,7 +120,7 @@ export const Statuses = [
   },
   {
     id: 'PendingPayment',
-    name: textForKey('Pending payment'),
+    name: 'pending payment',
     color: '#ffd180',
     icon: <IconAppointmentCalendar />,
     statusIcon: null,
@@ -129,7 +129,7 @@ export const Statuses = [
   },
   {
     id: 'WaitingForPatient',
-    name: textForKey('Waiting for patient'),
+    name: 'waiting for patient',
     color: '#ffcfab',
     icon: <IconClock fill='#ffcfab' />,
     statusIcon: <IconClock fill='#ffcfab' />,
@@ -138,7 +138,7 @@ export const Statuses = [
   },
   {
     id: 'OnSite',
-    name: textForKey('On site'),
+    name: 'on site',
     color: '#4bba01',
     icon: <IconCheckMark />,
     statusIcon: <DoneIcon style={{ fill: '#4bba01' }} />,
@@ -147,7 +147,7 @@ export const Statuses = [
   },
   {
     id: 'Late',
-    name: textForKey('Late'),
+    name: 'late',
     color: '#cda4de',
     icon: <IconClock fill='#cda4de' />,
     statusIcon: null,
@@ -156,7 +156,7 @@ export const Statuses = [
   },
   {
     id: 'DidNotCome',
-    name: textForKey("Didn't show up"),
+    name: "didn't show up",
     color: '#fc6c85',
     icon: <IconXPerson />,
     statusIcon: <IconClear style={{ fill: '#fc6c85' }} />,
@@ -165,7 +165,7 @@ export const Statuses = [
   },
   {
     id: 'Canceled',
-    name: textForKey('Canceled'),
+    name: 'canceled',
     color: '#fc2847',
     icon: <IconXPerson />,
     statusIcon: <IconClear style={{ fill: '#fc2847' }} />,
@@ -174,7 +174,7 @@ export const Statuses = [
   },
   {
     id: 'CompletedNotPaid',
-    name: textForKey('Completed not paid'),
+    name: 'completed not paid',
     color: '#9fe2bf',
     icon: <IconMoney />,
     statusIcon: <IconSuccess fill='#9fe2bf' />,
@@ -183,7 +183,7 @@ export const Statuses = [
   },
   {
     id: 'CompletedPaid',
-    name: textForKey('Paid'),
+    name: 'paid',
     color: '#1df914',
     icon: <IconCreditCard />,
     statusIcon: <DoneAllIcon style={{ fill: '#1df914' }} />,
@@ -192,7 +192,7 @@ export const Statuses = [
   },
   {
     id: 'PartialPaid',
-    name: textForKey('Partial paid'),
+    name: 'partial paid',
     color: '#1cd3a2',
     icon: <DoneAllIcon />,
     statusIcon: <IconSuccess fill='#1cd3a2' />,
@@ -201,7 +201,7 @@ export const Statuses = [
   },
   {
     id: 'CompletedFree',
-    name: textForKey('Completed. Free.'),
+    name: 'completed. free.',
     color: '#bab86c',
     icon: <IconFree />,
     statusIcon: <DoneAllIcon style={{ fill: '#bab86c' }} />,
@@ -210,7 +210,7 @@ export const Statuses = [
   },
   {
     id: 'Paid',
-    name: textForKey('Paid'),
+    name: 'paid',
     color: '#1df914',
     icon: <IconCreditCard />,
     statusIcon: null,
@@ -219,7 +219,7 @@ export const Statuses = [
   },
   {
     id: 'Rescheduled',
-    name: textForKey('Rescheduled'),
+    name: 'rescheduled',
     color: '#A71F8B',
     icon: <IconClock fill='#A71F8B' />,
     statusIcon: null,

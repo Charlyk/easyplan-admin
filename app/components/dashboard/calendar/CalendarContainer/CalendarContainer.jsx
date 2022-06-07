@@ -1,14 +1,14 @@
-import React, { useContext, useEffect, useReducer } from 'react';
+import React, { useContext, useEffect, useReducer, useMemo } from 'react';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import MainComponent from 'app/components/common/MainComponent';
 import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { HeaderKeys } from 'app/utils/constants';
 import getCurrentWeek from 'app/utils/getCurrentWeek';
-import { textForKey } from 'app/utils/localization';
 import {
   importSchedulesFromFile,
   requestDeleteSchedule,
@@ -46,72 +46,73 @@ const AppointmentsCalendar = dynamic(() => import('../AppointmentsCalendar'));
 const importFields = [
   {
     id: 'doctor',
-    name: textForKey('Doctor'),
+    name: 'doctor',
     required: true,
   },
   {
     id: 'date',
-    name: textForKey('Date'),
+    name: 'date',
     required: false,
   },
   {
     id: 'time',
-    name: textForKey('Time'),
+    name: 'time',
     required: false,
   },
   {
     id: 'cabinet',
-    name: textForKey('cabinet'),
+    name: 'cabinet',
     required: false,
   },
   {
     id: 'startTime',
-    name: textForKey('import_start_date'),
+    name: 'startTime',
     required: false,
   },
   {
     id: 'endTime',
-    name: textForKey('import_end_time'),
+    name: 'endTime',
     required: false,
   },
   {
     id: 'serviceName',
-    name: textForKey('Service'),
+    name: 'service',
     required: false,
   },
   {
     id: 'patientName',
-    name: textForKey('Patient name'),
+    name: 'patient name',
     required: false,
   },
   {
     id: 'phoneNumber',
-    name: textForKey('Patient phone'),
+    name: 'patient phone',
     required: false,
   },
   {
     id: 'countryCode',
-    name: textForKey('Country code'),
+    name: 'country code',
     required: false,
   },
   {
     id: 'status',
-    name: textForKey('Status'),
+    name: 'status',
     required: false,
   },
   {
     id: 'comment',
-    name: textForKey('Comment'),
+    name: 'comment',
     required: false,
   },
   {
     id: 'importedId',
-    name: textForKey('ID'),
+    name: 'id',
     required: false,
   },
 ];
 
 const CalendarContainer = ({ date, doctorId, viewMode, children }) => {
+  const textForKey = useTranslate();
   const toast = useContext(NotificationsContext);
   const updateClinicData = useSelector(updateClinicDataSelector);
   const doctors = useSelector(calendarDoctorsSelector);
@@ -142,6 +143,13 @@ const CalendarContainer = ({ date, doctorId, viewMode, children }) => {
       doctors,
     },
   });
+
+  const mappedImportFields = useMemo(() => {
+    return importFields.map((field) => ({
+      ...field,
+      name: textForKey(field.name),
+    }));
+  }, []);
 
   useEffect(() => {
     if (!updateClinicData) {
@@ -355,8 +363,8 @@ const CalendarContainer = ({ date, doctorId, viewMode, children }) => {
         <CSVImportModal
           open={showImportModal}
           isLoading={isUploading}
-          fields={importFields}
-          title={textForKey('Import schedules')}
+          fields={mappedImportFields}
+          title={textForKey('import schedules')}
           iconTitle={textForKey('upload csv file')}
           iconSubtitle={textForKey('n_schedules_only')}
           importBtnTitle={textForKey('import_n_schedules')}
@@ -367,7 +375,7 @@ const CalendarContainer = ({ date, doctorId, viewMode, children }) => {
           <ConfirmationModal
             isLoading={isDeleting}
             show={deleteSchedule.open}
-            title={textForKey('Delete appointment')}
+            title={textForKey('delete appointment')}
             message={textForKey('delete appointment message')}
             onConfirm={handleConfirmDeleteSchedule}
             onClose={handleCloseDeleteSchedule}

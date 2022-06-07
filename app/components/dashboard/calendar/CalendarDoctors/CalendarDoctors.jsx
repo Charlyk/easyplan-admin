@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import EASTextField from 'app/components/common/EASTextField';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
-import { textForKey } from 'app/utils/localization';
 import CalendarDoctor from './CalendarDoctor';
 import styles from './CalendarDoctors.module.scss';
 
@@ -14,6 +14,7 @@ const CalendarDoctors = ({
   selectedService,
   onSelect,
 }) => {
+  const textForKey = useTranslate();
   const [filteredDoctors, setFilteredDoctors] = useState(doctors);
   const [searchText, setSearchText] = useState('');
 
@@ -41,7 +42,7 @@ const CalendarDoctors = ({
         <EASTextField
           type='text'
           value={searchText}
-          placeholder={`${textForKey('Search')}...`}
+          placeholder={`${textForKey('search')}...`}
           onChange={handleSearchTextChange}
         />
       </div>
