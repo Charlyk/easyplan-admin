@@ -61,13 +61,6 @@ const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
   const isFormValid = (email.length === 0 || isEmailValid) && isPhoneValid;
   const isEmailFieldValid = email.length === 0 || email.match(EmailRegex);
 
-  const mappedPatientSources = useMemo(() => {
-    return PatientSources.map((source) => ({
-      ...source,
-      name: textForKey(source.name),
-    }));
-  }, []);
-
   useEffect(() => {
     if (!open) {
       localDispatch(actions.resetState());

@@ -5,6 +5,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import AudioPlayer from 'react-h5-audio-player';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import InfoContainer from 'app/components/common/InfoContainer';
 import IconClose from 'app/components/icons/iconClose';
@@ -16,7 +17,7 @@ import {
   SubscriptionStatuses,
 } from 'app/utils/constants';
 import getCallRecordUrl from 'app/utils/getCallRecordUrl';
-import paths from 'app/utils/paths';
+import rawPaths from 'app/utils/paths';
 import { loginUrl } from 'eas.config';
 import { signOut } from 'middleware/api/auth';
 import {
@@ -27,6 +28,7 @@ import {
 import { setIsExchangeRatesModalOpen } from 'redux/actions/exchangeRatesActions';
 import initialState from 'redux/initialState';
 import {
+  appLanguageSelector,
   authTokenSelector,
   currentClinicSelector,
   currentUserSelector,
@@ -80,6 +82,7 @@ const PageHeader = dynamic(() => import('./PageHeader'));
 const AddReminderModal = dynamic(() => import('../modals/AddReminderModal'));
 
 const MainComponent = ({ children, currentPath, provideAppData = true }) => {
+  const textForKey = useTranslate();
   const toast = useContext(NotificationsContext);
   const router = useRouter();
   const dispatch = useDispatch();
@@ -97,11 +100,20 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
   const reminderModal = useSelector(createReminderModalSelector);
   const isExchangeRatesModalOpen = useSelector(isExchangeRateModalOpenSelector);
   const clinicAccessChange = useSelector(userClinicAccessChangeSelector);
+  const appLanguage = useSelector(appLanguageSelector);
   const { data: subscription } = useSelector(paymentsSubscriptionSelector);
   let childrenProps = children.props;
   if (provideAppData) {
     childrenProps = { ...childrenProps, currentUser, currentClinic, authToken };
   }
+
+  const paths = useMemo(() => {
+    const translatedPaths = {};
+    Object.keys(rawPaths).map((key) => {
+      translatedPaths[key] = textForKey(rawPaths[key]);
+    });
+    return translatedPaths;
+  }, [appLanguage]);
 
   const showPaymentWarning = useMemo(() => {
     const { roleInClinic } = currentUser.userClinic;
@@ -178,7 +190,7 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
 
   const headerTitle = useMemo(() => {
     return paths[currentPath];
-  }, [currentPath]);
+  }, [currentPath, appLanguage]);
 
   const pageTitle = useMemo(() => {
     if (currentClinic == null) {
