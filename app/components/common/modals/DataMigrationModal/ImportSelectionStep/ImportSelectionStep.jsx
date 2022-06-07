@@ -10,13 +10,13 @@ import remove from 'lodash/remove';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import EASTextField from 'app/components/common/EASTextField';
 import LoadingButton from 'app/components/common/LoadingButton';
 import IconArrowDown from 'app/components/icons/iconArrowDown';
 import NotificationsContext from 'app/context/notificationsContext';
 import { YClientAPIUrl } from 'app/utils/constants';
 import generateReducerActions from 'app/utils/generateReducerActions';
-import { textForKey } from 'app/utils/localization';
 import styles from './ImportSelectionStep.module.scss';
 
 const EasyDatePicker = dynamic(() =>
@@ -83,6 +83,7 @@ const reducer = (state, action) => {
 };
 
 const ImportSelectionStep = ({ userData, onImport }) => {
+  const textForKey = useTranslate();
   const toast = useContext(NotificationsContext);
   const companiesRef = useRef(null);
   const datePickerRef = useRef(null);
@@ -199,7 +200,7 @@ const ImportSelectionStep = ({ userData, onImport }) => {
     >
       {datePicker}
       <Typography classes={{ root: styles['form-title'] }}>
-        {textForKey('Select type of data to import')}
+        {textForKey('select type of data to import')}
       </Typography>
       <FormControlLabel
         id='company'
@@ -216,7 +217,7 @@ const ImportSelectionStep = ({ userData, onImport }) => {
             inputProps={{ 'aria-label': 'secondary checkbox' }}
           />
         }
-        label={textForKey('Company details')}
+        label={textForKey('company details')}
       />
       <FormControlLabel
         id='schedules'
@@ -233,7 +234,7 @@ const ImportSelectionStep = ({ userData, onImport }) => {
             inputProps={{ 'aria-label': 'secondary checkbox' }}
           />
         }
-        label={textForKey('Appointments')}
+        label={textForKey('appointments')}
       />
       <FormControlLabel
         id='patients'
@@ -250,7 +251,7 @@ const ImportSelectionStep = ({ userData, onImport }) => {
             inputProps={{ 'aria-label': 'secondary checkbox' }}
           />
         }
-        label={textForKey('Patients')}
+        label={textForKey('patients')}
       />
       <FormControlLabel
         id='services'
@@ -267,20 +268,20 @@ const ImportSelectionStep = ({ userData, onImport }) => {
             inputProps={{ 'aria-label': 'secondary checkbox' }}
           />
         }
-        label={textForKey('Services')}
+        label={textForKey('services')}
       />
       <Box display='flex'>
         <EASTextField
           readOnly
           containerClass={styles.simpleField}
-          fieldLabel={textForKey('Start date')}
+          fieldLabel={textForKey('start date')}
           value={moment(startDate).format('DD MMMM YYYY')}
           onPointerUp={handleDateFieldClick('start')}
         />
         <EASTextField
           readOnly
           containerClass={styles.simpleField}
-          fieldLabel={textForKey('End date')}
+          fieldLabel={textForKey('end date')}
           value={moment(endDate).format('DD MMMM YYYY')}
           onPointerUp={handleDateFieldClick('end')}
         />
@@ -290,7 +291,7 @@ const ImportSelectionStep = ({ userData, onImport }) => {
         ref={companiesRef}
         className={styles['company-button']}
       >
-        {selectedCompany ? selectedCompany.title : textForKey('Select company')}
+        {selectedCompany ? selectedCompany.title : textForKey('select company')}
         <IconArrowDown fill='#3A83DC' />
       </Box>
       <Menu
@@ -318,7 +319,7 @@ const ImportSelectionStep = ({ userData, onImport }) => {
           disabled={isLoading || selectedCompany == null}
           isLoading={isLoading}
         >
-          {textForKey('Import')}
+          {textForKey('import')}
         </LoadingButton>
       </Box>
     </Box>

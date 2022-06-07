@@ -8,6 +8,7 @@ import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import EASImage from 'app/components/common/EASImage';
 import { openChangeLogModal } from 'app/components/common/modals/ChangeLogsModal/ChangeLogModal.reducer';
@@ -22,7 +23,7 @@ import IconPlus from 'app/components/icons/iconPlus';
 import IconTurnOff from 'app/components/icons/iconTurnOff';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { PaymentStatuses, Role } from 'app/utils/constants';
-import { textForKey } from 'app/utils/localization';
+import useMappedValue from 'app/utils/hooks/useMappedValue';
 import { setPaymentModal } from 'redux/actions/actions';
 import {
   currentClinicSelector,
@@ -35,15 +36,15 @@ const ActionsSheet = dynamic(() =>
   import('app/components/common/ActionsSheet'),
 );
 
-const actions = [
+const rawActions = [
   {
-    name: textForKey('Edit profile'),
+    name: 'edit profile',
     key: 'edit-profile',
     icon: <IconEdit />,
     type: 'default',
   },
   {
-    name: textForKey('Logout'),
+    name: 'logout',
     key: 'log-out',
     icon: <IconTurnOff />,
     type: 'destructive',
@@ -58,6 +59,8 @@ const PageHeader = ({
   onEditProfile,
   user,
 }) => {
+  const textForKey = useTranslate();
+  const actions = useMappedValue(rawActions);
   const router = useRouter();
   const dispatch = useDispatch();
   const actionsAnchor = useRef(null);
@@ -160,7 +163,7 @@ const PageHeader = ({
       {!isDoctor && canRegisterPayments && (
         <div className={styles.invoicesBtnWrapper}>
           <InvoicesButton currentUser={user} currentClinic={currentClinic} />
-          <Tooltip title={textForKey('Add payment')}>
+          <Tooltip title={textForKey('add payment')}>
             <IconButton
               classes={{ root: styles.addInvoiceBtn }}
               onClick={handleOpenPaymentModal}

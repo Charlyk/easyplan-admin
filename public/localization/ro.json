@@ -754,7 +754,7 @@
   "title": "Titlu",
   "to": "pînă la",
   "today": "Astăzi",
-  "tooth": "Dintele {1}",
+  "tooth": "Dintele %{tooth}",
   "toothid": "Dintele",
   "totalamount": "Suma totală",
   "total income": "Venit total",

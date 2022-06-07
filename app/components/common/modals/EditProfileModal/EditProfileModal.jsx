@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import EASPhoneInput from 'app/components/common/EASPhoneInput';
 import EASTextField from 'app/components/common/EASTextField';
@@ -7,7 +8,6 @@ import UploadAvatar from 'app/components/common/UploadAvatar';
 import { EmailRegex, PasswordRegex } from 'app/utils/constants';
 import imageToBase64 from 'app/utils/imageToBase64';
 import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
-import { textForKey } from 'app/utils/localization';
 import urlToLambda from 'app/utils/urlToLambda';
 import {
   currentUserSelector,
@@ -18,6 +18,7 @@ import EASModal from '../EASModal';
 import styles from './EditProfileModal.module.scss';
 
 const EditProfileModal = ({ open, onClose }) => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const isLoading = useSelector(isUpdatingProfileSelector);
   const currentUser = useSelector(currentUserSelector);
@@ -120,7 +121,7 @@ const EditProfileModal = ({ open, onClose }) => {
 
   return (
     <EASModal
-      title={textForKey('Account settings')}
+      title={textForKey('account settings')}
       open={open}
       className={styles.editProfileModal}
       paperClass={styles.modalPaper}
@@ -138,7 +139,7 @@ const EditProfileModal = ({ open, onClose }) => {
         <EASTextField
           type='text'
           containerClass={styles.simpleField}
-          fieldLabel={textForKey('Last name')}
+          fieldLabel={textForKey('last name')}
           value={data.lastName ?? ''}
           onChange={handleFormChange('lastName')}
           maxLength={25}
@@ -147,7 +148,7 @@ const EditProfileModal = ({ open, onClose }) => {
         <EASTextField
           type='text'
           containerClass={styles.simpleField}
-          fieldLabel={textForKey('First name')}
+          fieldLabel={textForKey('first name')}
           value={data.firstName ?? ''}
           onChange={handleFormChange('firstName')}
           maxLength={25}
@@ -158,7 +159,7 @@ const EditProfileModal = ({ open, onClose }) => {
           error={!isEmailValid}
           helperText={isEmailValid ? null : textForKey('email_invalid_message')}
           containerClass={styles.simpleField}
-          fieldLabel={textForKey('Email')}
+          fieldLabel={textForKey('email')}
           value={data.email ?? ''}
           onChange={handleFormChange('email')}
           maxLength={40}
@@ -166,7 +167,7 @@ const EditProfileModal = ({ open, onClose }) => {
 
         <EASPhoneInput
           rootClass={styles.simpleField}
-          fieldLabel={textForKey('Phone number')}
+          fieldLabel={textForKey('phone number')}
           onChange={handlePhoneChange}
           value={data.phoneNumber ?? ''}
           country='md'
@@ -175,11 +176,11 @@ const EditProfileModal = ({ open, onClose }) => {
         <EASTextField
           type='password'
           containerClass={styles.simpleField}
-          fieldLabel={textForKey('Current password')}
+          fieldLabel={textForKey('current password')}
           value={data.oldPassword ?? ''}
           onChange={handleFormChange('oldPassword')}
           helperText={
-            isEmailChanged ? textForKey('Current password is required') : null
+            isEmailChanged ? textForKey('current password is required') : null
           }
         />
 
@@ -198,7 +199,7 @@ const EditProfileModal = ({ open, onClose }) => {
         <EASTextField
           type='password'
           containerClass={styles.simpleField}
-          fieldLabel={textForKey('Confirm new password')}
+          fieldLabel={textForKey('confirm new password')}
           value={data.confirmPassword ?? ''}
           error={!isConfirmPasswordValid}
           onChange={handleFormChange('confirmPassword')}

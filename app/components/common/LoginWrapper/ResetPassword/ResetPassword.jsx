@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import Box from '@material-ui/core/Box';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import EASTextField from 'app/components/common/EASTextField';
 import LoadingButton from 'app/components/common/LoadingButton';
 import { EmailRegex } from 'app/utils/constants';
-import { textForKey } from 'app/utils/localization';
 import styles from './ResetPassword.module.scss';
 
 const ResetPassword = ({ isLoading, isMobile, onSubmit, onGoBack }) => {
+  const textForKey = useTranslate();
   const [email, setEmail] = useState('');
   const isEmailValid = email.length === 0 || email.match(EmailRegex);
 
@@ -35,7 +36,7 @@ const ResetPassword = ({ isLoading, isMobile, onSubmit, onGoBack }) => {
         width: isMobile ? 'calc(90% - 2rem)' : 'calc(70% - 4rem)',
       }}
     >
-      <span className='form-title'>{textForKey('Reset Password')}</span>
+      <span className='form-title'>{textForKey('reset password')}</span>
       <span className='welcome-text'>
         {textForKey('reset_password_message')}
       </span>
@@ -45,7 +46,7 @@ const ResetPassword = ({ isLoading, isMobile, onSubmit, onGoBack }) => {
           type='email'
           error={!isEmailValid}
           helperText={isEmailValid ? null : textForKey('email_invalid_message')}
-          fieldLabel={textForKey('Email')}
+          fieldLabel={textForKey('email')}
           value={email}
           onChange={handleFormChange}
         />
@@ -56,7 +57,7 @@ const ResetPassword = ({ isLoading, isMobile, onSubmit, onGoBack }) => {
             className='back-button'
             onClick={onGoBack}
           >
-            {textForKey('Go back')}
+            {textForKey('go back')}
           </Box>
           <LoadingButton
             type='submit'
@@ -65,7 +66,7 @@ const ResetPassword = ({ isLoading, isMobile, onSubmit, onGoBack }) => {
             className='positive-button'
             disabled={!isFormValid}
           >
-            {textForKey('Reset password')}
+            {textForKey('reset password')}
           </LoadingButton>
         </div>
       </form>

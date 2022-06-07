@@ -754,7 +754,7 @@
   "title": "Title",
   "to": "to",
   "today": "Today",
-  "tooth": "Tooth {1}",
+  "tooth": "Tooth %{tooth}",
   "toothid": "Tooth",
   "totalamount": "Total amount",
   "total income": "Total income",

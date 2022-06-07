@@ -10,19 +10,16 @@ import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import IconClose from 'app/components/icons/iconClose';
 import generateReducerActions from 'app/utils/generateReducerActions';
-import { textForKey } from 'app/utils/localization';
+import useMappedValue from '../../../../utils/hooks/useMappedValue';
 import AuthenticationStep from './AuthenticationStep';
 import DataMigrationFinalStep from './DataMigrationFinalStep';
 import styles from './DataMigrationModal.module.scss';
 import ImportSelectionStep from './ImportSelectionStep';
 
-const steps = [
-  textForKey('Authentication'),
-  textForKey('Import data'),
-  textForKey('Finish'),
-];
+const rawSteps = ['authentication', 'import data', 'finish'];
 
 const initialState = {
   activeStep: 0,
@@ -106,6 +103,9 @@ const reducer = (state, action) => {
 };
 
 const DataMigrationModal = ({ show, onClose }) => {
+  const textForKey = useTranslate();
+  const steps = useMappedValue(rawSteps);
+
   const [
     { activeStep, completedSteps, yClientsUser, dataTypes, company },
     localDispatch,
@@ -176,7 +176,7 @@ const DataMigrationModal = ({ show, onClose }) => {
     >
       <Paper>
         <Typography classes={{ root: styles['modal-title-label'] }}>
-          {textForKey('Migrate data from Yclients')}
+          {textForKey('migrate data from yclients')}
         </Typography>
         <Box onClick={onClose} className='close-button'>
           <IconClose />

@@ -12,8 +12,8 @@ import {
 } from '@easyplanpro/easyplan-components';
 import { MenuItem } from '@material-ui/core';
 import debounce from 'lodash/debounce';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
-import { textForKey } from 'app/utils/localization';
 import { patientsAutocompleteSelector } from 'redux/selectors/patientsAutocompleteSelector';
 import {
   dispatchFetchFilteredPatients,
@@ -28,6 +28,7 @@ const PatientsAutocomplete: React.FC<PatientsAutocompleteProps> = ({
   onSelect,
   value,
 }) => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const newClientRef = useRef<HTMLDivElement>(null);
   const requestInitiated = useRef(false);

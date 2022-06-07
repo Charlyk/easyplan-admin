@@ -1,10 +1,10 @@
 import React, { useCallback, useContext, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Head from 'next/head';
+import { useTranslate } from 'react-polyglot';
 import NotificationsContext from 'app/context/notificationsContext';
 import useIsMobileDevice from 'app/hooks/useIsMobileDevice';
 import { PasswordRegex } from 'app/utils/constants';
-import { textForKey } from 'app/utils/localization';
 import { isDev, loginUrl } from 'eas.config';
 import { requestResetUserPassword } from 'middleware/api/auth';
 import EASImage from '../EASImage';
@@ -13,6 +13,7 @@ import LoadingButton from '../LoadingButton';
 import styles from './ResetPasswordForm.module.scss';
 
 const ResetPasswordPage = ({ token }) => {
+  const textForKey = useTranslate();
   const toast = useContext(NotificationsContext);
   const isMobileDevice = useIsMobileDevice();
   const [state, setState] = useState({
@@ -41,7 +42,7 @@ const ResetPasswordPage = ({ token }) => {
         newPassword: state.newPassword,
         resetToken: token,
       });
-      toast.success(textForKey('Saved successfully'));
+      toast.success(textForKey('saved successfully'));
       window.location = loginUrl;
     } catch (error) {
       toast.error(error.response.data.message);
@@ -63,7 +64,7 @@ const ResetPasswordPage = ({ token }) => {
   return (
     <div className={styles.generalPage}>
       <Head>
-        <title>EasyPlan.pro - {textForKey('Create new password')}</title>
+        <title>EasyPlan.pro - {textForKey('create new password')}</title>
       </Head>
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       {!isMobileDevice && (
@@ -97,7 +98,7 @@ const ResetPasswordPage = ({ token }) => {
         >
           <div className={styles.formWrapper}>
             <Typography className={styles.formTitle}>
-              {textForKey('Create new password')}
+              {textForKey('create new password')}
             </Typography>
             <Typography className={styles.welcomeText}>
               {textForKey('change password message')}
@@ -108,8 +109,8 @@ const ResetPasswordPage = ({ token }) => {
                 containerClass={styles.passwordField}
                 value={state.newPassword}
                 onChange={handleNewPasswordChange}
-                fieldLabel={textForKey('Enter a new password')}
-                helperText={textForKey('passwordValidationMessage')}
+                fieldLabel={textForKey('enter a new password')}
+                helperText={textForKey('passwordvalidationmessage')}
                 error={
                   state.newPassword.length > 0 &&
                   !state.newPassword.match(PasswordRegex)
@@ -118,7 +119,7 @@ const ResetPasswordPage = ({ token }) => {
               <EASTextField
                 type='password'
                 containerClass={styles.passwordField}
-                fieldLabel={textForKey('Confirm password')}
+                fieldLabel={textForKey('confirm password')}
                 onChange={handleConfirmPasswordChange}
                 value={state.confirmPassword}
                 helperText={
@@ -135,7 +136,7 @@ const ResetPasswordPage = ({ token }) => {
               disabled={!isFormValid() || state.isLoading}
               className='positive-button'
             >
-              {textForKey('Save')}
+              {textForKey('save')}
             </LoadingButton>
           </div>
         </div>

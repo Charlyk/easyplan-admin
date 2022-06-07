@@ -24,13 +24,13 @@ import debounce from 'lodash/debounce';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import EASTextarea from 'app/components/common/EASTextarea';
 import IconClose from 'app/components/icons/iconClose';
 import NotificationsContext from 'app/context/notificationsContext';
 import adjustValueToNumber from 'app/utils/adjustValueToNumber';
 import formattedAmount from 'app/utils/formattedAmount';
-import { textForKey } from 'app/utils/localization';
 import onRequestError from 'app/utils/onRequestError';
 import {
   createNewInvoice,
@@ -71,6 +71,7 @@ const CheckoutModal = ({
   openPatientDetailsOnClose,
   onClose,
 }) => {
+  const textForKey = useTranslate();
   const toast = useContext(NotificationsContext);
   const dispatch = useDispatch();
   const [
@@ -498,7 +499,7 @@ const CheckoutModal = ({
             </div>
           )}
           <Typography classes={{ root: styles.title }}>
-            {textForKey('Details')}
+            {textForKey('details')}
           </Typography>
           {!isFetching && (
             <TableContainer classes={{ root: styles.detailsTableContainer }}>
@@ -510,13 +511,13 @@ const CheckoutModal = ({
                       isValueInput={isNew && schedule == null}
                       onValueSelected={handleDoctorSelected}
                       valuePlaceholder={`${textForKey(
-                        'Select doctor',
-                      )} (${textForKey('Optional')})`}
+                        'select doctor',
+                      )} (${textForKey('optional')})`}
                       options={doctors.map((it) => ({
                         ...it,
                         name: `${it.firstName} ${it.lastName}`,
                       }))}
-                      title={textForKey('Doctor')}
+                      title={textForKey('doctor')}
                       value={invoiceDetails.doctor}
                     />
                   )}
@@ -528,15 +529,15 @@ const CheckoutModal = ({
                     clickableValue={!isNew || schedule != null}
                     isValueInput={isNew && schedule == null}
                     options={searchResults}
-                    valuePlaceholder={textForKey('Select patient')}
-                    title={textForKey('Patient')}
+                    valuePlaceholder={textForKey('select patient')}
+                    title={textForKey('patient')}
                     value={invoiceDetails.patient}
                     onValueClick={handlePatientClick}
                   />
                   {(!isNew || schedule != null) &&
                     invoiceDetails.schedule != null && (
                       <DetailsRow
-                        title={textForKey('Date')}
+                        title={textForKey('date')}
                         value={{ name: scheduleTime }}
                       />
                     )}
@@ -556,7 +557,7 @@ const CheckoutModal = ({
                       }}
                     >
                       <Typography classes={{ root: styles.label }}>
-                        {textForKey('For payment')}
+                        {textForKey('for payment')}
                       </Typography>
                     </TableCell>
                   </TableRow>
@@ -608,7 +609,7 @@ const CheckoutModal = ({
                         style={{ width: '100%', justifyContent: 'center' }}
                       >
                         <Typography classes={{ root: styles.label }}>
-                          {textForKey('Discount')}
+                          {textForKey('discount')}
                         </Typography>
                         <NumberFormat
                           disabled={isDebt}
@@ -649,7 +650,7 @@ const CheckoutModal = ({
                   classes={{ root: styles.payBtn }}
                   variant='contained'
                 >
-                  {textForKey('Pay')}{' '}
+                  {textForKey('pay')}{' '}
                   {formattedAmount(payAmount, clinicCurrency)}
                 </Button>
               ) : (

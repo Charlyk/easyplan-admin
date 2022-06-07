@@ -2,13 +2,13 @@ import React, { useEffect, useMemo, useReducer } from 'react';
 import upperFirst from 'lodash/upperFirst';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextarea from 'app/components/common/EASTextarea';
 import EASTextField from 'app/components/common/EASTextField';
 import PatientsSearchField from 'app/components/common/PatientsSearchField/PatientsSearchField';
 import { Role } from 'app/utils/constants';
-import { textForKey } from 'app/utils/localization';
 import { currentClinicSelector } from 'redux/selectors/appDataSelector';
 import { isCreatingNewReminderSelector } from 'redux/selectors/CreateReminderModal.selector';
 import { dispatchCreateNewReminder } from 'redux/slices/CreateReminderModal.reducer';
@@ -28,6 +28,7 @@ import reducer, {
 } from './AddReminderModal.reducer';
 
 const AddReminderModal = ({ open, deal, searchType = 'Deal', onClose }) => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const currentClinic = useSelector(currentClinicSelector);
   const isLoading = useSelector(isCreatingNewReminderSelector);
@@ -136,7 +137,7 @@ const AddReminderModal = ({ open, deal, searchType = 'Deal', onClose }) => {
         <div className={styles.header}>
           <EASTextField
             type='date'
-            fieldLabel={textForKey('Date')}
+            fieldLabel={textForKey('date')}
             inputClass={styles.fieldText}
             fieldClass={styles.fieldRoot}
             error={moment(date).isBefore(moment(), 'date')}
@@ -146,7 +147,7 @@ const AddReminderModal = ({ open, deal, searchType = 'Deal', onClose }) => {
           />
           <EASTextField
             type='time'
-            fieldLabel={textForKey('Start time')}
+            fieldLabel={textForKey('start time')}
             inputClass={styles.fieldText}
             fieldClass={styles.fieldRoot}
             containerClass={styles.timeField}
@@ -157,7 +158,7 @@ const AddReminderModal = ({ open, deal, searchType = 'Deal', onClose }) => {
           />
           <EASTextField
             type='time'
-            fieldLabel={textForKey('End time')}
+            fieldLabel={textForKey('end time')}
             inputClass={styles.fieldText}
             fieldClass={styles.fieldRoot}
             containerClass={styles.timeField}
@@ -188,7 +189,7 @@ const AddReminderModal = ({ open, deal, searchType = 'Deal', onClose }) => {
         {!deal ? (
           <PatientsSearchField
             containerClass={styles.patientField}
-            fieldLabel={textForKey('Patient')}
+            fieldLabel={textForKey('patient')}
             selectedPatient={patient}
             onSelected={handlePatientSelected}
           />
@@ -198,7 +199,7 @@ const AddReminderModal = ({ open, deal, searchType = 'Deal', onClose }) => {
           maxRows={4}
           value={note}
           onChange={handleNoteChange}
-          placeholder={textForKey('Add a comment')}
+          placeholder={textForKey('add a comment')}
         />
       </form>
     </EASModal>

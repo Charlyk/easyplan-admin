@@ -1,10 +1,11 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Link from 'next/link';
-import { textForKey } from 'app/utils/localization';
+import { useTranslate } from 'react-polyglot';
 import styles from './InfoContainer.module.scss';
 
 const InfoContainer = () => {
+  const textForKey = useTranslate();
   return (
     <div className={styles.wrapper}>
       <Typography>

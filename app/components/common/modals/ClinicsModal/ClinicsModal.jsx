@@ -3,13 +3,14 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
-import { textForKey } from 'app/utils/localization';
-import { requestFetchAllOwnerClinics } from 'middleware/api/clinic';
+import { useTranslate } from 'react-polyglot';
 import onRequestError from 'app/utils/onRequestError';
+import { requestFetchAllOwnerClinics } from 'middleware/api/clinic';
 import EASModal from '../EASModal';
 import styles from './ClinicsModal.module.scss';
 
 const ClinicsModal = ({ open, currentClinicId, onClose, onSelect }) => {
+  const textForKey = useTranslate();
   const [isLoading, setIsLoading] = useState(false);
   const [clinics, setClinics] = useState([]);
 
@@ -42,7 +43,7 @@ const ClinicsModal = ({ open, currentClinicId, onClose, onSelect }) => {
       open={open}
       hidePositiveBtn
       className={styles.clinicsModal}
-      title={textForKey('Select a clinic')}
+      title={textForKey('select a clinic')}
       isPositiveLoading={isLoading}
       onClose={onClose}
     >

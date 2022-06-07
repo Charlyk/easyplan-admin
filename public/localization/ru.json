@@ -754,7 +754,7 @@
   "title": "Заголовок",
   "to": "до",
   "today": "сегодня",
-  "tooth": "Зуб {1}",
+  "tooth": "Зуб %{tooth}",
   "toothid": "Зуб",
   "totalamount": "Общая сумма",
   "total income": "Общий доход",

@@ -7,8 +7,8 @@ import CardContent from '@material-ui/core/CardContent';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import Image from 'next/image';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
-import { textForKey } from 'app/utils/localization';
 import { getAppLanguage } from 'app/utils/localization';
 import placeholderImage from 'public/feature_placeholder.png';
 import EASImage from '../../EASImage';
@@ -26,6 +26,7 @@ interface Props {
 }
 
 const ChangeLogModal: React.FC<Props> = ({ open, onClose }) => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const { changes, isLoading } = useSelector(changeLogModalSelector);
   const [expanded, setExpanded] = useState('panel1');

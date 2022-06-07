@@ -5,7 +5,7 @@ import Fade from '@material-ui/core/Fade';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import { ColorPicker } from 'react-color-palette';
-import { textForKey } from 'app/utils/localization';
+import { useTranslate } from 'react-polyglot';
 import styles from './EASColorPicker.module.scss';
 
 const EASColorPicker = ({
@@ -17,6 +17,7 @@ const EASColorPicker = ({
   onSave,
   setColor,
 }) => {
+  const textForKey = useTranslate();
   return (
     <Popper
       transition
@@ -40,7 +41,7 @@ const EASColorPicker = ({
                 onChange={setColor}
               />
               <Button className='positive-button' onPointerUp={onSave}>
-                {textForKey('Save')}
+                {textForKey('save')}
               </Button>
             </Paper>
           </ClickAwayListener>

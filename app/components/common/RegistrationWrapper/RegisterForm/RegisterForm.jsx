@@ -5,13 +5,13 @@ import VisibilityOn from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import EASPhoneInput from 'app/components/common/EASPhoneInput';
 import EASTextField from 'app/components/common/EASTextField';
 import LoadingButton from 'app/components/common/LoadingButton';
 import UploadAvatar from 'app/components/common/UploadAvatar';
 import { EmailRegex, PasswordRegex } from 'app/utils/constants';
 import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
-import { textForKey } from 'app/utils/localization';
 import styles from './RegisterForm.module.scss';
 
 const RegisterForm = ({
@@ -21,6 +21,7 @@ const RegisterForm = ({
   onSubmit,
   onGoBack,
 }) => {
+  const textForKey = useTranslate();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [data, setData] = useState({
     firstName: '',
@@ -98,7 +99,7 @@ const RegisterForm = ({
         width: isMobile ? 'calc(90% - 2rem)' : 'calc(70% - 4rem)',
       }}
     >
-      <span className='form-title'>{textForKey('Create new account')}</span>
+      <span className='form-title'>{textForKey('create new account')}</span>
       {errorMessage && (
         <span className='error-text'>{textForKey(errorMessage)}</span>
       )}
@@ -114,7 +115,7 @@ const RegisterForm = ({
           containerClass={styles.textField}
           value={data.lastName}
           onChange={handleLastNameChange}
-          fieldLabel={textForKey('Last name')}
+          fieldLabel={textForKey('last name')}
         />
 
         <EASTextField
@@ -123,7 +124,7 @@ const RegisterForm = ({
           containerClass={styles.textField}
           value={data.firstName}
           onChange={handleFirstNameChange}
-          fieldLabel={textForKey('First name')}
+          fieldLabel={textForKey('first name')}
         />
 
         <EASTextField
@@ -137,7 +138,7 @@ const RegisterForm = ({
           containerClass={styles.textField}
           value={data.username}
           onChange={handleEmailChange}
-          fieldLabel={textForKey('Email')}
+          fieldLabel={textForKey('email')}
         />
 
         <EASTextField
@@ -149,7 +150,7 @@ const RegisterForm = ({
           error={!isPasswordFieldValid}
           onChange={handlePasswordChange}
           helperText={textForKey('passwordvalidationmessage')}
-          fieldLabel={textForKey('Password')}
+          fieldLabel={textForKey('password')}
           endAdornment={
             <IconButton
               onClick={togglePasswordVisibility}
@@ -161,7 +162,7 @@ const RegisterForm = ({
         />
 
         <EASPhoneInput
-          fieldLabel={textForKey('Phone number')}
+          fieldLabel={textForKey('phone number')}
           rootClass={styles.textField}
           value={data.phoneNumber}
           onChange={handlePhoneChange}
@@ -169,7 +170,7 @@ const RegisterForm = ({
 
         <div className='footer'>
           <Box className='back-button' onClick={onGoBack}>
-            {textForKey('Already have an account')}?
+            {textForKey('already have an account')}?
           </Box>
           <LoadingButton
             type='submit'
@@ -182,7 +183,7 @@ const RegisterForm = ({
             }}
             onClick={submitForm}
           >
-            {textForKey('Next')}
+            {textForKey('next')}
           </LoadingButton>
         </div>
       </form>

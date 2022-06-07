@@ -2,8 +2,8 @@ import React, { useMemo } from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import moment from 'moment-timezone';
+import { useTranslate } from 'react-polyglot';
 import { useSelector } from 'react-redux';
-import { textForKey } from 'app/utils/localization';
 import { viewDateSelector } from 'redux/selectors/scheduleSelector';
 import styles from './CalendarNoDataView.module.scss';
 
@@ -16,6 +16,7 @@ const CalendarNoDataView: React.FC<CalendarNoDataViewProps> = ({
   showButton,
   onSetupHours,
 }) => {
+  const textForKey = useTranslate();
   const selectedDate = useSelector(viewDateSelector);
 
   const date = useMemo(() => {

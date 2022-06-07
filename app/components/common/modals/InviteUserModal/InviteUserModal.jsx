@@ -4,28 +4,29 @@ import Typography from '@material-ui/core/Typography';
 import Alert from '@material-ui/lab/Alert';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import { useSelector } from 'react-redux';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
 import { EmailRegex, Role } from 'app/utils/constants';
-import { textForKey } from 'app/utils/localization';
 import { paymentsSubscriptionSelector } from 'redux/selectors/paymentsSelector';
 import { invitationsSelector } from 'redux/selectors/usersListSelector';
+import useMappedValue from '../../../../utils/hooks/useMappedValue';
 import EASModal from '../EASModal';
 import styles from './InviteUserModal.module.scss';
 
-const selectOptions = [
+const rawSelectOptions = [
   {
     id: Role.reception,
-    name: textForKey(Role.reception),
+    name: Role.reception,
   },
   {
     id: Role.doctor,
-    name: textForKey(Role.doctor),
+    name: Role.doctor,
   },
   {
     id: Role.manager,
-    name: textForKey(Role.manager),
+    name: Role.manager,
   },
 ];
 
@@ -37,6 +38,8 @@ const InviteUserModal = ({
   onClose,
   onInvite,
 }) => {
+  const textForKey = useTranslate();
+  const selectOptions = useMappedValue(rawSelectOptions);
   const [email, setEmail] = useState('');
   const [role, setRole] = useState(type || Role.reception);
   const isEmailValid = email.length === 0 || email.match(EmailRegex);
@@ -88,8 +91,8 @@ const InviteUserModal = ({
       className={styles.inviteUserModal}
       onClose={onClose}
       onPrimaryClick={handleInviteUser}
-      title={textForKey('Invite user')}
-      primaryBtnText={textForKey('Invite')}
+      title={textForKey('invite user')}
+      primaryBtnText={textForKey('invite')}
       isPositiveLoading={isLoading}
       isPositiveDisabled={
         !email.match(EmailRegex) || doctorSelectedAndInsufficientSeats
@@ -101,12 +104,12 @@ const InviteUserModal = ({
           error={!isEmailValid}
           helperText={isEmailValid ? null : textForKey('email_invalid_message')}
           containerClass={styles.input}
-          fieldLabel={textForKey('Email')}
+          fieldLabel={textForKey('email')}
           type='email'
           onChange={handleEmailChange}
         />
         <EASSelect
-          label={textForKey('Role for user')}
+          label={textForKey('role for user')}
           labelId='user-role-select'
           options={selectOptions}
           value={role}
