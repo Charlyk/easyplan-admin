@@ -3,16 +3,16 @@ import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import EASTextField from 'app/components/common/EASTextField';
 import LoadingButton from 'app/components/common/LoadingButton';
 import IconPlus from 'app/components/icons/iconPlus';
 import NotificationsContext from 'app/context/notificationsContext';
-import { textForKey } from 'app/utils/localization';
+import onRequestError from 'app/utils/onRequestError';
 import {
   requestFetchSmsMessages,
   requestSendSms,
 } from 'middleware/api/patients';
-import onRequestError from 'app/utils/onRequestError';
 import PatientMessage from './PatientMessage';
 import styles from './PatientMessages.module.scss';
 import {
@@ -23,6 +23,7 @@ import {
 } from './PatientMessages.reducer';
 
 const PatientMessages = ({ patient }) => {
+  const textForKey = useTranslate();
   const toast = useContext(NotificationsContext);
   const [state, localDispatch] = useReducer(reducer, initialState);
 
@@ -84,11 +85,11 @@ const PatientMessages = ({ patient }) => {
   return (
     <div className={styles.patientsMessagesList}>
       <Typography classes={{ root: 'title-label' }}>
-        {textForKey('Messages')}
+        {textForKey('messages')}
       </Typography>
       {state.messages.length === 0 && !state.isFetching && (
         <Typography classes={{ root: 'no-data-label' }}>
-          {textForKey('No data here yet')} :(
+          {textForKey('no data here yet')} :(
         </Typography>
       )}
       {state.isFetching && (
@@ -103,7 +104,7 @@ const PatientMessages = ({ patient }) => {
         <EASTextField
           type='text'
           containerClass={styles.field}
-          placeholder={textForKey('Enter new message')}
+          placeholder={textForKey('enter new message')}
           value={state.newMessageText}
           onChange={handleNewMessageChange}
           onKeyDown={handleInputKeyDown}
@@ -118,7 +119,7 @@ const PatientMessages = ({ patient }) => {
           }
           onClick={handleSendMessage}
         >
-          {textForKey('Send message')}
+          {textForKey('send message')}
           <IconPlus fill={null} />
         </LoadingButton>
       </Box>

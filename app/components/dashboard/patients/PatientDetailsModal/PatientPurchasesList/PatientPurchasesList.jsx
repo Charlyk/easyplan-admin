@@ -13,12 +13,12 @@ import clsx from 'clsx';
 import sumBy from 'lodash/sumBy';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import IconPrint from 'app/components/icons/iconPrint';
 import IconRefresh from 'app/components/icons/iconRefresh';
 import IconTrash from 'app/components/icons/iconTrash';
 import formattedAmount from 'app/utils/formattedAmount';
-import { textForKey } from 'app/utils/localization';
 import { baseApiUrl } from 'eas.config';
 import {
   clinicCurrencySelector,
@@ -34,6 +34,7 @@ import {
 import { patientPurchasesListSelector } from './PatientPurchasesList.selector';
 
 const PatientPurchasesList = ({ patient }) => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const updateInvoice = useSelector(updateInvoiceSelector);
   const clinicCurrency = useSelector(clinicCurrencySelector);
@@ -91,14 +92,14 @@ const PatientPurchasesList = ({ patient }) => {
         onConfirm={handleConfirmUndoPayment}
       />
       <Typography classes={{ root: 'title-label' }}>
-        {textForKey('Payments')}
+        {textForKey('payments')}
       </Typography>
       {isLoading && (
         <CircularProgress classes={{ root: 'circular-progress-bar' }} />
       )}
       {payments.length === 0 && !isLoading && (
         <Typography classes={{ root: 'no-data-label' }}>
-          {textForKey('No data here yet')} :(
+          {textForKey('no data here yet')} :(
         </Typography>
       )}
       {!isLoading && payments.length > 0 && (
@@ -106,11 +107,11 @@ const PatientPurchasesList = ({ patient }) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>{textForKey('Received by')}</TableCell>
-                <TableCell>{textForKey('Date')}</TableCell>
-                <TableCell>{textForKey('Paid for')}</TableCell>
-                <TableCell>{textForKey('Comment')}</TableCell>
-                <TableCell align='right'>{textForKey('Amount')}</TableCell>
+                <TableCell>{textForKey('received by')}</TableCell>
+                <TableCell>{textForKey('date')}</TableCell>
+                <TableCell>{textForKey('paid for')}</TableCell>
+                <TableCell>{textForKey('comment')}</TableCell>
+                <TableCell align='right'>{textForKey('amount')}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -121,7 +122,7 @@ const PatientPurchasesList = ({ patient }) => {
                     {moment(payment.created).format('DD.MM.YYYY HH:mm')}
                   </TableCell>
                   <TableCell>
-                    {payment.comment || textForKey('Appointment')}
+                    {payment.comment || textForKey('appointment')}
                   </TableCell>
                   <TableCell>{payment.userComment ?? '-'}</TableCell>
                   <TableCell align='right' classes={{ root: 'amount-cell' }}>
@@ -168,7 +169,7 @@ const PatientPurchasesList = ({ patient }) => {
                     style={{ width: '100%', justifyContent: 'flex-end' }}
                   >
                     <Typography classes={{ root: 'totals-text' }}>
-                      {textForKey('Total')}:
+                      {textForKey('total')}:
                     </Typography>
                     <Typography
                       classes={{

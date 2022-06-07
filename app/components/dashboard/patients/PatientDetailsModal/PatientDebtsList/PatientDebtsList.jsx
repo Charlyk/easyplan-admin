@@ -12,11 +12,11 @@ import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import IconPrint from 'app/components/icons/iconPrint';
 import NotificationsContext from 'app/context/notificationsContext';
 import formattedAmount from 'app/utils/formattedAmount';
-import { textForKey } from 'app/utils/localization';
 import { baseApiUrl } from 'eas.config';
 import { getPatientDebts } from 'middleware/api/patients';
 import { setPaymentModal } from 'redux/actions/actions';
@@ -24,6 +24,7 @@ import { updateInvoiceSelector } from 'redux/selectors/invoicesSelector';
 import styles from './PatientDebtsList.module.scss';
 
 const PatientDebtsList = ({ patient, viewInvoice, onDebtShowed }) => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
   const updateInvoice = useSelector(updateInvoiceSelector);
@@ -98,14 +99,14 @@ const PatientDebtsList = ({ patient, viewInvoice, onDebtShowed }) => {
   return (
     <div className={styles['patient-debts-list']}>
       <Typography classes={{ root: 'title-label' }}>
-        {textForKey('Debts')}
+        {textForKey('debts')}
       </Typography>
       {isLoading && (
         <CircularProgress classes={{ root: 'circular-progress-bar' }} />
       )}
       {debts.length === 0 && !isLoading && (
         <Typography classes={{ root: 'no-data-label' }}>
-          {textForKey('No data here yet')} :)
+          {textForKey('no data here yet')} :)
         </Typography>
       )}
       <div className={styles['patient-debts-list__data-container']}>
@@ -114,12 +115,12 @@ const PatientDebtsList = ({ patient, viewInvoice, onDebtShowed }) => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell align='left'>{textForKey('Services')}</TableCell>
-                  <TableCell align='right'>{textForKey('Date')}</TableCell>
-                  <TableCell align='right'>{textForKey('Clinic')}</TableCell>
-                  <TableCell align='right'>{textForKey('Total')}</TableCell>
-                  <TableCell align='right'>{textForKey('Remained')}</TableCell>
-                  <TableCell align='right'>{textForKey('Actions')}</TableCell>
+                  <TableCell align='left'>{textForKey('services')}</TableCell>
+                  <TableCell align='right'>{textForKey('date')}</TableCell>
+                  <TableCell align='right'>{textForKey('clinic')}</TableCell>
+                  <TableCell align='right'>{textForKey('total')}</TableCell>
+                  <TableCell align='right'>{textForKey('remained')}</TableCell>
+                  <TableCell align='right'>{textForKey('actions')}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -168,7 +169,7 @@ const PatientDebtsList = ({ patient, viewInvoice, onDebtShowed }) => {
                           }}
                           onPointerUp={() => handlePayDebt(item)}
                         >
-                          {textForKey('Pay')}
+                          {textForKey('pay')}
                         </Button>
                       </Box>
                     </TableCell>

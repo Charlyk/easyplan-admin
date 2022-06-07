@@ -421,52 +421,52 @@ export const Languages = [
 export const PatientSources = [
   {
     id: 'Unknown',
-    name: textForKey('Unknown'),
+    name: 'unknown',
     color: '#555555',
   },
   {
     id: 'Facebook',
-    name: textForKey('Facebook'),
+    name: 'Facebook',
     color: '#4267B2',
   },
   {
     id: 'Instagram',
-    name: textForKey('Instagram'),
+    name: 'Instagram',
     color: '#C13584',
   },
   {
     id: 'Twitter',
-    name: textForKey('Twitter'),
+    name: 'Twitter',
     color: '#1DA1F2',
   },
   {
     id: 'LinkedIn',
-    name: textForKey('LinkedIn'),
+    name: 'LinkedIn',
     color: '#0077B5',
   },
   {
     id: 'TV',
-    name: textForKey('TV'),
+    name: 'TV',
     color: '#33FFCC',
   },
   {
     id: 'Radio',
-    name: textForKey('Radio'),
+    name: 'radio',
     color: '#991AFF',
   },
   {
     id: 'Friend',
-    name: textForKey('Friend'),
+    name: 'friend',
     color: '#4DB380',
   },
   {
     id: 'Google',
-    name: textForKey('Google'),
+    name: 'Google',
     color: '#F4B400',
   },
   {
     id: 'Other',
-    name: textForKey('Other'),
+    name: 'other',
     color: '#809980',
   },
 ];

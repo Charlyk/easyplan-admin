@@ -1,12 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useMemo } from 'react';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import EASSelect from 'app/components/common/EASSelect';
 import EASModal from 'app/components/common/modals/EASModal';
 import NotificationsContext from 'app/context/notificationsContext';
 import { HeaderKeys } from 'app/utils/constants';
-import { textForKey } from 'app/utils/localization';
 import { addPatientXRayImage } from 'middleware/api/patients';
 import {
   authTokenSelector,
@@ -18,19 +18,20 @@ import styles from './AddXRay.module.scss';
 const phases = [
   {
     id: 'Initial',
-    name: textForKey('Initial phase'),
+    name: 'initial phase',
   },
   {
     id: 'Middle',
-    name: textForKey('Middle phase'),
+    name: 'middle phase',
   },
   {
     id: 'Final',
-    name: textForKey('Final phase'),
+    name: 'final phase',
   },
 ];
 
 const AddXRay = ({ open, patientId, onClose }) => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
   const authToken = useSelector(authTokenSelector);
@@ -38,6 +39,10 @@ const AddXRay = ({ open, patientId, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [phase, setPhase] = useState('Initial');
+
+  const mappedPhases = useMemo(() => {
+    return phases.map((phase) => ({ ...phase, name: textForKey(phase.name) }));
+  }, []);
 
   useEffect(() => {
     if (!open) setImageFile(null);
@@ -88,7 +93,7 @@ const AddXRay = ({ open, patientId, onClose }) => {
       <form className={styles.formRoot}>
         <div className={styles.fileInput}>
           <Typography className={styles.formLabel}>
-            {textForKey('Upload image')}
+            {textForKey('upload image')}
           </Typography>
           <input
             className='custom-file-input'
@@ -103,9 +108,9 @@ const AddXRay = ({ open, patientId, onClose }) => {
 
         <EASSelect
           rootClass={styles.simpleField}
-          label={textForKey('Select phase')}
+          label={textForKey('select phase')}
           value={phase}
-          options={phases}
+          options={mappedPhases}
           onChange={handlePhaseChange}
         />
       </form>

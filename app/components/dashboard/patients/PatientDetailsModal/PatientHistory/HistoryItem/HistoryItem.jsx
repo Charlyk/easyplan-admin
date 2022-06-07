@@ -4,16 +4,17 @@ import clsx from 'clsx';
 import sortBy from 'lodash/sortBy';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import { useSelector } from 'react-redux';
 import IconArrowNext from 'app/components/icons/iconArrowNext';
 import IconDelete from 'app/components/icons/iconDelete';
 import IconEdit from 'app/components/icons/iconEdit';
 import IconPlus from 'app/components/icons/iconPlus';
-import { textForKey } from 'app/utils/localization';
 import { clinicTimeZoneSelector } from 'redux/selectors/appDataSelector';
 import styles from './HistoryItem.module.scss';
 
 const Field = ({ field }) => {
+  const textForKey = useTranslate();
   const timeZone = useSelector(clinicTimeZoneSelector);
 
   const isDate = (value) => {
@@ -32,13 +33,13 @@ const Field = ({ field }) => {
     <tr className={styles.field}>
       <td style={{ padding: '.3rem' }}>
         <Typography noWrap classes={{ root: styles['field-text'] }}>
-          {textForKey(field.fieldName)}
+          {textForKey(field.fieldName.toLowerCase())}
         </Typography>
       </td>
       {field.startValue && (
         <td style={{ padding: '.3rem' }} align='center'>
           <Typography classes={{ root: styles['field-text'] }}>
-            {textForKey(getValue(field.startValue))}
+            {textForKey(getValue(field.startValue.toLowerCase()))}
           </Typography>
         </td>
       )}
@@ -53,7 +54,7 @@ const Field = ({ field }) => {
         align='center'
       >
         <Typography classes={{ root: styles['field-text'] }}>
-          {textForKey(getValue(field.endValue))}
+          {textForKey(getValue(field.endValue?.toLowerCase()))}
         </Typography>
       </td>
     </tr>
@@ -61,6 +62,7 @@ const Field = ({ field }) => {
 };
 
 const HistoryItem = ({ item, clinic }) => {
+  const textForKey = useTranslate();
   const itemIcon = () => {
     if (item.action.includes('Create') || item.action.includes('SMS')) {
       return <IconPlus fill='#3A83DC' />;
@@ -81,7 +83,7 @@ const HistoryItem = ({ item, clinic }) => {
           {item.user.fullName}
         </Typography>
         <Typography classes={{ root: styles['history-title-label'] }}>
-          {textForKey(`${item.action}action`)}{' '}
+          {textForKey(`${item.action?.toLowerCase()}action`)}{' '}
           {moment(item.created).format('DD.MM.YYYY HH:mm')} ({item.targetId})
         </Typography>
       </div>

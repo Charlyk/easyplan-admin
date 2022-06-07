@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
-import { textForKey } from 'app/utils/localization';
 import { updateNotesSelector } from 'redux/selectors/rootSelector';
 import AppointmentNote from './AppointmentNote';
 import styles from './AppointmentNotes.module.scss';
@@ -11,6 +11,7 @@ import { dispatchFetchPatientVisits } from './AppointmentNotes.reducer';
 import { appointmentNotesSelector } from './AppointmentNotes.selector';
 
 const AppointmentNotes = ({ currentUser, patient, onEditNote }) => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const { isFetching, visits } = useSelector(appointmentNotesSelector);
   const updateNotes = useSelector(updateNotesSelector);
@@ -22,11 +23,11 @@ const AppointmentNotes = ({ currentUser, patient, onEditNote }) => {
   return (
     <div className={styles.patientVisitsList}>
       <Typography classes={{ root: 'title-label' }}>
-        {textForKey('Appointments notes')}
+        {textForKey('appointments notes')}
       </Typography>
       {visits.length === 0 && !isFetching && (
         <Typography classes={{ root: 'no-data-label' }}>
-          {textForKey('No data here yet')} :(
+          {textForKey('no data here yet')} :(
         </Typography>
       )}
       <div className={styles.visitsData}>

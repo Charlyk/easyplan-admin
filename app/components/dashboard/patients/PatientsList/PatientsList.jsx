@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useReducer } from 'react';
+import React, { useContext, useEffect, useReducer, useMemo } from 'react';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from '@material-ui/core/Table';
@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import UploadIcon from '@material-ui/icons/CloudUpload';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import EASTextField from 'app/components/common/EASTextField';
 import LoadingButton from 'app/components/common/LoadingButton';
@@ -19,7 +20,6 @@ import IconPlus from 'app/components/icons/iconPlus';
 import IconSearch from 'app/components/icons/iconSearch';
 import NotificationsContext from 'app/context/notificationsContext';
 import { HeaderKeys } from 'app/utils/constants';
-import { textForKey } from 'app/utils/localization';
 import { importPatientsFromFile } from 'middleware/api/patients';
 import {
   authTokenSelector,
@@ -56,37 +56,38 @@ const CreatePatientModal = dynamic(() => import('../CreatePatientModal'));
 const importFields = [
   {
     id: 'firstName',
-    name: textForKey('First name'),
+    name: 'first name',
     required: true,
   },
   {
     id: 'lastName',
-    name: textForKey('Last name'),
+    name: 'last name',
     required: true,
   },
   {
     id: 'phoneNumber',
-    name: textForKey('Phone number'),
+    name: 'phone number',
     required: true,
   },
   {
     id: 'birthday',
-    name: textForKey('Birthday'),
+    name: 'birthday',
     required: false,
   },
   {
     id: 'email',
-    name: textForKey('Email'),
+    name: 'email',
     required: false,
   },
   {
     id: 'gender',
-    name: textForKey('Gender'),
+    name: 'gender',
     required: false,
   },
 ];
 
 const PatientsList = ({ query: initialQuery }) => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
   const patients = useSelector(globalPatientListSelector);
@@ -98,6 +99,13 @@ const PatientsList = ({ query: initialQuery }) => {
     { rowsPerPage, page, showCreateModal, searchQuery, showImportModal },
     localDispatch,
   ] = useReducer(reducer, initialState);
+
+  const mappedImportFields = useMemo(() => {
+    return importFields.map((field) => ({
+      ...field,
+      name: textForKey(field.name),
+    }));
+  }, []);
 
   useEffect(() => {
     localDispatch(setInitialQuery(initialQuery));
@@ -210,7 +218,7 @@ const PatientsList = ({ query: initialQuery }) => {
         note={textForKey('patients_import_note')}
         iconTitle={textForKey('upload csv file')}
         iconSubtitle={textForKey('n_contacts_only')}
-        fields={importFields}
+        fields={mappedImportFields}
         onImport={handleImportPatients}
         onClose={handleCloseImportModal}
       />
@@ -233,27 +241,27 @@ const PatientsList = ({ query: initialQuery }) => {
               <TableRow classes={{ root: styles.tableHeadRow }}>
                 <TableCell>
                   <Typography classes={{ root: styles.headerLabel }}>
-                    {textForKey('Name')}
+                    {textForKey('name')}
                   </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography classes={{ root: styles.headerLabel }}>
-                    {textForKey('Phone number')}
+                    {textForKey('phone number')}
                   </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography classes={{ root: styles.headerLabel }}>
-                    {textForKey('Email')}
+                    {textForKey('email')}
                   </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography classes={{ root: styles.headerLabel }}>
-                    {textForKey('Source')}
+                    {textForKey('source')}
                   </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography classes={{ root: styles.headerLabel }}>
-                    {textForKey('Discount')}
+                    {textForKey('discount')}
                   </Typography>
                 </TableCell>
               </TableRow>
@@ -277,7 +285,7 @@ const PatientsList = ({ query: initialQuery }) => {
           colSpan={4}
           count={patients.total}
           rowsPerPage={parseInt(rowsPerPage)}
-          labelRowsPerPage={textForKey('Patients per page')}
+          labelRowsPerPage={textForKey('patients per page')}
           labelDisplayedRows={translateRowsLabel}
           page={parseInt(page)}
           component='div'
@@ -299,7 +307,7 @@ const PatientsList = ({ query: initialQuery }) => {
             onClick={handleStartUploadPatients}
           >
             <Typography noWrap className={styles.buttonLabel}>
-              {textForKey('Import patients')}
+              {textForKey('import patients')}
             </Typography>
             <UploadIcon />
           </Button>
@@ -309,14 +317,14 @@ const PatientsList = ({ query: initialQuery }) => {
             onClick={handleCreatePatient}
           >
             <Typography noWrap className={styles.buttonLabel}>
-              {textForKey('Add patient')}
+              {textForKey('add patient')}
             </Typography>
             <IconPlus fill='#00E987' />
           </Button>
           <div className='flexContainer'>
             <EASTextField
               type='text'
-              placeholder={`${textForKey('Search patient')}...`}
+              placeholder={`${textForKey('search patient')}...`}
               value={searchQuery || ''}
               onChange={handleSearchQueryChange}
               onKeyDown={handleSearchFieldKeyDown}
@@ -327,7 +335,7 @@ const PatientsList = ({ query: initialQuery }) => {
               isLoading={isLoading}
               onClick={handleSearchClick}
             >
-              {textForKey('Search')}
+              {textForKey('search')}
               <IconSearch />
             </LoadingButton>
           </div>

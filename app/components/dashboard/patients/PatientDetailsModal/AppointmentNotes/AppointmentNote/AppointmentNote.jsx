@@ -3,11 +3,12 @@ import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import IconEditService from 'app/components/icons/iconEditService';
-import { textForKey } from 'app/utils/localization';
 import styles from './AppointmentNote.module.scss';
 
 const AppointmentNote = ({ visit, canEdit, onEdit }) => {
+  const textForKey = useTranslate();
   const { doctor } = visit;
 
   const serviceName = (planService) => {
@@ -17,7 +18,9 @@ const AppointmentNote = ({ visit, canEdit, onEdit }) => {
     }
 
     if (planService.bracesPlanType) {
-      name = `${name} | ${textForKey(planService.bracesPlanType)}`;
+      name = `${name} | ${textForKey(
+        planService.bracesPlanType.toLowerCase(),
+      )}`;
     }
     return name;
   };
@@ -29,7 +32,7 @@ const AppointmentNote = ({ visit, canEdit, onEdit }) => {
       </div>
       <div className={styles.dataWrapper}>
         <div className={styles.creatorInfo}>
-          <span className={styles.doctorTitle}>{textForKey('Doctor')}:</span>
+          <span className={styles.doctorTitle}>{textForKey('doctor')}:</span>
           <span className={styles.doctorName}>{doctor.fullName}</span>
         </div>
         <Typography noWrap className={styles.noteText}>

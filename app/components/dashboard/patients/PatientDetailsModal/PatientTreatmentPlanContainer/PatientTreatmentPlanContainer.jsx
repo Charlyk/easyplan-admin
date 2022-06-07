@@ -2,12 +2,11 @@ import React, { useContext, useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
+import { useTranslate } from 'react-polyglot';
 import EASTextField from 'app/components/common/EASTextField';
 import PatientTreatmentPlan from 'app/components/common/PatientTreatmentPlan';
 import NotificationsContext from 'app/context/notificationsContext';
 import getTreatmentPlanURL from 'app/utils/getTreatmentPlanURL';
-import { textForKey } from 'app/utils/localization';
-import { fetchDoctorScheduleDetails } from 'middleware/api/schedules';
 import { fetchPatientTreatmentPlan } from '../../../../../../middleware/api/patients';
 import styles from './PatientTreatmentPlanContainer.module.scss';
 
@@ -17,6 +16,7 @@ const PatientTreatmentPlanContainer = ({
   authToken,
   patientId,
 }) => {
+  const textForKey = useTranslate();
   const toast = useContext(NotificationsContext);
   const [isLoading, setIsLoading] = useState(false);
   const [scheduleData, setScheduleData] = useState(null);
@@ -64,7 +64,7 @@ const PatientTreatmentPlanContainer = ({
   return (
     <div className={styles.patientTreatmentPlanContainer}>
       <Typography classes={{ root: 'title-label' }}>
-        {textForKey('Treatment plan')}
+        {textForKey('treatment plan')}
       </Typography>
       <div className={styles.planWrapper}>
         {isLoading && (
@@ -85,7 +85,7 @@ const PatientTreatmentPlanContainer = ({
       {!isLoading && canPrint && (
         <div className={styles.footer}>
           <EASTextField
-            fieldLabel={textForKey('Enter guide name')}
+            fieldLabel={textForKey('enter guide name')}
             value={guideName}
             containerClass={styles.guideNameField}
             onChange={handleGuideNameChange}
@@ -97,7 +97,7 @@ const PatientTreatmentPlanContainer = ({
             }}
             onPointerUp={handlePrintTreatmentPlan}
           >
-            {textForKey('Print plan')}
+            {textForKey('print plan')}
           </Button>
         </div>
       )}

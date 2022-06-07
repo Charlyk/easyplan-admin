@@ -3,10 +3,10 @@ import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import IconPlus from 'app/components/icons/iconPlus';
 import NotificationsContext from 'app/context/notificationsContext';
-import { textForKey } from 'app/utils/localization';
 import { getPatientSchedules } from 'middleware/api/patients';
 import {
   deleteScheduleSelector,
@@ -18,6 +18,7 @@ import styles from './PatientAppointments.module.scss';
 import { reducer, initialState, actions } from './PatientAppointments.reducer';
 
 const PatientAppointments = ({ patient, isDoctor }) => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
   const updateSchedule = useSelector(updateScheduleSelector);
@@ -64,11 +65,11 @@ const PatientAppointments = ({ patient, isDoctor }) => {
   return (
     <div className={styles.patientAppointmentsList}>
       <Typography classes={{ root: 'title-label' }}>
-        {textForKey('Appointments')}
+        {textForKey('appointments')}
       </Typography>
       {schedules.length === 0 && !isLoading && (
         <Typography classes={{ root: 'no-data-label' }}>
-          {textForKey('No data here yet')} :(
+          {textForKey('no data here yet')} :(
         </Typography>
       )}
       <div className={styles.appointmentsData}>
@@ -92,7 +93,7 @@ const PatientAppointments = ({ patient, isDoctor }) => {
             }}
             onClick={handleAddAppointment}
           >
-            {textForKey('Add appointment')}
+            {textForKey('add appointment')}
             <IconPlus fill={null} />
           </Button>
         </div>

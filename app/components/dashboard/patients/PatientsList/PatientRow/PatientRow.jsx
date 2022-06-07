@@ -5,14 +5,16 @@ import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import EASImage from 'app/components/common/EASImage';
 import IconAvatar from 'app/components/icons/iconAvatar';
 import IconEmail from 'app/components/icons/iconEmail';
 import IconPhone from 'app/components/icons/iconPhone';
-import { textForKey } from 'app/utils/localization';
 import styles from './PatientRow.module.scss';
 
 const PatientRow = ({ patient, onSelect }) => {
+  const textForKey = useTranslate();
+
   const handlePatientNameClick = () => {
     onSelect(patient);
   };
@@ -74,7 +76,7 @@ const PatientRow = ({ patient, onSelect }) => {
       </TableCell>
       <TableCell>
         <Typography classes={{ root: clsx(styles['row-label'], styles.email) }}>
-          {textForKey(patient.source)}
+          {textForKey(patient.source.toLowerCase())}
         </Typography>
       </TableCell>
       <TableCell>
