@@ -9,6 +9,7 @@ import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { HeaderKeys } from 'app/utils/constants';
 import getCurrentWeek from 'app/utils/getCurrentWeek';
+import useMappedValue from 'app/utils/hooks/useMappedValue';
 import {
   importSchedulesFromFile,
   requestDeleteSchedule,
@@ -43,7 +44,7 @@ const ConfirmationModal = dynamic(() =>
 const CalendarDoctors = dynamic(() => import('../CalendarDoctors'));
 const AppointmentsCalendar = dynamic(() => import('../AppointmentsCalendar'));
 
-const importFields = [
+const rawImportFields = [
   {
     id: 'doctor',
     name: 'doctor',
@@ -113,6 +114,7 @@ const importFields = [
 
 const CalendarContainer = ({ date, doctorId, viewMode, children }) => {
   const textForKey = useTranslate();
+  const importFields = useMappedValue(rawImportFields);
   const toast = useContext(NotificationsContext);
   const updateClinicData = useSelector(updateClinicDataSelector);
   const doctors = useSelector(calendarDoctorsSelector);
@@ -143,13 +145,6 @@ const CalendarContainer = ({ date, doctorId, viewMode, children }) => {
       doctors,
     },
   });
-
-  const mappedImportFields = useMemo(() => {
-    return importFields.map((field) => ({
-      ...field,
-      name: textForKey(field.name),
-    }));
-  }, []);
 
   useEffect(() => {
     if (!updateClinicData) {
@@ -363,7 +358,7 @@ const CalendarContainer = ({ date, doctorId, viewMode, children }) => {
         <CSVImportModal
           open={showImportModal}
           isLoading={isUploading}
-          fields={mappedImportFields}
+          fields={importFields}
           title={textForKey('import schedules')}
           iconTitle={textForKey('upload csv file')}
           iconSubtitle={textForKey('n_schedules_only')}

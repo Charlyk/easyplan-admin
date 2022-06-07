@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useMemo } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import { useTranslate } from 'react-polyglot';
@@ -7,6 +7,7 @@ import EASSelect from 'app/components/common/EASSelect';
 import EASModal from 'app/components/common/modals/EASModal';
 import NotificationsContext from 'app/context/notificationsContext';
 import { HeaderKeys } from 'app/utils/constants';
+import useMappedValue from 'app/utils/hooks/useMappedValue';
 import { addPatientXRayImage } from 'middleware/api/patients';
 import {
   authTokenSelector,
@@ -15,7 +16,7 @@ import {
 import { updateXRay } from 'redux/slices/mainReduxSlice';
 import styles from './AddXRay.module.scss';
 
-const phases = [
+const rawPhases = [
   {
     id: 'Initial',
     name: 'initial phase',
@@ -31,7 +32,8 @@ const phases = [
 ];
 
 const AddXRay = ({ open, patientId, onClose }) => {
-  const textForKey = useTranslate();
+  const textForKey = useTranslate(rawPhases);
+  const phases = useMappedValue();
   const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
   const authToken = useSelector(authTokenSelector);
@@ -39,10 +41,6 @@ const AddXRay = ({ open, patientId, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [phase, setPhase] = useState('Initial');
-
-  const mappedPhases = useMemo(() => {
-    return phases.map((phase) => ({ ...phase, name: textForKey(phase.name) }));
-  }, []);
 
   useEffect(() => {
     if (!open) setImageFile(null);
@@ -110,7 +108,7 @@ const AddXRay = ({ open, patientId, onClose }) => {
           rootClass={styles.simpleField}
           label={textForKey('select phase')}
           value={phase}
-          options={mappedPhases}
+          options={phases}
           onChange={handlePhaseChange}
         />
       </form>

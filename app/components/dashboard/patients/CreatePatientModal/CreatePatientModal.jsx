@@ -18,11 +18,12 @@ import {
   EmailRegex,
   HeaderKeys,
   Languages,
-  PatientSources,
+  PatientSources as rawPatientSources,
 } from 'app/utils/constants';
 import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
 import { requestCreatePatient } from 'middleware/api/patients';
 import { toggleUpdatePatients } from 'redux/slices/mainReduxSlice';
+import useMappedValue from '../../../../utils/hooks/useMappedValue';
 import EASModal from '../../../common/modals/EASModal';
 import styles from './CreatePatientModal.module.scss';
 import { reducer, initialState, actions } from './CreatePatientModal.reducer';
@@ -33,6 +34,7 @@ const EasyDatePicker = dynamic(() =>
 
 const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
   const textForKey = useTranslate();
+  const patientSources = useMappedValue(rawPatientSources);
   const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
   const birthdayPickerAnchor = useRef();
@@ -260,7 +262,7 @@ const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
         <EASSelect
           label={textForKey('patient_source')}
           labelId='patient-source-select'
-          options={mappedPatientSources}
+          options={patientSources}
           value={source}
           rootClass={styles.simpleField}
           onChange={handleSourceChange}
