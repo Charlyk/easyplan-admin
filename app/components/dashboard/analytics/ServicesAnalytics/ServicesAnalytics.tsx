@@ -16,11 +16,11 @@ import sortBy from 'lodash/sortBy';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
 import { Role, ScheduleStatuses } from 'app/utils/constants';
-import { textForKey } from 'app/utils/localization';
 import { currentClinicSelector } from 'redux/selectors/appDataSelector';
 import { openCreateReminderModal } from 'redux/slices/CreateReminderModal.reducer';
 import { setPatientDetails } from 'redux/slices/mainReduxSlice';
@@ -64,6 +64,7 @@ const ServicesAnalytics: React.FC<ServicesAnalyticsProps> = ({
   statistics: { data: statistics, total: totalItems },
   query: initialQuery,
 }) => {
+  const textForKey = useTranslate();
   const router = useRouter();
   const dispatch = useDispatch();
   const pickerRef = useRef(null);
@@ -75,7 +76,7 @@ const ServicesAnalytics: React.FC<ServicesAnalyticsProps> = ({
       ['asc', 'asc'],
     ).map(({ id, fullName, isHidden }) => ({
       id,
-      name: `${fullName} ${isHidden ? `(${textForKey('Fired')})` : ''}`,
+      name: `${fullName} ${isHidden ? `(${textForKey('fired')})` : ''}`,
     }));
   }, [currentClinic]);
   const services = sortBy(currentClinic.services, (service) =>
@@ -262,13 +263,13 @@ const ServicesAnalytics: React.FC<ServicesAnalyticsProps> = ({
           multiple
           checkable
           rootClass={styles.selectControlRoot}
-          label={textForKey('Services')}
+          label={textForKey('services')}
           labelId='services-select-label'
           options={services}
           value={selectedServices.map((item) => item.id)}
           defaultOption={{
             id: -1,
-            name: textForKey('All services'),
+            name: textForKey('all services'),
           }}
           onChange={(evt) => handleServiceChange(evt.target.value)}
         />
@@ -276,20 +277,20 @@ const ServicesAnalytics: React.FC<ServicesAnalyticsProps> = ({
           multiple
           checkable
           rootClass={styles.selectControlRoot}
-          label={textForKey('Doctors')}
+          label={textForKey('doctors')}
           labelId='doctors-select-label'
           options={doctors}
           value={selectedDoctors.map((item) => item.id)}
           defaultOption={{
             id: -1,
-            name: textForKey('All doctors'),
+            name: textForKey('all doctors'),
           }}
           onChange={(evt) => handleDoctorChange(evt.target.value)}
         />
         <EASTextField
           ref={pickerRef}
           containerClass={styles.selectControlRoot}
-          fieldLabel={textForKey('Period')}
+          fieldLabel={textForKey('period')}
           readOnly
           onPointerUp={handleDatePickerOpen}
           value={`${moment(startDate).format('DD MMM YYYY')} - ${moment(
@@ -300,13 +301,13 @@ const ServicesAnalytics: React.FC<ServicesAnalyticsProps> = ({
           multiple
           checkable
           rootClass={styles.selectControlRoot}
-          label={textForKey('Statuses')}
+          label={textForKey('statuses')}
           labelId='statuses-select-label'
           options={ScheduleStatuses}
           value={selectedStatuses.map((item) => item.id)}
           defaultOption={{
             id: 'All',
-            name: textForKey('All statuses'),
+            name: textForKey('all statuses'),
           }}
           onChange={(evt) => handleStatusChange(evt.target.value)}
         />
@@ -319,7 +320,7 @@ const ServicesAnalytics: React.FC<ServicesAnalyticsProps> = ({
         )}
         {!isLoading && statistics.length === 0 && (
           <span className={styles['no-data-label']}>
-            {textForKey('No results')}
+            {textForKey('no results')}
           </span>
         )}
         {statistics.length > 0 && (
@@ -327,13 +328,13 @@ const ServicesAnalytics: React.FC<ServicesAnalyticsProps> = ({
             <Table classes={{ root: styles['data-table'] }}>
               <TableHead>
                 <TableRow>
-                  <TableCell>{textForKey('Date')}</TableCell>
-                  <TableCell>{textForKey('Doctor')}</TableCell>
-                  <TableCell>{textForKey('Service')}</TableCell>
-                  <TableCell>{textForKey('Patient')}</TableCell>
-                  <TableCell>{textForKey('Phone number')}</TableCell>
-                  <TableCell align='right'>{textForKey('Status')}</TableCell>
-                  <TableCell align='right'>{textForKey('Actions')}</TableCell>
+                  <TableCell>{textForKey('date')}</TableCell>
+                  <TableCell>{textForKey('doctor')}</TableCell>
+                  <TableCell>{textForKey('service')}</TableCell>
+                  <TableCell>{textForKey('patient')}</TableCell>
+                  <TableCell>{textForKey('phone number')}</TableCell>
+                  <TableCell align='right'>{textForKey('status')}</TableCell>
+                  <TableCell align='right'>{textForKey('actions')}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -398,7 +399,7 @@ const ServicesAnalytics: React.FC<ServicesAnalyticsProps> = ({
         colSpan={4}
         count={totalItems}
         rowsPerPage={parseInt(String(rowsPerPage))}
-        labelRowsPerPage={textForKey('Rows per page')}
+        labelRowsPerPage={textForKey('rows per page')}
         page={parseInt(String(page))}
         component='div'
         SelectProps={{

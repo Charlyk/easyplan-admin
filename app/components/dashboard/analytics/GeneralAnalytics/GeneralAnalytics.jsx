@@ -4,6 +4,7 @@ import sortBy from 'lodash/sortBy';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+import { useTranslate } from 'react-polyglot';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
 import IconCheckMark from 'app/components/icons/iconCheckMark';
@@ -13,7 +14,6 @@ import IconLiabilities from 'app/components/icons/iconLiabilities';
 import IconSuccess from 'app/components/icons/iconSuccess';
 import IconXPerson from 'app/components/icons/iconXPerson';
 import { Role, Statuses } from 'app/utils/constants';
-import { textForKey } from 'app/utils/localization';
 import styles from './GeneralAnalytics.module.scss';
 import { reducer, actions, initialState } from './GeneralAnalytics.reducer';
 
@@ -31,6 +31,7 @@ const General = ({
   financeStats,
   query: initialQuery,
 }) => {
+  const textForKey = useTranslate();
   const pickerRef = useRef(null);
   const userClinic = currentUser.clinics.find(
     (item) => item.clinicId === currentClinic.id,
@@ -44,7 +45,7 @@ const General = ({
       (user) => user.fullName.toLowerCase(),
     ).map(({ id, fullName, isHidden }) => ({
       id,
-      name: `${fullName} ${isHidden ? `(${textForKey('Fired')})` : ''}`,
+      name: `${fullName} ${isHidden ? `(${textForKey('fired')})` : ''}`,
     }));
   }, [currentClinic]);
   const [{ selectedDoctor, showRangePicker, selectedRange }, localDispatch] =
@@ -120,13 +121,13 @@ const General = ({
         <StatisticFilter onUpdate={handleFilterSubmit}>
           <EASSelect
             rootClass={styles.filterField}
-            label={textForKey('Doctor')}
+            label={textForKey('doctor')}
             value={selectedDoctor?.id || -1}
             options={doctors}
             labelId='doctor-select-label'
             defaultOption={{
               id: -1,
-              name: textForKey('All doctors'),
+              name: textForKey('all doctors'),
             }}
             onChange={handleDoctorChange}
           />
@@ -134,7 +135,7 @@ const General = ({
           <EASTextField
             ref={pickerRef}
             containerClass={styles.filterField}
-            fieldLabel={textForKey('Period')}
+            fieldLabel={textForKey('period')}
             readOnly
             onPointerUp={handleDatePickerOpen}
             value={`${moment(startDate).format('DD MMM YYYY')} - ${moment(
@@ -143,7 +144,7 @@ const General = ({
           />
         </StatisticFilter>
         <span className={styles['block-title']}>
-          {textForKey('Schedules statistics')}
+          {textForKey('schedules statistics')}
         </span>
         {statuses.length > 0 ? (
           <div className={styles['statuses-container']}>
@@ -168,37 +169,37 @@ const General = ({
           {financeStats != null && (
             <div className={styles['items-wrapper']}>
               <IncomeStatisticItem
-                title={textForKey('Expectations')}
+                title={textForKey('expectations')}
                 icon={<IconClock />}
                 amount={financeStats?.expectations.amount}
                 persons={financeStats?.expectations.persons}
               />
               <IncomeStatisticItem
-                title={textForKey('Confirmed')}
+                title={textForKey('confirmed')}
                 icon={<IconCheckMark />}
                 amount={financeStats?.confirmed.amount}
                 persons={financeStats?.confirmed.persons}
               />
               <IncomeStatisticItem
-                title={textForKey('Did not came')}
+                title={textForKey('did not came')}
                 icon={<IconXPerson />}
                 amount={financeStats?.canceled.amount}
                 persons={financeStats?.canceled.persons}
               />
               <IncomeStatisticItem
-                title={textForKey('Finished')}
+                title={textForKey('finished')}
                 icon={<IconSuccess fill='#ffffff' />}
                 amount={financeStats?.finished.amount}
                 persons={financeStats?.finished.persons}
               />
               <IncomeStatisticItem
-                title={textForKey('Liabilities')}
+                title={textForKey('liabilities')}
                 icon={<IconLiabilities />}
                 amount={financeStats?.debts.amount}
                 persons={financeStats?.debts.persons}
               />
               <IncomeStatisticItem
-                title={textForKey('Paid')}
+                title={textForKey('paid')}
                 icon={<IconCreditCard />}
                 amount={financeStats?.paid.amount}
                 persons={financeStats?.paid.persons}

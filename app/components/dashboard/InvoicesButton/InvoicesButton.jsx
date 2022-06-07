@@ -5,10 +5,10 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Fade from '@material-ui/core/Fade';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import formattedAmount from 'app/utils/formattedAmount';
-import { textForKey } from 'app/utils/localization';
 import { setPaymentModal } from 'redux/actions/actions';
 import { clinicExchangeRatesSelector } from 'redux/selectors/appDataSelector';
 import styles from './InvoicesButton.module.scss';
@@ -16,6 +16,7 @@ import { invoicesButtonSelector } from './InvoicesButton.selector';
 import { fetchInvoicesList } from './InvoicesButton.slice';
 
 const InvoicesButton = ({ currentUser, currentClinic }) => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const { invoices, isLoading } = useSelector(invoicesButtonSelector);
   const buttonRef = useRef(null);
@@ -75,10 +76,10 @@ const InvoicesButton = ({ currentUser, currentClinic }) => {
               <table>
                 <thead>
                   <tr>
-                    <td>{textForKey('Doctor')}</td>
-                    <td>{textForKey('Patient')}</td>
-                    <td align='right'>{textForKey('Amount')}</td>
-                    <td align='right'>{textForKey('Actions')}</td>
+                    <td>{textForKey('doctor')}</td>
+                    <td>{textForKey('patient')}</td>
+                    <td align='right'>{textForKey('amount')}</td>
+                    <td align='right'>{textForKey('actions')}</td>
                   </tr>
                 </thead>
                 <tbody>
@@ -94,7 +95,7 @@ const InvoicesButton = ({ currentUser, currentClinic }) => {
                           className={'positive-button'}
                           onClick={() => handlePayInvoice(invoice)}
                         >
-                          {textForKey('Pay')}
+                          {textForKey('pay')}
                         </Button>
                       </td>
                     </tr>
@@ -115,7 +116,7 @@ const InvoicesButton = ({ currentUser, currentClinic }) => {
       onClick={handleToggleInvoices}
     >
       <span className={styles['button-text']}>
-        {textForKey('For payment')} ({invoices?.length || 0})
+        {textForKey('for payment')} ({invoices?.length || 0})
       </span>
       {invoicesPaper}
     </Box>

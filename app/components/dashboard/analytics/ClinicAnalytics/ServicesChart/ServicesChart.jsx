@@ -5,8 +5,8 @@ import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Line } from 'react-chartjs-2';
+import { useTranslate } from 'react-polyglot';
 import IconClose from 'app/components/icons/iconClose';
-import { textForKey } from 'app/utils/localization';
 import { ChartType } from 'types/ChartType.type';
 import {
   getServicesChartData,
@@ -15,6 +15,7 @@ import {
 import styles from './ServicesChart.module.scss';
 
 const ServicesChart = ({ services, removeable, onClose, visible = true }) => {
+  const textForKey = useTranslate();
   const data = useMemo(() => {
     return getServicesChartData(services);
   }, [services]);

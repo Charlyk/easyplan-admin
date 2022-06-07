@@ -2,8 +2,8 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
+import { useTranslate } from 'react-polyglot';
 import IconClose from 'app/components/icons/iconClose';
-import { textForKey } from 'app/utils/localization';
 import { ChartType } from 'types/ChartType.type';
 import { AnalyticsClients, ChartProps } from '../ClinicAnalytics.types';
 import styles from './ClientsChart.module.scss';
@@ -18,6 +18,7 @@ const ClientsChart: React.FC<ClientsChartProps> = ({
   removeable = false,
   visible = true,
 }) => {
+  const textForKey = useTranslate();
   if (!visible || clients == null) {
     return null;
   }

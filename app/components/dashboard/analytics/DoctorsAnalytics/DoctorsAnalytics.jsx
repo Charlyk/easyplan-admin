@@ -13,12 +13,12 @@ import sum from 'lodash/sum';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+import { useTranslate } from 'react-polyglot';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
 import IconList from 'app/components/icons/iconList';
 import { Role } from 'app/utils/constants';
 import formattedAmount from 'app/utils/formattedAmount';
-import { textForKey } from 'app/utils/localization';
 import styles from './DoctorsAnalytics.module.scss';
 import reducer, {
   initialState,
@@ -41,6 +41,7 @@ const DoctorsAnalytics = ({
   statistics,
   query: initialQuery,
 }) => {
+  const textForKey = useTranslate();
   const pickerRef = useRef(null);
   const router = useRouter();
   const currency = currentClinic.currency;
@@ -63,7 +64,7 @@ const DoctorsAnalytics = ({
     ).map((doctor) => ({
       id: doctor.id,
       name: `${doctor.firstName} ${doctor.lastName} ${
-        doctor.isHidden ? `(${textForKey('Fired')})` : ''
+        doctor.isHidden ? `(${textForKey('fired')})` : ''
       }`,
     }));
   }, [currentClinic]);
@@ -158,26 +159,26 @@ const DoctorsAnalytics = ({
       <StatisticFilter isLoading={isLoading} onUpdate={handleFilterSubmit}>
         <EASSelect
           rootClass={styles.selectRoot}
-          label={textForKey('Services')}
+          label={textForKey('services')}
           options={services}
           value={selectedService?.id ?? -1}
           labelId='services-select-label'
           defaultOption={{
             id: -1,
-            name: textForKey('All services'),
+            name: textForKey('all services'),
           }}
           onChange={handleServiceChange}
         />
 
         <EASSelect
           rootClass={styles.selectRoot}
-          label={textForKey('Doctors')}
+          label={textForKey('doctors')}
           options={doctors}
           value={selectedDoctor?.id ?? -1}
           labelId='doctors-select-label'
           defaultOption={{
             id: -1,
-            name: textForKey('All doctors'),
+            name: textForKey('all doctors'),
           }}
           onChange={handleDoctorChange}
         />
@@ -185,7 +186,7 @@ const DoctorsAnalytics = ({
         <EASTextField
           ref={pickerRef}
           containerClass={styles.selectRoot}
-          fieldLabel={textForKey('Period')}
+          fieldLabel={textForKey('period')}
           readOnly
           onPointerUp={handleDatePickerOpen}
           value={`${moment(startDate).format('DD MMM YYYY')} - ${moment(
@@ -196,7 +197,7 @@ const DoctorsAnalytics = ({
       <div className={styles['data-container']}>
         {!isLoading && statistics?.length === 0 && (
           <span className={styles['no-data-label']}>
-            {textForKey('No results')}
+            {textForKey('no results')}
           </span>
         )}
         {statistics?.length > 0 && (
@@ -204,18 +205,18 @@ const DoctorsAnalytics = ({
             <Table classes={{ root: styles['data-table'] }}>
               <TableHead>
                 <TableRow>
-                  <TableCell>{textForKey('Doctor')}</TableCell>
+                  <TableCell>{textForKey('doctor')}</TableCell>
                   <TableCell align='right'>
-                    {textForKey('Total income')}
+                    {textForKey('total income')}
                   </TableCell>
                   <TableCell align='right'>
-                    {textForKey('Doctor part')}
+                    {textForKey('doctor part')}
                   </TableCell>
                   <TableCell align='right'>
-                    {textForKey('Clinic profit')}
+                    {textForKey('clinic profit')}
                   </TableCell>
                   <TableCell align='right' size='small'>
-                    {textForKey('Services')}
+                    {textForKey('services')}
                   </TableCell>
                 </TableRow>
               </TableHead>
@@ -258,7 +259,7 @@ const DoctorsAnalytics = ({
                   <TableCell />
                   <TableCell />
                   <TableCell align='right'>
-                    {textForKey('Total')}:{' '}
+                    {textForKey('total')}:{' '}
                     {formattedAmount(
                       sum(statistics.map((it) => it.clinicAmount)),
                       currentClinic.currency,
