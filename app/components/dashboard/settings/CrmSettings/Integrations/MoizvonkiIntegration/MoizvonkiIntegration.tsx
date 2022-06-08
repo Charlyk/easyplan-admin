@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Image from 'next/image';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingButton from 'app/components/common/LoadingButton';
-import { textForKey } from 'app/utils/localization';
 import MoizvonkiLogo from 'public/moizvonki_logo.png';
 import ApiDetailsModal from './ApiDetailsModal';
 import styles from './MoizvonkiIntegration.module.scss';
@@ -15,6 +15,7 @@ import {
 import { moizvonkiIntegrationSelector } from './MoizvonkiIntegration.selector';
 
 const MoizvonkiIntegration: React.FC = () => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const { isLoading, connection } = useSelector(moizvonkiIntegrationSelector);
@@ -63,7 +64,7 @@ const MoizvonkiIntegration: React.FC = () => {
         onClick={handleOpenModal}
       >
         {connection == null
-          ? textForKey('Connect')
+          ? textForKey('connect')
           : textForKey('edit_connection')}
       </LoadingButton>
     </div>

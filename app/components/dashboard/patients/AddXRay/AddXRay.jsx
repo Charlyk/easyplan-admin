@@ -1,12 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import EASSelect from 'app/components/common/EASSelect';
 import EASModal from 'app/components/common/modals/EASModal';
 import NotificationsContext from 'app/context/notificationsContext';
 import { HeaderKeys } from 'app/utils/constants';
-import { textForKey } from 'app/utils/localization';
+import useMappedValue from 'app/utils/hooks/useMappedValue';
 import { addPatientXRayImage } from 'middleware/api/patients';
 import {
   authTokenSelector,
@@ -15,22 +16,24 @@ import {
 import { updateXRay } from 'redux/slices/mainReduxSlice';
 import styles from './AddXRay.module.scss';
 
-const phases = [
+const rawPhases = [
   {
     id: 'Initial',
-    name: textForKey('Initial phase'),
+    name: 'initial phase',
   },
   {
     id: 'Middle',
-    name: textForKey('Middle phase'),
+    name: 'middle phase',
   },
   {
     id: 'Final',
-    name: textForKey('Final phase'),
+    name: 'final phase',
   },
 ];
 
 const AddXRay = ({ open, patientId, onClose }) => {
+  const textForKey = useTranslate(rawPhases);
+  const phases = useMappedValue();
   const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
   const authToken = useSelector(authTokenSelector);
@@ -88,7 +91,7 @@ const AddXRay = ({ open, patientId, onClose }) => {
       <form className={styles.formRoot}>
         <div className={styles.fileInput}>
           <Typography className={styles.formLabel}>
-            {textForKey('Upload image')}
+            {textForKey('upload image')}
           </Typography>
           <input
             className='custom-file-input'
@@ -103,7 +106,7 @@ const AddXRay = ({ open, patientId, onClose }) => {
 
         <EASSelect
           rootClass={styles.simpleField}
-          label={textForKey('Select phase')}
+          label={textForKey('select phase')}
           value={phase}
           options={phases}
           onChange={handlePhaseChange}

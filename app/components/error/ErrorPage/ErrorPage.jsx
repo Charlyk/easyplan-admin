@@ -3,10 +3,11 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { textForKey } from 'app/utils/localization';
+import { useTranslate } from 'react-polyglot';
 import styles from './ErrorPage.module.scss';
 
 const ErrorPage = ({ query }) => {
+  const textForKey = useTranslate();
   const router = useRouter();
 
   const handleRetry = () => {
@@ -32,7 +33,7 @@ const ErrorPage = ({ query }) => {
           }}
         >
           <Typography className={styles.retryLabel}>
-            {textForKey('Go to home')}
+            {textForKey('go to home')}
           </Typography>
         </Button>
       </div>

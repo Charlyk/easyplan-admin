@@ -1,13 +1,13 @@
 import React, { KeyboardEvent, useState, useRef, memo } from 'react';
 import { IconButton } from '@material-ui/core';
 import Chip from '@material-ui/core/Chip';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch } from 'react-redux';
 import EASTextField from 'app/components/common/EASTextField';
 import IconCheckMark from 'app/components/icons/iconCheckMark';
 import IconDelete from 'app/components/icons/iconDelete';
 import IconEdit from 'app/components/icons/iconEdit';
 import IconPlus from 'app/components/icons/iconPlus';
-import { textForKey } from 'app/utils/localization';
 import onRequestError from 'app/utils/onRequestError';
 import { updateCabinet as middlewareUpdateCabinet } from 'middleware/api/cabinets';
 import { updateCabinet } from 'redux/slices/cabinetsData';
@@ -27,6 +27,7 @@ const CabinetItem: React.FC<Props> = ({
   handleAddDoctor,
   handleDeleteDoctor,
 }) => {
+  const textForKey = useTranslate();
   const [isBeingEdited, setIsBeingEdited] = useState(false);
   const [inputValue, setInputValue] = useState(cabinet.name);
   const inputRef = useRef(null);

@@ -9,6 +9,7 @@ import IconLockOpen from '@material-ui/icons/LockOpen';
 import clsx from 'clsx';
 import upperFirst from 'lodash/upperFirst';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import EASImage from 'app/components/common/EASImage';
 import LoadingButton from 'app/components/common/LoadingButton';
 import SwitchButton from 'app/components/common/SwitchButton';
@@ -20,7 +21,6 @@ import IconEmail from 'app/components/icons/iconEmail';
 import IconPhone from 'app/components/icons/iconPhone';
 import IconRefresh from 'app/components/icons/iconRefresh';
 import { Role } from 'app/utils/constants';
-import { textForKey } from 'app/utils/localization';
 import styles from './UserItem.module.scss';
 
 const UserItem = ({
@@ -35,6 +35,8 @@ const UserItem = ({
   onCalendarChange,
   onAccessToggle,
 }) => {
+  const textForKey = useTranslate();
+
   const handleDeleteUser = (event) => {
     onDelete(event, user, isInvitation);
   };
@@ -69,13 +71,13 @@ const UserItem = ({
   );
 
   const conditionalButtonForDeleteRestore = user.isHidden ? (
-    <Tooltip title={textForKey('Restore')}>
+    <Tooltip title={textForKey('restore')}>
       <IconButton className={styles.iconButton} onClick={handleRestoreUser}>
         <IconRefresh fill='#00E987' />
       </IconButton>
     </Tooltip>
   ) : (
-    <Tooltip title={textForKey('Delete')}>
+    <Tooltip title={textForKey('delete')}>
       <IconButton className={styles.iconButton} onClick={handleDeleteUser}>
         <IconDelete fill='#ec3276' />
       </IconButton>
@@ -119,7 +121,7 @@ const UserItem = ({
             <Typography className={styles.contactLabel}>
               {user.phoneNumber
                 ? user.phoneNumber
-                : textForKey('No phone number')}
+                : textForKey('no phone number')}
             </Typography>
           </div>
         </TableCell>
@@ -144,15 +146,15 @@ const UserItem = ({
               className={styles.resendButton}
               onClick={handleResendInvitation}
             >
-              {textForKey('Invite')} <IconRefresh fill='#FDC534' />
+              {textForKey('invite')} <IconRefresh fill='#FDC534' />
             </LoadingButton>
           )}
           {user.roleInClinic === Role.doctor && !isInvitation && (
             <Tooltip
               title={
                 user.showInCalendar
-                  ? textForKey('Hide from calendar')
-                  : textForKey('Show in calendar')
+                  ? textForKey('hide from calendar')
+                  : textForKey('show in calendar')
               }
             >
               <IconButton
@@ -167,7 +169,7 @@ const UserItem = ({
             </Tooltip>
           )}
           {user.roleInClinic === Role.doctor && !isInvitation && (
-            <Tooltip title={textForKey('Edit')}>
+            <Tooltip title={textForKey('edit')}>
               <IconButton
                 className={styles.iconButton}
                 onClick={handleEditUser}
@@ -179,7 +181,7 @@ const UserItem = ({
           {user.roleInClinic === Role.reception && !isInvitation && (
             <div className={styles.cashierSwitchWrapper}>
               <Typography className={styles.cashierSwitchTitle}>
-                {textForKey('Cashier')}
+                {textForKey('cashier')}
               </Typography>
               <SwitchButton
                 isChecked={user.canRegisterPayments}

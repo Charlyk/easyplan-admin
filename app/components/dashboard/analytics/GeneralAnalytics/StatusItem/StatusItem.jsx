@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import moment from 'moment-timezone';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
-import { textForKey } from 'app/utils/localization';
+import { useTranslate } from 'react-polyglot';
 import styles from '../GeneralAnalytics.module.scss';
 
 const StatusItem = ({
@@ -15,6 +15,7 @@ const StatusItem = ({
   startDate,
   endDate,
 }) => {
+  const textForKey = useTranslate();
   const formattedDate = (date) => {
     return moment(date).format('YYYY-MM-DD');
   };

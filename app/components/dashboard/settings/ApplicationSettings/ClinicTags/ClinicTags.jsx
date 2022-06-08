@@ -4,8 +4,8 @@ import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import ShareIcon from '@material-ui/icons/Share';
+import { useTranslate } from 'react-polyglot';
 import EASTextField from 'app/components/common/EASTextField';
-import { textForKey } from 'app/utils/localization';
 import onRequestError from 'app/utils/onRequestError';
 import {
   requestCreateTag,
@@ -15,6 +15,7 @@ import {
 import styles from './ClinicTags.module.scss';
 
 const ClinicTags = ({ onShare }) => {
+  const textForKey = useTranslate();
   const [text, setText] = useState('');
   const [tags, setTags] = useState([]);
 

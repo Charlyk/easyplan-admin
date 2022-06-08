@@ -3,11 +3,11 @@ import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { useTranslate } from 'react-polyglot';
 import AppLogoWhite from 'app/components/icons/AppLogoWhite';
 import NotificationsContext from 'app/context/notificationsContext';
 import useIsMobileDevice from 'app/hooks/useIsMobileDevice';
 import getClinicUrl from 'app/utils/getClinicUrl';
-import { textForKey } from 'app/utils/localization';
 import { isDev, loginUrl } from 'eas.config';
 import { createNewClinic } from 'middleware/api/clinic';
 import { setCurrentClinic } from 'redux/slices/appDataSlice';
@@ -24,6 +24,7 @@ export default function CreateClinicWrapper({
   countries,
   isMobile,
 }) {
+  const textForKey = useTranslate();
   const toast = useContext(NotificationsContext);
   const router = useRouter();
   const isOnPhone = useIsMobileDevice();
@@ -70,7 +71,7 @@ export default function CreateClinicWrapper({
   return (
     <div className={styles.createClinicRoot}>
       <Head>
-        <title>EasyPlan.pro - {textForKey('Create clinic')}</title>
+        <title>EasyPlan.pro - {textForKey('create clinic')}</title>
       </Head>
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       {!isMobileDevice && (

@@ -5,9 +5,9 @@ import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { PolarArea } from 'react-chartjs-2';
+import { useTranslate } from 'react-polyglot';
 import IconClose from 'app/components/icons/iconClose';
 import formattedAmount from 'app/utils/formattedAmount';
-import { textForKey } from 'app/utils/localization';
 import { ChartType } from 'types/ChartType.type';
 import { getDoctorIncomeChartData } from '../ClinicAnalytics.utils';
 import styles from './DoctorsIncomeChart.module.scss';
@@ -19,6 +19,7 @@ const DoctorsIncomeChart = ({
   onClose,
   visible = true,
 }) => {
+  const textForKey = useTranslate();
   const data = useMemo(() => {
     return getDoctorIncomeChartData(incomes);
   }, [incomes]);

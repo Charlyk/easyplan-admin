@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import debounce from 'lodash/debounce';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import getPatientName from 'app/utils/getPatientName';
-import { textForKey } from 'app/utils/localization';
 import onRequestError from 'app/utils/onRequestError';
 import { getPatients } from 'middleware/api/patients';
 import EASAutocomplete from '../EASAutocomplete';
@@ -17,6 +17,7 @@ const PatientsSearchField = ({
   onSelected,
   onCreatePatient,
 }) => {
+  const textForKey = useTranslate();
   const [isLoading, setIsLoading] = useState(false);
   const [patients, setPatients] = useState([]);
   const suggestionPatients = useMemo(() => {
@@ -94,7 +95,7 @@ const PatientsSearchField = ({
       helperText={helperText}
       value={selectedPatient || ''}
       loading={isLoading}
-      placeholder={textForKey('Enter patient name or phone')}
+      placeholder={textForKey('enter patient name or phone')}
     />
   );
 };

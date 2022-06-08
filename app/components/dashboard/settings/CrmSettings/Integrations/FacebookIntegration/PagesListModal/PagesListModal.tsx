@@ -3,9 +3,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import orderBy from 'lodash/orderBy';
 import Image from 'next/image';
+import { useTranslate } from 'react-polyglot';
 import EASModal from 'app/components/common/modals/EASModal';
 import IconCheckMark from 'app/components/icons/iconCheckMark';
-import { textForKey } from 'app/utils/localization';
 import instagramLogo from 'public/instagram.png';
 import { FacebookPageType } from 'types';
 import styles from './PagesListModal.module.scss';
@@ -23,6 +23,7 @@ const PagesListModal: React.FC<PageListModalProps> = ({
   onClose,
   onSelect,
 }) => {
+  const textForKey = useTranslate();
   const [selectedPages, setSelectedPages] = useState<FacebookPageType[]>([]);
 
   const isPageSelected = useCallback(
@@ -49,7 +50,7 @@ const PagesListModal: React.FC<PageListModalProps> = ({
       open={open}
       onClose={onClose}
       onPrimaryClick={handleSubmit}
-      title={textForKey('Select a page')}
+      title={textForKey('select a page')}
       className={styles.pagesListModal}
     >
       <MenuList>

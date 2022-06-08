@@ -5,6 +5,7 @@ import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { useColor } from 'react-color-palette';
+import { useTranslate } from 'react-polyglot';
 import { useSelector } from 'react-redux';
 import EASColorPicker from 'app/components/common/EASColorPicker/EASColorPicker';
 import EASSelect from 'app/components/common/EASSelect';
@@ -12,9 +13,9 @@ import EASTextarea from 'app/components/common/EASTextarea';
 import EASTextField from 'app/components/common/EASTextField';
 import IconPalette from 'app/components/icons/iconPalette';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
-import { textForKey } from 'app/utils/localization';
 import { availableCurrenciesSelector } from 'redux/selectors/appDataSelector';
 import { categoriesSelector } from 'redux/selectors/servicesSelector';
+import useMappedValue from '../../../../../utils/hooks/useMappedValue';
 import styles from './ServiceInformation.module.scss';
 
 const availableColors = [
@@ -30,22 +31,24 @@ const availableColors = [
   '#F44081',
 ];
 
-const serviceTypes = [
+const rawServiceTypes = [
   {
     id: 'All',
-    name: textForKey('Applicable on all teeth'),
+    name: 'applicable on all teeth',
   },
   {
     id: 'Single',
-    name: textForKey('Applicable on single tooth'),
+    name: 'applicable on single tooth',
   },
   {
     id: 'Braces',
-    name: textForKey('Braces service'),
+    name: 'Braces service',
   },
 ];
 
 const ServiceInformation = ({ isExpanded, showStep, data, onChange }) => {
+  const textForKey = useTranslate();
+  const serviceTypes = useMappedValue(rawServiceTypes);
   const currencies = useSelector(availableCurrenciesSelector);
   const categories = useSelector(categoriesSelector);
   const paletteRef = useRef(null);
@@ -133,9 +136,9 @@ const ServiceInformation = ({ isExpanded, showStep, data, onChange }) => {
       <div className={styles.header}>
         <div className={styles.title}>
           {showStep && (
-            <div className={styles.step}>{textForKey('Step 1.')}</div>
+            <div className={styles.step}>{textForKey('step 1.')}</div>
           )}
-          {textForKey('Service information')}
+          {textForKey('service information')}
         </div>
       </div>
 
@@ -144,7 +147,7 @@ const ServiceInformation = ({ isExpanded, showStep, data, onChange }) => {
           <EASTextField
             type='text'
             containerClass={styles.simpleField}
-            fieldLabel={textForKey('Service name')}
+            fieldLabel={textForKey('service name')}
             value={service.name}
             onChange={(value) => handleFormChange('name', value)}
           />
@@ -152,7 +155,7 @@ const ServiceInformation = ({ isExpanded, showStep, data, onChange }) => {
           <EASTextField
             type='number'
             containerClass={styles.simpleField}
-            fieldLabel={textForKey('Required time')}
+            fieldLabel={textForKey('required time')}
             min='15'
             max='360'
             inputClass='test-input-class'
@@ -176,7 +179,7 @@ const ServiceInformation = ({ isExpanded, showStep, data, onChange }) => {
           <EASTextField
             type='number'
             containerClass={styles.simpleField}
-            fieldLabel={textForKey('Service price')}
+            fieldLabel={textForKey('service price')}
             value={service.price}
             min='0'
             onChange={(value) => handleFormChange('price', value)}
@@ -207,7 +210,7 @@ const ServiceInformation = ({ isExpanded, showStep, data, onChange }) => {
           <EASSelect
             type='text'
             rootClass={styles.simpleField}
-            label={textForKey('Service type')}
+            label={textForKey('service type')}
             labelId='service-type-select'
             onChange={(event) =>
               handleFormChange('serviceType', event.target.value)
@@ -218,7 +221,7 @@ const ServiceInformation = ({ isExpanded, showStep, data, onChange }) => {
 
           <EASTextarea
             containerClass={styles.simpleField}
-            fieldLabel={textForKey('Description')}
+            fieldLabel={textForKey('description')}
             rows={4}
             maxRows={4}
             value={service.description || ''}
@@ -227,7 +230,7 @@ const ServiceInformation = ({ isExpanded, showStep, data, onChange }) => {
         </form>
         <div className={styles.colorsWrapper}>
           <Typography className={styles.formLabel}>
-            {textForKey('Select color')}
+            {textForKey('select color')}
           </Typography>
           <ToggleButtonGroup
             exclusive
@@ -262,7 +265,7 @@ const ServiceInformation = ({ isExpanded, showStep, data, onChange }) => {
             {colorPickerPopper}
             <IconPalette fill='#3A83DC' />
             <Typography className={styles.paletteLabel}>
-              {textForKey('Add new color')}
+              {textForKey('add new color')}
             </Typography>
           </div>
         </div>

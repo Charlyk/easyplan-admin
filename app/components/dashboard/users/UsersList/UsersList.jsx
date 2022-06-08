@@ -8,10 +8,10 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import dynamic from 'next/dynamic';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import NotificationsContext from 'app/context/notificationsContext';
 import { Role } from 'app/utils/constants';
-import { textForKey } from 'app/utils/localization';
 import onRequestError from 'app/utils/onRequestError';
 import { deleteInvitation } from 'middleware/api/clinic';
 import {
@@ -55,6 +55,7 @@ const InviteUserModal = dynamic(() =>
 );
 
 const UsersList = () => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
   const currentClinic = useSelector(currentClinicSelector);
@@ -184,25 +185,25 @@ const UsersList = () => {
           if (users.some((item) => item?.roleInClinic === type) || isLoading)
             return null;
           if (admins.length > 0) return null;
-          message = textForKey('No managers yet.');
-          buttonText = textForKey('Add manager');
+          message = textForKey('no managers yet.');
+          buttonText = textForKey('add manager');
           break;
         case Role.doctor:
           if (users.some((item) => item?.roleInClinic === type) || isLoading)
             return null;
-          message = textForKey('No doctors yet.');
-          buttonText = textForKey('Add doctor');
+          message = textForKey('no doctors yet.');
+          buttonText = textForKey('add doctor');
           break;
         case Role.reception:
           if (users.some((item) => item?.roleInClinic === type) || isLoading)
             return null;
-          message = textForKey('No receptionists yet.');
-          buttonText = textForKey('Add receptionist');
+          message = textForKey('no receptionists yet.');
+          buttonText = textForKey('add receptionist');
           break;
         case Role.invitations:
           if (invitations.length > 0 || isLoading) return null;
-          message = `${textForKey('No pending invitations')}.`;
-          buttonText = textForKey('Invite user');
+          message = `${textForKey('no pending invitations')}.`;
+          buttonText = textForKey('invite user');
           break;
         default:
           return null;
@@ -322,8 +323,8 @@ const UsersList = () => {
       <ConfirmationModal
         show={Boolean(userToDelete)}
         onClose={closeDeleteUserDialog}
-        title={textForKey('Delete user')}
-        message={textForKey('Are you sure you want to delete this user?')}
+        title={textForKey('delete user')}
+        message={textForKey('are you sure you want to delete this user?')}
         onConfirm={handleDeleteUserConfirm}
         isLoading={isDeleting}
       />
@@ -340,7 +341,7 @@ const UsersList = () => {
       <ConfirmationModal
         onClose={closeInvitationSentModal}
         show={showInvitationSent}
-        title={textForKey('Invitation sent')}
+        title={textForKey('invitation sent')}
         message={textForKey('invitation_sent_message')}
       />
 
@@ -375,7 +376,7 @@ const UsersList = () => {
                   <TableRow className={styles.tableRow}>
                     <TableCell colSpan={5}>
                       <span className={styles.groupTitle}>
-                        {textForKey('Invitations')}
+                        {textForKey('invitations')}
                       </span>
                     </TableCell>
                   </TableRow>
@@ -401,7 +402,7 @@ const UsersList = () => {
                   <TableRow className={styles.tableRow}>
                     <TableCell colSpan={5}>
                       <span className={styles.groupTitle}>
-                        {textForKey('Doctors')}
+                        {textForKey('doctors')}
                       </span>
                     </TableCell>
                   </TableRow>
@@ -427,7 +428,7 @@ const UsersList = () => {
                   <TableRow className={styles.tableRow}>
                     <TableCell colSpan={5}>
                       <span className={styles.groupTitle}>
-                        {textForKey('Receptionists')}
+                        {textForKey('receptionists')}
                       </span>
                     </TableCell>
                   </TableRow>
@@ -453,7 +454,7 @@ const UsersList = () => {
                   <TableRow className={styles.tableRow}>
                     <TableCell colSpan={5}>
                       <span className={styles.groupTitle}>
-                        {textForKey('Administrators')}
+                        {textForKey('administrators')}
                       </span>
                     </TableCell>
                   </TableRow>

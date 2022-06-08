@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import EASTextField from 'app/components/common/EASTextField';
 import LoadingButton from 'app/components/common/LoadingButton';
 import IconSuccess from 'app/components/icons/iconSuccess';
 import { PasswordRegex } from 'app/utils/constants';
-import { textForKey } from 'app/utils/localization';
 import { isUpdatingProfileSelector } from 'redux/selectors/appDataSelector';
 import { updateUserProfile } from 'redux/slices/appDataSlice';
 import styles from './SecuritySettings.module.scss';
 
 const SecuritySettings = () => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const isLoading = useSelector(isUpdatingProfileSelector);
   const [data, setData] = useState({
@@ -46,12 +47,12 @@ const SecuritySettings = () => {
   return (
     <div className={styles['security-settings']}>
       <span className={styles['form-title']}>
-        {textForKey('Security settings')}
+        {textForKey('security settings')}
       </span>
       <EASTextField
         type='password'
         containerClass={styles.simpleField}
-        fieldLabel={textForKey('Current password')}
+        fieldLabel={textForKey('current password')}
         value={data.oldPassword || ''}
         onChange={(value) => handleFormChange('oldPassword', value)}
       />
@@ -61,7 +62,7 @@ const SecuritySettings = () => {
         containerClass={styles.simpleField}
         error={!isNewPasswordValid}
         helperText={textForKey('passwordvalidationmessage')}
-        fieldLabel={textForKey('New password')}
+        fieldLabel={textForKey('new password')}
         value={data.password || ''}
         onChange={(value) => handleFormChange('password', value)}
       />
@@ -69,7 +70,7 @@ const SecuritySettings = () => {
       <EASTextField
         type='password'
         containerClass={styles.simpleField}
-        fieldLabel={textForKey('Confirm new password')}
+        fieldLabel={textForKey('confirm new password')}
         value={data.confirmPassword || ''}
         error={!isConfirmPasswordValid}
         helperText={
@@ -84,7 +85,7 @@ const SecuritySettings = () => {
         isLoading={isLoading}
         disabled={isLoading || !isFormValid()}
       >
-        {textForKey('Save')}
+        {textForKey('save')}
         {!isLoading && <IconSuccess />}
       </LoadingButton>
     </div>

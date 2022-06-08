@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 import Typography from '@material-ui/core/Typography';
 import moment from 'moment-timezone';
-import { textForKey } from 'app/utils/localization';
+import { useTranslate } from 'react-polyglot';
 import {
   availableHours,
   charactersRegex,
@@ -27,6 +27,7 @@ const BirthdayMessageForm = ({
   onLanguageChange,
   onSubmit,
 }) => {
+  const textForKey = useTranslate();
   const availableTags = tags.filter((item) =>
     item.availableFor.includes(messageTypeEnum.BirthdayCongrats),
   );
@@ -109,7 +110,7 @@ const BirthdayMessageForm = ({
     <div className={styles.birthdayMessageRoot}>
       <form className={styles.formContainer} onSubmit={handleSubmit}>
         <Typography className={styles.formTitle}>
-          {textForKey(messageTypeEnum.BirthdayCongrats)}
+          {textForKey(messageTypeEnum.BirthdayCongrats.toLowerCase())}
         </Typography>
         <MainMessageForm
           currentClinic={currentClinic}

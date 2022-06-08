@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Fade from '@material-ui/core/Fade';
 import Popper from '@material-ui/core/Popper';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import { Statuses } from 'app/utils/constants';
-import { textForKey } from 'app/utils/localization';
 import styles from './CalendarLegend.module.scss';
 
 const StatusItem = ({ item }) => {
@@ -20,7 +20,14 @@ const StatusItem = ({ item }) => {
 };
 
 const CalendarLegend = ({ open, anchorEl, placement }) => {
-  const scheduleStatuses = Statuses.filter((item) => item.isSchedule);
+  const textForKey = useTranslate();
+  const scheduleStatuses = useMemo(() => {
+    return Statuses.filter((item) => item.isSchedule).map((status) => ({
+      ...status,
+      name: textForKey(status.name),
+    }));
+  }, []);
+
   return (
     <Popper
       disablePortal
@@ -33,7 +40,7 @@ const CalendarLegend = ({ open, anchorEl, placement }) => {
         <Fade {...TransitionProps} timeout={350}>
           <div className={styles.calendarLegend}>
             <Typography className={styles.titleLabel}>
-              {textForKey('Calendar legend')}
+              {textForKey('calendar legend')}
             </Typography>
             {scheduleStatuses.map((status) => (
               <StatusItem key={status.id} item={status} />

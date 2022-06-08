@@ -2,8 +2,8 @@ import React from 'react';
 import clsx from 'clsx';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import { useSelector } from 'react-redux';
-import { textForKey } from 'app/utils/localization';
 import { currentClinicSelector } from 'redux/selectors/appDataSelector';
 import styles from './ServiceDoctors.module.scss';
 
@@ -16,6 +16,7 @@ const ServiceDoctors = ({
   serviceId,
   onDoctorChange,
 }) => {
+  const textForKey = useTranslate();
   const clinic = useSelector(currentClinicSelector);
   const contentClasses = clsx(
     styles.content,
@@ -27,14 +28,14 @@ const ServiceDoctors = ({
       <div className={styles.header}>
         <div className={styles.title}>
           {showStep && (
-            <div className={styles.step}>{textForKey('Step 3.')}</div>
+            <div className={styles.step}>{textForKey('step 3.')}</div>
           )}
-          {textForKey('Doctors who provide this service')}
+          {textForKey('doctors who provide this service')}
         </div>
       </div>
       <div className={contentClasses}>
         {doctors?.length === 0 && (
-          <div className={styles.noData}>{textForKey('No doctors yet.')}</div>
+          <div className={styles.noData}>{textForKey('no doctors yet.')}</div>
         )}
         {doctors?.map((doctor) => (
           <ServiceDoctor

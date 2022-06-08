@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import LoadingButton from 'app/components/common/LoadingButton';
 import IconRefresh from 'app/components/icons/iconRefresh';
-import { textForKey } from 'app/utils/localization';
 import styles from './StatisticFilter.module.scss';
 
 const StatisticFilter = ({ children, isLoading, onUpdate }) => {
+  const textForKey = useTranslate();
   return (
     <div className={styles.statisticsFilterRoot}>
       <div className={styles.filterOptionsWrapper}>{children}</div>
@@ -15,7 +16,7 @@ const StatisticFilter = ({ children, isLoading, onUpdate }) => {
         isLoading={isLoading}
         disabled={isLoading}
       >
-        {textForKey('Apply')} <IconRefresh fill='#fff' />
+        {textForKey('apply')} <IconRefresh fill='#fff' />
       </LoadingButton>
     </div>
   );

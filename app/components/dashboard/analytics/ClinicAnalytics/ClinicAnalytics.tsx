@@ -3,12 +3,12 @@ import { CircularProgress } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import isEqual from 'lodash/isEqual';
 import moment from 'moment-timezone';
+import { useTranslate } from 'react-polyglot';
 import { useSelector, useDispatch } from 'react-redux';
 import EASTextField from 'app/components/common/EASTextField';
 import EasyDateRangePicker from 'app/components/common/EasyDateRangePicker';
 import usePrevious from 'app/hooks/usePrevious';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
-import { textForKey } from 'app/utils/localization';
 import onRequestError from 'app/utils/onRequestError';
 import { requestFetchClinicAnalytics } from 'middleware/api/analytics';
 import { requestUpdateSelectedCharts } from 'middleware/api/users';
@@ -36,6 +36,7 @@ import TotalVisitsChart from './TotalVisistsChart';
 import TreatedPatientsChart from './TreatedPatientsChart';
 
 const ClinicAnalytics: React.FC<ClinicAnalyticsProps> = ({ currentClinic }) => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const pickerRef = useRef(null);
   const didInitialRenderHappen = useRef(false);
@@ -247,7 +248,7 @@ const ClinicAnalytics: React.FC<ClinicAnalyticsProps> = ({ currentClinic }) => {
           readOnly
           ref={pickerRef}
           containerClass={styles.filterField}
-          fieldLabel={textForKey('Period')}
+          fieldLabel={textForKey('period')}
           onPointerUp={handleDatePickerOpen}
           value={`${moment(startDate).format('DD MMM YYYY')} - ${moment(
             endDate,

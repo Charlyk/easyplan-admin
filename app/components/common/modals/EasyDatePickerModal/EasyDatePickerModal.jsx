@@ -4,10 +4,12 @@ import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { Calendar } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
+import { useSelector } from 'react-redux';
 import EASSelect from 'app/components/common/EASSelect';
 import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
-import { getAppLanguage, textForKey } from 'app/utils/localization';
+import { textForKey } from 'app/utils/localization';
+import { appLanguageSelector } from 'redux/selectors/appDataSelector';
 import EASModal from '../EASModal';
 
 const EasyDatePickerModal = ({
@@ -20,6 +22,7 @@ const EasyDatePickerModal = ({
   fetchHours,
 }) => {
   const toast = useContext(NotificationsContext);
+  const appLanguage = useSelector(appLanguageSelector);
   const [date, setDate] = useState(selectedDate);
   const [hour, setHour] = useState(moment(selectedDate).format('HH:mm'));
   const [isLoading, setIsLoading] = useState(false);
@@ -76,21 +79,21 @@ const EasyDatePickerModal = ({
       onClose={onClose}
       size='small'
       onPrimaryClick={handleConfirmed}
-      primaryBtnText={textForKey('Save')}
+      primaryBtnText={textForKey('save')}
       isPositiveLoading={isLoading}
       isPositiveDisabled={isLoading}
-      title={textForKey('Select new date')}
+      title={textForKey('select new date')}
     >
       <Box padding='16px' display='flex' flexDirection='column'>
         <Calendar
           minDate={minDate}
-          locale={locales[getAppLanguage()]}
+          locale={locales[appLanguage]}
           onChange={handleDateChange}
           date={date}
         />
         {isHourRequired && (
           <EASSelect
-            label={textForKey('Hour')}
+            label={textForKey('hour')}
             labelId='hour-select-label'
             value={hour}
             options={mappedHours}

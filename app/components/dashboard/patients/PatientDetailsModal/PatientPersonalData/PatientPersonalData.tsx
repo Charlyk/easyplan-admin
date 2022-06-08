@@ -1,9 +1,16 @@
-import React, { useContext, useEffect, useReducer, useRef } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useReducer,
+  useRef,
+  useMemo,
+} from 'react';
 import Box from '@material-ui/core/Box';
 import Chip from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import EASPhoneInput from 'app/components/common/EASPhoneInput';
 import EASSelect from 'app/components/common/EASSelect';
@@ -19,7 +26,6 @@ import {
   PatientSources,
 } from 'app/utils/constants';
 import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
-import { textForKey } from 'app/utils/localization';
 import onRequestError from 'app/utils/onRequestError';
 import { requestUpdatePatient } from 'middleware/api/patients';
 import {
@@ -74,6 +80,7 @@ const PatientPersonalData: React.FC<Props> = ({
   authToken,
   onPatientUpdated,
 }) => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const didInitialRenderHappen = useRef<boolean>(false);
   const scheduleDetails = useSelector(calendarScheduleDetailsSelector);
@@ -102,6 +109,13 @@ const PatientPersonalData: React.FC<Props> = ({
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
+
+  const mappedPatientSources = useMemo(() => {
+    return PatientSources.map((source) => ({
+      ...source,
+      name: textForKey(source.name),
+    }));
+  }, []);
 
   useEffect(() => {
     fetchAllTags();
@@ -250,7 +264,7 @@ const PatientPersonalData: React.FC<Props> = ({
         [HeaderKeys.subdomain]: currentClinic.domainName,
       });
       await onPatientUpdated(true);
-      toast.success(textForKey('Saved successfully'));
+      toast.success(textForKey('saved successfully'));
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -284,13 +298,13 @@ const PatientPersonalData: React.FC<Props> = ({
         />
       )}
       <Typography classes={{ root: 'title-label' }}>
-        {textForKey('Personal Info')}
+        {textForKey('personal info')}
       </Typography>
       <Box className={styles['patient-form-wrapper']}>
         <EASTextField
           type='text'
           containerClass={styles.simpleField}
-          fieldLabel={textForKey('Last name')}
+          fieldLabel={textForKey('last name')}
           value={lastName}
           onChange={(value) => handleFormChange('lastName', value)}
           maxLength={25}
@@ -299,7 +313,7 @@ const PatientPersonalData: React.FC<Props> = ({
         <EASTextField
           type='text'
           containerClass={styles.simpleField}
-          fieldLabel={textForKey('First name')}
+          fieldLabel={textForKey('first name')}
           value={firstName}
           onChange={(value) => handleFormChange('firstName', value)}
           maxLength={25}
@@ -311,7 +325,7 @@ const PatientPersonalData: React.FC<Props> = ({
           value={formattedBirthday}
           onPointerUp={handleOpenDatePicker}
           containerClass={styles.simpleField}
-          fieldLabel={textForKey('Birthday')}
+          fieldLabel={textForKey('birthday')}
         />
 
         <EASTextField
@@ -319,7 +333,7 @@ const PatientPersonalData: React.FC<Props> = ({
           value={email || ''}
           containerClass={styles.simpleField}
           error={email?.length > 0 && !email.match(EmailRegex)}
-          fieldLabel={textForKey('Email')}
+          fieldLabel={textForKey('email')}
           onChange={(value) => handleFormChange('email', value)}
           maxLength={40}
         />
@@ -328,7 +342,7 @@ const PatientPersonalData: React.FC<Props> = ({
           type='number'
           value={String(discount)}
           containerClass={styles.simpleField}
-          fieldLabel={textForKey('Discount')}
+          fieldLabel={textForKey('discount')}
           onChange={(value) => handleFormChange('discount', value)}
         />
 
@@ -336,7 +350,7 @@ const PatientPersonalData: React.FC<Props> = ({
           type='number'
           value={String(euroDebt)}
           containerClass={styles.simpleField}
-          fieldLabel={textForKey('Euro Debt')}
+          fieldLabel={textForKey('euro debt')}
           onChange={(value) => handleFormChange('euroDebt', value)}
         />
 
@@ -363,7 +377,7 @@ const PatientPersonalData: React.FC<Props> = ({
 
         <EASPhoneInput
           rootClass={styles.simpleField}
-          fieldLabel={textForKey('Phone number')}
+          fieldLabel={textForKey('phone number')}
           value={`+${country.dialCode}${phoneNumber}`}
           country={country.countryCode}
           placeholder={country.format}
@@ -382,7 +396,7 @@ const PatientPersonalData: React.FC<Props> = ({
         <EASSelect
           label={textForKey('patient_source')}
           labelId='patient-source-select'
-          options={PatientSources}
+          options={mappedPatientSources}
           value={source}
           rootClass={styles.simpleField}
           onChange={handleSourceChange}
@@ -427,7 +441,7 @@ const PatientPersonalData: React.FC<Props> = ({
             onClick={handleSavePatient}
             disabled={isSaving || !isFormValid()}
           >
-            {textForKey('Save')}
+            {textForKey('save')}
             {!isSaving && <IconSuccess />}
           </LoadingButton>
         </Box>

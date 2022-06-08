@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Link from 'next/link';
+import { useTranslate } from 'react-polyglot';
 import EASTextField from 'app/components/common/EASTextField';
 import EASModal from 'app/components/common/modals/EASModal';
 import { EmailRegex } from 'app/utils/constants';
-import { textForKey } from 'app/utils/localization';
 import { MoizvonkiConnection } from 'types';
 import styles from './ApiDetailsModal.module.scss';
 
@@ -23,6 +23,7 @@ const ApiDetailsModal: React.FC<ApiDetailsModalProps> = ({
   onSubmit,
   onDisconnect,
 }) => {
+  const textForKey = useTranslate();
   const [apiUrl, setApiUrl] = useState('');
   const [apiKey, setApiKey] = useState('');
   const [username, setUsername] = useState('');

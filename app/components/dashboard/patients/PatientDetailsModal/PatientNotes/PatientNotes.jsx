@@ -3,12 +3,12 @@ import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import { useSelector } from 'react-redux';
 import EASTextField from 'app/components/common/EASTextField';
 import LoadingButton from 'app/components/common/LoadingButton';
 import IconPlus from 'app/components/icons/iconPlus';
 import NotificationsContext from 'app/context/notificationsContext';
-import { textForKey } from 'app/utils/localization';
 import {
   createPatientNote,
   requestFetchPatientNotes,
@@ -19,6 +19,7 @@ import styles from './PatientNotes.module.scss';
 import { reducer, initialState, actions } from './PatientNotes.reducer';
 
 const PatientNotes = ({ patient }) => {
+  const textForKey = useTranslate();
   const toast = useContext(NotificationsContext);
   const [state, localDispatch] = useReducer(reducer, initialState);
   const updateNotes = useSelector(updateNotesSelector);
@@ -69,10 +70,10 @@ const PatientNotes = ({ patient }) => {
 
   return (
     <div className={styles.patientNotesList}>
-      <Typography className='title-label'>{textForKey('Notes')}</Typography>
+      <Typography className='title-label'>{textForKey('notes')}</Typography>
       {state.notes.length === 0 && !state.isFetching && (
         <Typography className='no-data-label'>
-          {textForKey('No data here yet')} :(
+          {textForKey('no data here yet')} :(
         </Typography>
       )}
       {state.isFetching && (
@@ -90,7 +91,7 @@ const PatientNotes = ({ patient }) => {
           type='text'
           containerClass={styles.noteField}
           value={state.newNoteText}
-          placeholder={`${textForKey('Enter new note')}...`}
+          placeholder={`${textForKey('enter new note')}...`}
           onKeyDown={handleInputKeyDown}
           onChange={handleNewNoteChanged}
           maxLength={1000}
@@ -101,7 +102,7 @@ const PatientNotes = ({ patient }) => {
           className={styles.addNoteButton}
           onClick={handleAddNote}
         >
-          {textForKey('Add note')}
+          {textForKey('add note')}
           <IconPlus fill={null} />
         </LoadingButton>
       </Box>

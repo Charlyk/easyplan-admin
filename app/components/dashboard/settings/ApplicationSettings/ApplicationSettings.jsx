@@ -1,13 +1,13 @@
 import React, { useContext, useState } from 'react';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingButton from 'app/components/common/LoadingButton';
 import ClinicsModal from 'app/components/common/modals/ClinicsModal';
 import IconSuccess from 'app/components/icons/iconSuccess';
 import NotificationsContext from 'app/context/notificationsContext';
 import { HeaderKeys } from 'app/utils/constants';
-import { textForKey } from 'app/utils/localization';
 import onRequestError from 'app/utils/onRequestError';
 import { updateClinic } from 'middleware/api/clinic';
 import { requestShareTags } from 'middleware/api/tags';
@@ -23,6 +23,7 @@ import ClinicTags from './ClinicTags';
 import TimeBeforeOnSite from './TimeBeforeOnSite';
 
 const ApplicationSettings = () => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const clinic = useSelector(currentClinicSelector);
   const authToken = useSelector(authTokenSelector);
@@ -53,7 +54,7 @@ const ApplicationSettings = () => {
         [HeaderKeys.subdomain]: clinic.domainName,
       });
       dispatch(setCurrentClinic(response.data));
-      toast.success(textForKey('Saved successfully'));
+      toast.success(textForKey('saved successfully'));
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -89,7 +90,7 @@ const ApplicationSettings = () => {
         onClose={handleCloseClinics}
       />
       <span className={styles.formTitle}>
-        {textForKey('Application settings')}
+        {textForKey('application settings')}
       </span>
       <div className={styles.dataWrapper}>
         <Typography className={styles.titleLabel}>
@@ -123,7 +124,7 @@ const ApplicationSettings = () => {
             time === String(clinic.timeBeforeOnSite)
           }
         >
-          {textForKey('Save')}
+          {textForKey('save')}
           <IconSuccess />
         </LoadingButton>
       </div>

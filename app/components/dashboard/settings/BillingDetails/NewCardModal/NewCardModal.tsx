@@ -4,11 +4,11 @@ import Box from '@material-ui/core/Box';
 import Modal from '@material-ui/core/Modal';
 import Typography from '@material-ui/core/Typography';
 import { SelectChangeEvent } from '@mui/material';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
 import LoadingButton from 'app/components/common/LoadingButton';
-import { textForKey } from 'app/utils/localization';
 import { appBaseUrl } from 'eas.config';
 import {
   authTokenSelector,
@@ -46,6 +46,7 @@ const defaultAddressValue = {
 };
 
 const NewCardModal: React.FC<NewCardModalProps> = ({ countries }) => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const { error } = useSelector(paymentsPaymentMethodsSelector);
   const modalOpen = useSelector(paymentsNewCardModalSelector);

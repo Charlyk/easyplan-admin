@@ -8,13 +8,14 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import sumBy from 'lodash/sumBy';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import LeftSideModal from 'app/components/common/LeftSideModal';
 import formattedAmount from 'app/utils/formattedAmount';
 import getServiceName from 'app/utils/getServiceName';
-import { textForKey } from 'app/utils/localization';
 import styles from './ServicesListModal.module.scss';
 
 const ServicesListModal = ({ open, currency, onClose, statistic }) => {
+  const textForKey = useTranslate();
   const doctor = statistic?.doctor;
 
   function getDoctorAmount(service) {
@@ -63,16 +64,16 @@ const ServicesListModal = ({ open, currency, onClose, statistic }) => {
       show={open}
       onClose={onClose}
       className={styles.servicesList}
-      title={textForKey('Completed services')}
-      steps={[doctor?.fullName, textForKey('Completed services')]}
+      title={textForKey('completed services')}
+      steps={[doctor?.fullName, textForKey('completed services')]}
     >
       <TableContainer className={styles.tableContainer}>
         <Table stickyHeader className={styles.dataTable}>
           <TableHead>
             <TableRow>
-              <TableCell>{textForKey('Service')}</TableCell>
-              <TableCell align='right'>{textForKey('Price')}</TableCell>
-              <TableCell align='right'>{textForKey('Doctor part')}</TableCell>
+              <TableCell>{textForKey('service')}</TableCell>
+              <TableCell align='right'>{textForKey('price')}</TableCell>
+              <TableCell align='right'>{textForKey('doctor part')}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>{statistic?.services.map(renderServiceRow)}</TableBody>

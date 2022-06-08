@@ -15,6 +15,7 @@ import upperFirst from 'lodash/upperFirst';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import IconArrowDown from 'app/components/icons/iconArrowDown';
 import IconClose from 'app/components/icons/iconClose';
@@ -24,7 +25,6 @@ import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { ManualStatuses, Statuses } from 'app/utils/constants';
 import formattedAmount from 'app/utils/formattedAmount';
-import { textForKey } from 'app/utils/localization';
 import { baseApiUrl } from 'eas.config';
 import {
   getAvailableHours,
@@ -71,6 +71,7 @@ const AppointmentDetails = ({
   onPayDebt,
   onAddSchedule,
 }) => {
+  const textForKey = useTranslate();
   const toast = useContext(NotificationsContext);
   const dispatch = useDispatch();
   const statusesAnchor = useRef(null);
@@ -331,8 +332,8 @@ const AppointmentDetails = ({
         onSubmit={handleCanceledReasonSubmitted}
         onClose={handleCloseCanceledReasonModal}
         open={isCanceledReasonRequired}
-        title={`${textForKey('Why schedule is canceled')}?`}
-        label={textForKey('Enter reason below')}
+        title={`${textForKey('why schedule is canceled')}?`}
+        label={textForKey('enter reason below')}
       />
       {isNewDateRequired && (
         <EasyDatePickerModal
@@ -393,7 +394,7 @@ const AppointmentDetails = ({
                   <tr>
                     <td colSpan={2}>
                       <div className={styles.groupTitle}>
-                        {textForKey('Info')}
+                        {textForKey('info')}
                       </div>
                     </td>
                   </tr>
@@ -405,7 +406,7 @@ const AppointmentDetails = ({
                         userSelect: 'none',
                       }}
                     >
-                      {textForKey('Doctor')}:
+                      {textForKey('doctor')}:
                     </td>
                     <td>{details.doctor.fullName}</td>
                   </tr>
@@ -418,14 +419,14 @@ const AppointmentDetails = ({
                           userSelect: 'none',
                         }}
                       >
-                        {textForKey('Cabinet')}:
+                        {textForKey('cabinet')}:
                       </td>
                       <td>{details.cabinet.name}</td>
                     </tr>
                   )}
                   <tr>
                     <td style={{ paddingRight: '1rem', userSelect: 'none' }}>
-                      {textForKey('Date')}:
+                      {textForKey('date')}:
                     </td>
                     <td>
                       {upperFirst(
@@ -435,7 +436,7 @@ const AppointmentDetails = ({
                   </tr>
                   <tr>
                     <td style={{ paddingRight: '1rem', userSelect: 'none' }}>
-                      {textForKey('Hour')}:
+                      {textForKey('hour')}:
                     </td>
                     <td>
                       {moment(details.startTime).format('HH:mm')} -{' '}
@@ -444,13 +445,13 @@ const AppointmentDetails = ({
                   </tr>
                   <tr>
                     <td style={{ paddingRight: '1rem', userSelect: 'none' }}>
-                      {upperFirst(textForKey('Created by'))}:
+                      {upperFirst(textForKey('created by'))}:
                     </td>
                     <td>{details.createdBy.fullName}</td>
                   </tr>
                   <tr>
                     <td style={{ paddingRight: '1rem', userSelect: 'none' }}>
-                      {upperFirst(textForKey('Created at'))}:
+                      {upperFirst(textForKey('created at'))}:
                     </td>
                     <td>
                       {moment(details.created).format('DD MMM YYYY, HH:mm')}
@@ -462,7 +463,7 @@ const AppointmentDetails = ({
                         <td
                           style={{ paddingRight: '1rem', userSelect: 'none' }}
                         >
-                          {upperFirst(textForKey('Canceled reason'))}:
+                          {upperFirst(textForKey('canceled reason'))}:
                         </td>
                         <td>{details.canceledReason}</td>
                       </tr>
@@ -481,7 +482,7 @@ const AppointmentDetails = ({
                         valign='top'
                         style={{ paddingRight: '1rem', userSelect: 'none' }}
                       >
-                        {textForKey('Note')}:
+                        {textForKey('note')}:
                       </td>
                       <td valign='top'>{details.noteText}</td>
                     </tr>
@@ -489,7 +490,7 @@ const AppointmentDetails = ({
                   <tr>
                     <td colSpan={2}>
                       <div className={styles.groupTitle}>
-                        {textForKey('Patient')}
+                        {textForKey('patient')}
                       </div>
                     </td>
                   </tr>
@@ -516,7 +517,7 @@ const AppointmentDetails = ({
                   )}
                   <tr>
                     <td style={{ paddingRight: '1rem', userSelect: 'none' }}>
-                      {textForKey('Name')}:
+                      {textForKey('name')}:
                     </td>
                     <td>
                       <Box
@@ -529,7 +530,7 @@ const AppointmentDetails = ({
                   </tr>
                   <tr>
                     <td style={{ paddingRight: '1rem', userSelect: 'none' }}>
-                      {textForKey('Phone')}:
+                      {textForKey('phone')}:
                     </td>
                     <td>
                       <a
@@ -542,7 +543,7 @@ const AppointmentDetails = ({
                   </tr>
                   <tr>
                     <td style={{ paddingRight: '1rem', userSelect: 'none' }}>
-                      {textForKey('Email')}:
+                      {textForKey('email')}:
                     </td>
                     <td>
                       <a
@@ -567,14 +568,14 @@ const AppointmentDetails = ({
               </table>
             </div>
             <div className={styles.debtsWrapper}>
-              <div className={styles.groupTitle}>{textForKey('Debts')}</div>
+              <div className={styles.groupTitle}>{textForKey('debts')}</div>
               <table>
                 <thead>
                   <tr>
-                    <td align='left'>{textForKey('Service')}</td>
-                    <td align='left'>{textForKey('Clinic')}</td>
-                    <td align='right'>{textForKey('Remained')}</td>
-                    <td align='right'>{textForKey('Actions')}</td>
+                    <td align='left'>{textForKey('service')}</td>
+                    <td align='left'>{textForKey('clinic')}</td>
+                    <td align='right'>{textForKey('remained')}</td>
+                    <td align='right'>{textForKey('actions')}</td>
                   </tr>
                 </thead>
                 <tbody>
@@ -609,7 +610,7 @@ const AppointmentDetails = ({
                           }}
                           onClick={() => handlePayDebt(item)}
                         >
-                          {textForKey('Pay')}
+                          {textForKey('pay')}
                         </Button>
                       </td>
                     </tr>
@@ -618,7 +619,7 @@ const AppointmentDetails = ({
                     <tr>
                       <td colSpan={4} align='center'>
                         <div className={styles.noDebtsLabel}>
-                          {textForKey('No debts found')}
+                          {textForKey('no debts found')}
                         </div>
                       </td>
                     </tr>
@@ -632,7 +633,7 @@ const AppointmentDetails = ({
       <div className={styles.footerWrapper}>
         <Box width='100%' display='flex'>
           <Button className='cancel-button' onPointerUp={onClose}>
-            {textForKey('Close')}
+            {textForKey('close')}
             <IconClose />
           </Button>
           <Button
@@ -640,14 +641,14 @@ const AppointmentDetails = ({
             disabled={isLoading || scheduleStatus.id !== 'OnSite'}
             onPointerUp={handleFinalizeSchedule}
           >
-            {textForKey('Finalize')}
+            {textForKey('finalize')}
           </Button>
           <Button
             className='delete-button'
             disabled={isFinished || isLoading}
             onPointerUp={handleDeleteSchedule}
           >
-            {textForKey('Delete')}
+            {textForKey('delete')}
             <IconTrash />
           </Button>
         </Box>
@@ -659,7 +660,7 @@ const AppointmentDetails = ({
             rel='noreferrer'
           >
             <span className={styles.printLabel}>
-              {textForKey('Print receipt')}
+              {textForKey('print receipt')}
             </span>
           </a>
         )}

@@ -3,8 +3,8 @@ import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { Bar } from 'react-chartjs-2';
+import { useTranslate } from 'react-polyglot';
 import IconClose from 'app/components/icons/iconClose';
-import { textForKey } from 'app/utils/localization';
 import { ChartType } from 'types/ChartType.type';
 import {
   getChartOptions,
@@ -18,6 +18,7 @@ const PatientsSourceChart = ({
   onClose,
   visible = true,
 }) => {
+  const textForKey = useTranslate();
   const data = useMemo(() => {
     return getPatientsSourceData(sources);
   }, [sources]);

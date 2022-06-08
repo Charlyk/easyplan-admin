@@ -6,13 +6,13 @@ import VisibilityOn from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch } from 'react-redux';
 import AppLogoWhite from 'app/components/icons/AppLogoWhite';
 import NotificationsContext from 'app/context/notificationsContext';
 import useIsMobileDevice from 'app/hooks/useIsMobileDevice';
 import { HeaderKeys, PasswordRegex, Role } from 'app/utils/constants';
 import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
-import { textForKey } from 'app/utils/localization';
 import { loginUrl } from 'eas.config';
 import { requestAcceptInvitation } from 'middleware/api/users';
 import { setAuthenticationData } from 'redux/slices/appDataSlice';
@@ -33,6 +33,7 @@ import reducer, {
 import styles from './AcceptInvitation.module.scss';
 
 const AcceptInvitation = ({ token, isNew, isMobile }) => {
+  const textForKey = useTranslate();
   const toast = useContext(NotificationsContext);
   const router = useRouter();
   const dispatch = useDispatch();
@@ -179,7 +180,7 @@ const AcceptInvitation = ({ token, isNew, isMobile }) => {
             {isNewUser ? (
               <div className={styles.formWrapper}>
                 <span className={styles.formTitle}>
-                  {textForKey('Accept invitation')}
+                  {textForKey('accept invitation')}
                 </span>
 
                 <span className={styles.welcomeText}>
@@ -195,7 +196,7 @@ const AcceptInvitation = ({ token, isNew, isMobile }) => {
                 <EASTextField
                   type='text'
                   containerClass={styles.textField}
-                  fieldLabel={textForKey('Last name')}
+                  fieldLabel={textForKey('last name')}
                   value={lastName}
                   onChange={handleLastNameChange}
                 />
@@ -203,13 +204,13 @@ const AcceptInvitation = ({ token, isNew, isMobile }) => {
                 <EASTextField
                   type='text'
                   containerClass={styles.textField}
-                  fieldLabel={textForKey('First name')}
+                  fieldLabel={textForKey('first name')}
                   value={firstName}
                   onChange={handleFirstNameChange}
                 />
 
                 <EASPhoneInput
-                  fieldLabel={textForKey('Phone number')}
+                  fieldLabel={textForKey('phone number')}
                   rootClass={styles.textField}
                   value={phoneNumber}
                   country='md'
@@ -218,11 +219,11 @@ const AcceptInvitation = ({ token, isNew, isMobile }) => {
 
                 <EASTextField
                   containerClass={styles.textField}
-                  fieldLabel={textForKey('Enter a new password')}
+                  fieldLabel={textForKey('enter a new password')}
                   type={isPasswordVisible ? 'text' : 'password'}
                   autoComplete='new-password'
                   onChange={handlePasswordChange}
-                  helperText={textForKey('passwordValidationMessage')}
+                  helperText={textForKey('passwordvalidationmessage')}
                   error={password.length > 0 && !password.match(PasswordRegex)}
                   value={password}
                   endAdornment={
@@ -238,10 +239,10 @@ const AcceptInvitation = ({ token, isNew, isMobile }) => {
             ) : (
               <div>
                 <Typography className={styles.formTitle}>
-                  {textForKey('Accept invitation')}
+                  {textForKey('accept invitation')}
                 </Typography>
                 <Typography className={styles.welcomeText}>
-                  {textForKey('Click on button below to accept the invitation')}
+                  {textForKey('click on button below to accept the invitation')}
                 </Typography>
               </div>
             )}
@@ -258,7 +259,7 @@ const AcceptInvitation = ({ token, isNew, isMobile }) => {
               className='positive-button'
               onClick={handleAcceptInvitation}
             >
-              {textForKey('Accept invitation')}
+              {textForKey('accept invitation')}
             </LoadingButton>
           </div>
         </form>

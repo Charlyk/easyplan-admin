@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useReducer, useRef } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useReducer,
+  useRef,
+  useMemo,
+} from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import IconButton from '@material-ui/core/IconButton';
 import MuiMenuItem from '@material-ui/core/MenuItem';
@@ -8,6 +14,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch } from 'react-redux';
 import EASImage from 'app/components/common/EASImage';
 import IconAvatar from 'app/components/icons/iconAvatar';
@@ -15,7 +22,6 @@ import IconClose from 'app/components/icons/iconClose';
 import IconEdit from 'app/components/icons/iconEdit';
 import NotificationsContext from 'app/context/notificationsContext';
 import { HeaderKeys } from 'app/utils/constants';
-import { textForKey } from 'app/utils/localization';
 import onRequestError from 'app/utils/onRequestError';
 import {
   getPatientDetails,
@@ -62,6 +68,7 @@ const PatientDetailsModal = ({
   canDelete,
   onClose,
 }) => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
   const inputRef = useRef(null);
@@ -78,6 +85,10 @@ const PatientDetailsModal = ({
     localDispatch,
   ] = useReducer(reducer, initialState);
   const patientAvatar = avatarFile ?? patient?.avatar;
+
+  const mappedMenuItems = useMemo(() => {
+    return MenuItems.map((item) => ({ ...item, name: textForKey(item.name) }));
+  }, []);
 
   useEffect(() => {
     if (!show) {
@@ -108,7 +119,7 @@ const PatientDetailsModal = ({
       });
       await fetchPatientDetails(true);
       localDispatch(setAvatarFile(null));
-      toast.success(textForKey('Saved successfully'));
+      toast.success(textForKey('saved successfully'));
     } catch (error) {
       onRequestError(error);
     }
@@ -242,7 +253,7 @@ const PatientDetailsModal = ({
         <ConfirmationModal
           isLoading={isDeleting}
           show={showDeleteConfirmation}
-          title={textForKey('Delete patient')}
+          title={textForKey('delete patient')}
           message={textForKey('delete_patient_message')}
           onConfirm={deletePatient}
           onClose={() => localDispatch(closeDeleteConfirmation())}
@@ -299,7 +310,7 @@ const PatientDetailsModal = ({
                 </Typography>
               </div>
               <MenuList className={styles.menuList}>
-                {MenuItems.map((item) => {
+                {mappedMenuItems.map((item) => {
                   if (item.id === MenuItem.delete && !canDelete) {
                     return null;
                   }

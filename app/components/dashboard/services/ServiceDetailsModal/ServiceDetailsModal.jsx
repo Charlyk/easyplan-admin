@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import dynamic from 'next/dynamic';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import LeftSideModal from 'app/components/common/LeftSideModal';
 import LoadingButton from 'app/components/common/LoadingButton';
 import IconClose from 'app/components/icons/iconClose';
 import IconSuccess from 'app/components/icons/iconSuccess';
 import NotificationsContext from 'app/context/notificationsContext';
-import { textForKey } from 'app/utils/localization';
 import onRequestFailed from 'app/utils/onRequestFailed';
 import { createService, updateService } from 'middleware/api/services';
 import {
@@ -55,6 +55,7 @@ const getInitialService = (doctors, categoryId, currency) => {
 };
 
 const ServiceDetailsModal = () => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
   const { category, service, open } = useSelector(detailsModalSelector);
@@ -124,7 +125,7 @@ const ServiceDetailsModal = () => {
       });
     }
     dispatch(fetchServicesList());
-    toast.success(textForKey('Saved successfully'));
+    toast.success(textForKey('saved successfully'));
     handleCloseModal();
   };
 
@@ -195,14 +196,14 @@ const ServiceDetailsModal = () => {
       show={open}
       onClose={handleCloseModal}
       steps={[
-        textForKey('Categories'),
-        textForKey(category?.name || textForKey('All services')),
+        textForKey('categories'),
+        textForKey(category?.name || textForKey('all services')),
         service == null
           ? textForKey('Add service')
           : textForKey('Edit service'),
       ]}
       title={
-        service == null ? textForKey('Add service') : textForKey('Edit service')
+        service == null ? textForKey('add service') : textForKey('edit service')
       }
     >
       <div className={styles.serviceDetailsModal}>
@@ -240,7 +241,7 @@ const ServiceDetailsModal = () => {
             disabled={isLoading}
             onClick={handleCloseModal}
           >
-            {textForKey('Close')}
+            {textForKey('close')}
             <IconClose />
           </Button>
           <LoadingButton
@@ -249,7 +250,7 @@ const ServiceDetailsModal = () => {
             isLoading={isLoading}
             disabled={!isFormValid || isLoading}
           >
-            {textForKey('Save')}
+            {textForKey('save')}
             {!isLoading && <IconSuccess />}
           </LoadingButton>
         </div>

@@ -1,9 +1,10 @@
 import React from 'react';
+import { useTranslate } from 'react-polyglot';
 import EASTextField from 'app/components/common/EASTextField';
-import { textForKey } from 'app/utils/localization';
 import styles from './TimeBeforeOnSite.module.scss';
 
 const TimeBeforeOnSite = ({ value, onChange }) => {
+  const textForKey = useTranslate();
   const handleFormChange = (newValue) => {
     if (Number(newValue) > 120) {
       onChange?.(120);
@@ -16,7 +17,7 @@ const TimeBeforeOnSite = ({ value, onChange }) => {
     <EASTextField
       type='number'
       containerClass={styles.timeBeforeOnSite}
-      fieldLabel={textForKey('Animate appointments before')}
+      fieldLabel={textForKey('animate appointments before')}
       value={value}
       max={120}
       helperText={textForKey('appointment_animation_timer')}

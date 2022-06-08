@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import PhoneIcon from '@material-ui/icons/Call';
@@ -9,6 +9,7 @@ import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import TextField from 'app/components/common/EASTextField';
+import { useTranslate } from 'react-polyglot';
 import formatSeconds from 'app/utils/formatSeconds';
 import getCallRecordUrl from 'app/utils/getCallRecordUrl';
 import { textForKey } from 'app/utils/localization';
@@ -19,6 +20,7 @@ const PhoneCallItem = ({ call, onPlayAudio }) => {
   const dispatch = useDispatch();
   const [isEdited, setIsEdited] = useState(false);
   const [inputValue, setInputValue] = useState(call.comment ?? '');
+  const textForKey = useTranslate();
   const dateText = useMemo(() => {
     if (call == null) {
       return '-';
@@ -41,11 +43,10 @@ const PhoneCallItem = ({ call, onPlayAudio }) => {
     if (call == null) {
       return '-';
     }
-    return textForKey(
-      'call_direction_with_time',
-      textForKey(`call_${call.direction}`),
-      formatSeconds(call.duration),
-    );
+    return textForKey('call_direction_with_time', {
+      first: textForKey(`call_${call.direction?.toLowerCase()}`),
+      second: formatSeconds(call.duration),
+    });
   }, [call]);
 
   const callIcon = useMemo(() => {
@@ -144,7 +145,7 @@ const PhoneCallItem = ({ call, onPlayAudio }) => {
           </Button>
         </div>
         <Typography className={styles.detailsLabel}>
-          {textForKey(`call_${call.status}`)}
+          {textForKey(`call_${call.status?.toLowerCase()}`)}
         </Typography>
         <div className={styles.commentWrapper}>
           {isEdited ? (

@@ -20,7 +20,7 @@ export const languages = [
 export const tags = [
   {
     id: '{{patientFullName}}',
-    label: textForKey('Patient full name'),
+    label: 'patient full name',
     availableFor: [
       'ScheduleNotification',
       'BirthdayCongrats',
@@ -33,7 +33,7 @@ export const tags = [
   },
   {
     id: '{{patientFirstName}}',
-    label: textForKey('Patient first name'),
+    label: 'patient first name',
     availableFor: [
       'ScheduleNotification',
       'BirthdayCongrats',
@@ -46,7 +46,7 @@ export const tags = [
   },
   {
     id: '{{patientLastName}}',
-    label: textForKey('Patient last name'),
+    label: 'patient last name',
     availableFor: [
       'ScheduleNotification',
       'BirthdayCongrats',
@@ -59,28 +59,28 @@ export const tags = [
   },
   {
     id: '{{confirmationLink}}',
-    label: textForKey('Confirmation link'),
+    label: 'confirmation link',
     availableFor: ['ScheduleNotification'],
     length: 23,
     placeholder: '#######################',
   },
   {
     id: '{{clinicName}}',
-    label: textForKey('Clinic name'),
+    label: 'clinic name',
     availableFor: ['ScheduleNotification'],
     length: 14,
     placeholder: '##############',
   },
   {
     id: '{{scheduleHour}}',
-    label: textForKey('Schedule hour'),
+    label: 'schedule hour',
     availableFor: ['ScheduleNotification'],
     length: 5,
     placeholder: '#####',
   },
   {
     id: '{{scheduleDate}}',
-    label: textForKey('Schedule date'),
+    label: 'schedule date',
     availableFor: ['ScheduleNotification'],
     length: 10,
     placeholder: '##########',

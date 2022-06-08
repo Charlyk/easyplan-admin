@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
@@ -13,6 +13,7 @@ import IconMessages from '@material-ui/icons/Message';
 import clsx from 'clsx';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import ClinicSelector from 'app/components/common/ClinicSelector';
 import EASHelpView from 'app/components/common/EASHelpView';
@@ -26,12 +27,12 @@ import MenuSettings from 'app/components/icons/menuSettings';
 import MenuUsers from 'app/components/icons/menuUsers';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { Role, TECH_SUPPORT_URL } from 'app/utils/constants';
-import { textForKey } from 'app/utils/localization';
 import notifications from 'app/utils/notifications/notifications';
 import updateNotificationState from 'app/utils/notifications/updateNotificationState';
 import wasNotificationShown from 'app/utils/notifications/wasNotificationShown';
 import useRootDomain from 'app/utils/useRootDomain';
 import {
+  appLanguageSelector,
   authTokenSelector,
   currentClinicSelector,
   currentUserSelector,
@@ -46,26 +47,26 @@ import { dispatchFetchRemindersCount } from 'redux/slices/crmBoardSlice';
 import ExchangeRates from '../ExchageRates';
 import styles from './MainMenu.module.scss';
 
-const menuItems = [
+const rawMenuItems = [
   {
     id: 'analytics',
     type: 'group',
-    text: textForKey('Analytics'),
+    text: 'analytics',
     icon: <MenuAnalytics />,
     roles: [Role.admin, Role.manager, Role.reception],
     children: [
       {
-        text: textForKey('General'),
+        text: 'general',
         href: '/analytics/general',
         roles: [Role.admin, Role.manager],
       },
       {
-        text: textForKey('Services'),
+        text: 'services',
         href: '/analytics/services',
         roles: [Role.admin, Role.manager, Role.reception],
       },
       {
-        text: textForKey('Doctors'),
+        text: 'doctors',
         href: '/analytics/doctors',
         roles: [Role.admin],
       },
@@ -80,7 +81,7 @@ const menuItems = [
     id: 'services',
     type: 'link',
     roles: [Role.admin, Role.manager],
-    text: textForKey('Services'),
+    text: 'services',
     icon: <MenuCategories />,
     href: '/services',
     hasCounter: false,
@@ -89,7 +90,7 @@ const menuItems = [
     id: 'users',
     type: 'link',
     roles: [Role.admin, Role.manager],
-    text: textForKey('Users'),
+    text: 'users',
     icon: <MenuUsers />,
     href: '/users',
     hasCounter: false,
@@ -98,7 +99,7 @@ const menuItems = [
     id: 'calendar',
     type: 'link',
     roles: [Role.admin, Role.manager, Role.reception],
-    text: textForKey('Calendar'),
+    text: 'calendar',
     icon: <MenuCalendar />,
     href: '/calendar/day',
     hasCounter: false,
@@ -107,7 +108,7 @@ const menuItems = [
     id: 'patients',
     type: 'link',
     roles: [Role.admin, Role.manager, Role.reception],
-    text: textForKey('Patients'),
+    text: 'patients',
     icon: <MenuPatients />,
     href: '/patients',
     hasCounter: false,
@@ -116,7 +117,7 @@ const menuItems = [
     id: 'messages',
     type: 'link',
     roles: [Role.admin, Role.manager],
-    text: textForKey('Messages'),
+    text: 'messages',
     icon: <IconMessages />,
     href: '/messages',
     hasCounter: false,
@@ -125,7 +126,7 @@ const menuItems = [
     id: 'settings',
     type: 'link',
     roles: [Role.admin, Role.manager, Role.reception],
-    text: textForKey('Settings'),
+    text: 'settings',
     icon: <MenuSettings />,
     href: '/settings',
     hasCounter: false,
@@ -134,7 +135,7 @@ const menuItems = [
     id: 'tech_support',
     type: 'button',
     roles: [Role.admin, Role.manager, Role.reception],
-    text: textForKey('tech_support'),
+    text: 'tech_support',
     icon: <IconLiveHelp />,
     href: TECH_SUPPORT_URL,
     hasCounter: false,
@@ -142,6 +143,7 @@ const menuItems = [
 ];
 
 const MainMenu = ({ currentPath, onCreateClinic }) => {
+  const textForKey = useTranslate();
   const buttonRef = useRef(null);
   const dispatch = useDispatch();
   const selectedClinic = useSelector(userClinicSelector);
@@ -156,9 +158,24 @@ const MainMenu = ({ currentPath, onCreateClinic }) => {
   const [techSupportRef, setTechSupportRef] = useState(null);
   const [isClinicsOpen, setIsClinicsOpen] = useState(false);
   const [showTechSupportHelp, setShowTechSupportHelp] = useState(false);
+  const appLanguage = useSelector(appLanguageSelector);
   const [isAnalyticsExpanded, setIsAnalyticsExpanded] = useState(
     currentPath.startsWith('/analytics'),
   );
+
+  const menuItems = useMemo(() => {
+    return rawMenuItems.map((item) => {
+      const translatedItem = { ...item, text: textForKey(item.text) };
+
+      if (item.children?.length > 0) {
+        translatedItem.children = item.children.map((item) => ({
+          ...item,
+          text: textForKey(item.text),
+        }));
+      }
+      return translatedItem;
+    });
+  }, [appLanguage]);
 
   useEffect(() => {
     setIsAnalyticsExpanded(checkIsAnalyticsEnabled());

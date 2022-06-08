@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingButton from 'app/components/common/LoadingButton';
 import WorkDay from 'app/components/common/WorkDay';
 import IconSuccess from 'app/components/icons/iconSuccess';
 import NotificationsContext from 'app/context/notificationsContext';
-import { textForKey } from 'app/utils/localization';
 import onRequestFailed from 'app/utils/onRequestFailed';
 import { updateClinic } from 'middleware/api/clinic';
 import { currentClinicSelector } from 'redux/selectors/appDataSelector';
@@ -12,6 +12,7 @@ import { setCurrentClinic } from 'redux/slices/appDataSlice';
 import styles from './ClinicWorkingHours.module.scss';
 
 const ClinicWorkingHours = () => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
   const clinic = useSelector(currentClinicSelector);
@@ -50,7 +51,7 @@ const ClinicWorkingHours = () => {
       const requestBody = { ...clinic, workdays };
       const response = await updateClinic(requestBody);
       dispatch(setCurrentClinic(response.data));
-      toast.success(textForKey('Saved successfully'));
+      toast.success(textForKey('saved successfully'));
     } catch (error) {
       onRequestFailed(error, toast);
     } finally {
@@ -73,7 +74,7 @@ const ClinicWorkingHours = () => {
 
   return (
     <div className={styles['company-working-hours']}>
-      <span className={styles['form-title']}>{textForKey('Work Hours')}</span>
+      <span className={styles['form-title']}>{textForKey('work hours')}</span>
       <table className={styles['days-wrapper']}>
         <tbody>
           {workdays.map((day, index) => (
@@ -94,7 +95,7 @@ const ClinicWorkingHours = () => {
           isLoading={isLoading}
           disabled={isLoading || !clinic}
         >
-          {textForKey('Save')}
+          {textForKey('save')}
           {!isLoading && <IconSuccess />}
         </LoadingButton>
       </div>

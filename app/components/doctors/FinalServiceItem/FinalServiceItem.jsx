@@ -5,11 +5,12 @@ import IconRemove from '@material-ui/icons/Clear';
 import clsx from 'clsx';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import IconCheckMark from 'app/components/icons/iconCheckMark';
-import { textForKey } from 'app/utils/localization';
 import styles from './FinalServiceItem.module.scss';
 
 const FinalServiceItem = ({ service, canRemove, onRemove }) => {
+  const textForKey = useTranslate();
   const completedDate = useMemo(() => {
     if (!service.completed) {
       return null;
@@ -24,10 +25,10 @@ const FinalServiceItem = ({ service, canRemove, onRemove }) => {
   const serviceName = useMemo(() => {
     let name = service.service.name;
     if (service.tooth != null) {
-      name = `${name} | ${textForKey('tooth', service.tooth)}`;
+      name = `${name} | ${textForKey('tooth', service.tooth.toLowerCase())}`;
     }
     if (service.bracesPlanType) {
-      name = `${name} | ${textForKey(service.bracesPlanType)}`;
+      name = `${name} | ${textForKey(service.bracesPlanType.toLowerCase())}`;
     }
     return name;
   }, [service]);
@@ -41,16 +42,18 @@ const FinalServiceItem = ({ service, canRemove, onRemove }) => {
           </Typography>
           {service.completedBy && (
             <Typography classes={{ root: styles.completedByLabel }}>
-              {textForKey(
-                'completed by',
-                service.completedBy.fullName,
-                completedDate,
-              )}
+              {textForKey('completed by', {
+                completedby: service.completedBy.fullName,
+                date: completedDate,
+              })}
             </Typography>
           )}
           {!service.completed && service.addedBy && (
             <Typography classes={{ root: styles.completedByLabel }}>
-              {textForKey('added by', service.addedBy.fullName, addedDate)}
+              {textForKey('added by', {
+                completedby: service.addedBy.fullName,
+                date: addedDate,
+              })}
             </Typography>
           )}
         </div>

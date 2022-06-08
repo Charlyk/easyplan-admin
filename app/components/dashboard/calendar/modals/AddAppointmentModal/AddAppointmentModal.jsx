@@ -12,6 +12,7 @@ import { Alert } from '@material-ui/lab';
 import orderBy from 'lodash/orderBy';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import EASAutocomplete from 'app/components/common/EASAutocomplete';
 import EASSelect from 'app/components/common/EASSelect';
@@ -20,7 +21,6 @@ import EASTextField from 'app/components/common/EASTextField';
 import EasyDatePicker from 'app/components/common/EasyDatePicker';
 import PatientsSearchField from 'app/components/common/PatientsSearchField';
 import NotificationsContext from 'app/context/notificationsContext';
-import { textForKey } from 'app/utils/localization';
 import {
   getAvailableHours,
   getScheduleDetails,
@@ -71,6 +71,7 @@ const AddAppointmentModal = ({
   schedule,
   onClose,
 }) => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
   const datePickerAnchor = useRef(null);
@@ -155,8 +156,8 @@ const AddAppointmentModal = ({
 
   const modalTitle =
     schedule == null
-      ? `${textForKey('Add appointment')} ${cabinet?.name ?? ''}`
-      : `${textForKey('Edit appointment')} ${cabinet?.name ?? ''}`;
+      ? `${textForKey('add appointment')} ${cabinet?.name ?? ''}`
+      : `${textForKey('edit appointment')} ${cabinet?.name ?? ''}`;
 
   // map services for autocomplete field
   const mappedServices = useMemo(() => {
@@ -514,7 +515,7 @@ const AddAppointmentModal = ({
         <Box display='flex' flexDirection='column' padding='16px'>
           <PatientsSearchField
             onCreatePatient={handleOpenCreateModal}
-            fieldLabel={`${textForKey('Patient')} (${textForKey('required')})`}
+            fieldLabel={`${textForKey('patient')} (${textForKey('required')})`}
             selectedPatient={patient}
             onSelected={handleExistentPatientChange}
           />
@@ -525,8 +526,8 @@ const AddAppointmentModal = ({
               containerClass={styles.simpleField}
               options={doctors}
               value={doctor}
-              fieldLabel={`${textForKey('Doctor')} (${textForKey('required')})`}
-              placeholder={textForKey('Enter doctor name or phone')}
+              fieldLabel={`${textForKey('doctor')} (${textForKey('required')})`}
+              placeholder={textForKey('enter doctor name or phone')}
               onChange={handleDoctorChange}
             />
           )}
@@ -551,8 +552,8 @@ const AddAppointmentModal = ({
             containerClass={styles.simpleField}
             options={mappedServices}
             value={service}
-            fieldLabel={`${textForKey('Service')} (${textForKey('required')})`}
-            placeholder={textForKey('Enter service name')}
+            fieldLabel={`${textForKey('service')} (${textForKey('required')})`}
+            placeholder={textForKey('enter service name')}
             onChange={handleServiceChange}
           />
 
@@ -560,7 +561,7 @@ const AddAppointmentModal = ({
             readOnly
             ref={datePickerAnchor}
             containerClass={styles.simpleField}
-            fieldLabel={`${textForKey('Date')} (${textForKey('required')})`}
+            fieldLabel={`${textForKey('date')} (${textForKey('required')})`}
             value={moment(appointmentDate).format('DD MMMM YYYY')}
             onPointerUp={handleDateFieldClick}
           />
@@ -570,7 +571,7 @@ const AddAppointmentModal = ({
               disabled={availableStartTime.length === 0}
               rootClass={styles.timeSelect}
               value={startTime || ''}
-              label={`${textForKey('Start time')} (${textForKey('required')})`}
+              label={`${textForKey('start time')} (${textForKey('required')})`}
               labelId='start-time-select'
               options={mappedTime(availableStartTime)}
               onChange={handleStartHourChange}
@@ -579,7 +580,7 @@ const AddAppointmentModal = ({
               disabled={availableEndTime.length === 0}
               rootClass={styles.timeSelect}
               value={endTime || ''}
-              label={`${textForKey('End time')} (${textForKey('required')})`}
+              label={`${textForKey('end time')} (${textForKey('required')})`}
               labelId='start-time-select'
               options={mappedTime(availableEndTime)}
               onChange={handleEndHourChange}
@@ -589,7 +590,7 @@ const AddAppointmentModal = ({
           <div>
             <FormControlLabel
               control={<Checkbox checked={isUrgent} />}
-              label={textForKey('Is urgent')}
+              label={textForKey('is urgent')}
               onChange={handleIsUrgentChange}
               classes={{
                 root: styles.urgentCheck,
@@ -604,7 +605,7 @@ const AddAppointmentModal = ({
             rows={4}
             maxRows={6}
             onChange={handleNoteChange}
-            fieldLabel={textForKey('Notes')}
+            fieldLabel={textForKey('notes')}
             maxLength={1000}
           />
           {hoursError && (

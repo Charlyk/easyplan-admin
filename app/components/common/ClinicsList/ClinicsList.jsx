@@ -4,10 +4,10 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch } from 'react-redux';
 import useIsMobileDevice from 'app/hooks/useIsMobileDevice';
 import getClinicUrl from 'app/utils/getClinicUrl';
-import { textForKey } from 'app/utils/localization';
 import { isDev } from 'eas.config';
 import { signOut } from 'middleware/api/auth';
 import { triggerUserLogOut } from 'redux/slices/mainReduxSlice';
@@ -17,6 +17,7 @@ import ClinicItem from './ClinicItem';
 import styles from './ClnicsList.module.scss';
 
 export default function ClinicsList({ user, authToken, isMobile }) {
+  const textForKey = useTranslate();
   const router = useRouter();
   const dispatch = useDispatch();
   const isOnPhone = useIsMobileDevice();
@@ -63,7 +64,7 @@ export default function ClinicsList({ user, authToken, isMobile }) {
   return (
     <div className={styles.clinicsListRoot}>
       <Head>
-        <title>EasyPlan.pro - {textForKey('Select a clinic')}</title>
+        <title>EasyPlan.pro - {textForKey('select a clinic')}</title>
       </Head>
       <ConfirmationModal
         show={showBlockedAccess}
@@ -102,7 +103,7 @@ export default function ClinicsList({ user, authToken, isMobile }) {
           }}
         >
           <Typography className={styles.formTitle}>
-            {textForKey('Select a clinic')}
+            {textForKey('select a clinic')}
           </Typography>
           {user?.clinics?.map((clinic) => (
             <ClinicItem
@@ -113,7 +114,7 @@ export default function ClinicsList({ user, authToken, isMobile }) {
           ))}
           <Box display='flex' width='100%' alignItems='center' mt='1rem'>
             <Button className='positive-button' onPointerUp={handleLogout}>
-              {textForKey('Logout')}
+              {textForKey('logout')}
             </Button>
           </Box>
         </div>

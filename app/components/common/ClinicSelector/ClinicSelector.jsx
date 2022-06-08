@@ -6,9 +6,9 @@ import Popper from '@material-ui/core/Popper';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import IconPlus from 'app/components/icons/iconPlus';
 import IconSuccess from 'app/components/icons/iconSuccess';
-import { textForKey } from 'app/utils/localization';
 import styles from './ClinicSelector.module.scss';
 
 const ClinicSelector = ({
@@ -19,6 +19,7 @@ const ClinicSelector = ({
   onChange,
   currentUser,
 }) => {
+  const textForKey = useTranslate();
   if (!currentUser) return null;
 
   const handleCompanySelected = (company) => {

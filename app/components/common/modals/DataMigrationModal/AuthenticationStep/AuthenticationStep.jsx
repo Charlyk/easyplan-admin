@@ -1,12 +1,12 @@
 import React, { useContext, useReducer } from 'react';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import EASTextField from 'app/components/common/EASTextField';
 import LoadingButton from 'app/components/common/LoadingButton';
 import NotificationsContext from 'app/context/notificationsContext';
 import { YClientAPIUrl } from 'app/utils/constants';
 import generateReducerActions from 'app/utils/generateReducerActions';
-import { textForKey } from 'app/utils/localization';
 import styles from './AuthenticationStep.module.scss';
 
 // const initialState = {
@@ -48,6 +48,7 @@ const reducer = (state, action) => {
 };
 
 const AuthenticationStep = ({ onLogin }) => {
+  const textForKey = useTranslate();
   const toast = useContext(NotificationsContext);
   const [{ username, password, partnerToken, isLoading }, localDispatch] =
     useReducer(reducer, initialState);
@@ -99,26 +100,26 @@ const AuthenticationStep = ({ onLogin }) => {
   return (
     <div className={styles['authentication-step']}>
       <Typography classes={{ root: styles['form-title'] }}>
-        {textForKey('Authenticate with Yclients account')}
+        {textForKey('authenticate with yclients account')}
       </Typography>
       <EASTextField
         type='email'
         containerClass={styles.simpleField}
-        fieldLabel={textForKey('Username')}
+        fieldLabel={textForKey('username')}
         value={username}
         onChange={handleFormChange('username')}
       />
       <EASTextField
         type='password'
         containerClass={styles.simpleField}
-        fieldLabel={textForKey('Password')}
+        fieldLabel={textForKey('password')}
         value={password}
         onChange={handleFormChange('password')}
       />
       <EASTextField
         type='text'
         containerClass={styles.simpleField}
-        fieldLabel={textForKey('Partner token')}
+        fieldLabel={textForKey('partner token')}
         value={partnerToken}
         onChange={handleFormChange('partnerToken')}
       />
@@ -128,7 +129,7 @@ const AuthenticationStep = ({ onLogin }) => {
         disabled={!isFormValid() || isLoading}
         isLoading={isLoading}
       >
-        {textForKey('Login')}
+        {textForKey('login')}
       </LoadingButton>
 
       <Typography classes={{ root: styles['explanation-label'] }}>

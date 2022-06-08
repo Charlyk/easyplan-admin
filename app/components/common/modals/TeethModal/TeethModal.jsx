@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import IconCheckMark from 'app/components/icons/iconCheckMark';
 import { Teeth } from 'app/utils/constants';
-import { textForKey } from 'app/utils/localization';
 import EASModal from '../EASModal';
 import styles from './TeethModal.module.scss';
 
@@ -13,6 +13,7 @@ const bottomLeft = Teeth.filter((item) => item.type === 'bottom-left');
 const bottomRight = Teeth.filter((item) => item.type === 'bottom-right');
 
 const TeethModal = ({ open, service, onClose, onSave }) => {
+  const textForKey = useTranslate();
   const [selectedTeeth, setSelectedTeeth] = useState([]);
 
   useEffect(() => {
@@ -46,10 +47,10 @@ const TeethModal = ({ open, service, onClose, onSave }) => {
       open={open}
       onClose={onClose}
       className={styles.teethModalRoot}
-      primaryBtnText={textForKey('Save')}
+      primaryBtnText={textForKey('save')}
       onPrimaryClick={handleSave}
       onSecondaryClick={onClose}
-      title={`${textForKey('Select teeth for')}: ${service?.name}`}
+      title={`${textForKey('select teeth for')}: ${service?.name}`}
     >
       <div className={styles.teethModalBody}>
         <div className={styles.teethRow}>

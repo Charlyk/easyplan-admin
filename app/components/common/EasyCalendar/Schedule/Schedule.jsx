@@ -6,10 +6,10 @@ import upperFirst from 'lodash/upperFirst';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { useDrag, useDrop } from 'react-dnd';
+import { useTranslate } from 'react-polyglot';
 import { useSelector } from 'react-redux';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { Statuses } from 'app/utils/constants';
-import { textForKey } from 'app/utils/localization';
 import { clinicDoctorsSelector } from 'redux/selectors/appDataSelector';
 import { dragItemTypes } from 'types';
 import styles from './Schedule.module.scss';
@@ -25,6 +25,7 @@ const Schedule = ({
   animatedStatuses,
   onScheduleSelect,
 }) => {
+  const textForKey = useTranslate();
   const [shouldMove, setShouldMove] = useState(false);
   const isPause = schedule.type === 'Pause';
   const highlightTimeout = useRef(-1);
@@ -223,7 +224,7 @@ const Schedule = ({
                     <tr className={styles.infoRow}>
                       <td>
                         <Typography className={styles.infoTitle}>
-                          {textForKey('Doctor')}:
+                          {textForKey('doctor')}:
                         </Typography>
                       </td>
                       <td>
@@ -236,7 +237,7 @@ const Schedule = ({
                   <tr className={styles.infoRow}>
                     <td>
                       <Typography className={styles.infoTitle}>
-                        {textForKey('Service')}:
+                        {textForKey('service')}:
                       </Typography>
                     </td>
                     <td>
@@ -248,7 +249,7 @@ const Schedule = ({
                   <tr className={styles.infoRow}>
                     <td>
                       <Typography className={styles.infoTitle}>
-                        {textForKey('Patient')}:
+                        {textForKey('patient')}:
                       </Typography>
                     </td>
                     <td>
@@ -260,7 +261,7 @@ const Schedule = ({
                   <tr className={styles.infoRow}>
                     <td>
                       <Typography className={styles.infoTitle}>
-                        {textForKey('Status')}:
+                        {textForKey('status')}:
                       </Typography>
                     </td>
                     <td>
@@ -274,13 +275,13 @@ const Schedule = ({
             ) : (
               <div className={styles.pauseWrapper}>
                 <Typography className={styles.pauseLabel}>
-                  {textForKey('Pause')}
+                  {textForKey('pause')}
                 </Typography>
                 <Typography className={styles.commentLabel}>
                   {schedule.comment}
                 </Typography>
                 <Typography className={styles.commentLabel}>
-                  {upperFirst(textForKey('Created by'))}:{' '}
+                  {upperFirst(textForKey('created by'))}:{' '}
                   {schedule.createdByName}
                 </Typography>
               </div>
