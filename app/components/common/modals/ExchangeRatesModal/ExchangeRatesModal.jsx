@@ -13,13 +13,13 @@ import remove from 'lodash/remove';
 import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
 import IconTrash from 'app/components/icons/iconTrash';
 import NotificationsContext from 'app/context/notificationsContext';
 import { Role } from 'app/utils/constants';
-import { textForKey } from 'app/utils/localization';
 import {
   fetchClinicExchangeRates,
   requestUpdateExchangeRates,
@@ -31,6 +31,7 @@ import styles from './ExchangeRates.module.scss';
 import { reducer, initialState, actions } from './ExchangeRatesModal.reducer';
 
 const ExchangeRatesModal = ({ open, currentClinic, currentUser, onClose }) => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
   const updateRates = useSelector(updateExchangeRatesSelector);
@@ -143,7 +144,7 @@ const ExchangeRatesModal = ({ open, currentClinic, currentUser, onClose }) => {
         return { ...item, value: 1 };
       });
       await requestUpdateExchangeRates({ rates: requestBody });
-      toast.success(textForKey('Saved successfully'));
+      toast.success(textForKey('saved successfully'));
       dispatch(setIsExchangeRatesModalOpen(false));
       onClose();
     } catch (error) {
@@ -162,7 +163,7 @@ const ExchangeRatesModal = ({ open, currentClinic, currentUser, onClose }) => {
       paperClass={styles.modalPaper}
       isPositiveLoading={isSaving || isLoading}
       isPositiveDisabled={isLoading || isSaving}
-      title={textForKey('Exchange rate')}
+      title={textForKey('exchange rate')}
       onPrimaryClick={handleSaveRates}
     >
       {!isLoading && (
@@ -170,10 +171,10 @@ const ExchangeRatesModal = ({ open, currentClinic, currentUser, onClose }) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>{textForKey('Currency')}</TableCell>
-                <TableCell>{textForKey('Value')}</TableCell>
-                <TableCell>{textForKey('Clinic currency')}</TableCell>
-                <TableCell>{textForKey('Actions')}</TableCell>
+                <TableCell>{textForKey('currency')}</TableCell>
+                <TableCell>{textForKey('value')}</TableCell>
+                <TableCell>{textForKey('clinic currency')}</TableCell>
+                <TableCell>{textForKey('actions')}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -220,7 +221,7 @@ const ExchangeRatesModal = ({ open, currentClinic, currentUser, onClose }) => {
                     classes={{ root: styles['add-button'] }}
                     onClick={handleAddExchangeRate}
                   >
-                    {textForKey('Add Rate')}
+                    {textForKey('add Rate')}
                   </Button>
                 </TableCell>
               </TableRow>

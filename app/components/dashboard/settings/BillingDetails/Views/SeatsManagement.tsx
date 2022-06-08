@@ -14,10 +14,10 @@ import {
   intervalToDuration,
 } from 'date-fns';
 import { formatInTimeZone, utcToZonedTime } from 'date-fns-tz';
+import { useTranslate } from 'react-polyglot';
 import { useSelector, useDispatch } from 'react-redux';
 import { DateLocales } from 'app/utils/constants';
 import formatAmountWithSymbol from 'app/utils/formatAmountWithSymbol';
-import { textForKey } from 'app/utils/localization';
 import { clinicDoctorsSelector } from 'redux/selectors/appDataSelector';
 import {
   clinicTimeZoneSelector,
@@ -43,6 +43,7 @@ const costOfOneMonthYearPlan = 30;
 const costOfOneMonthMonthPlan = 35;
 
 const SeatsManagement: React.FC<Props> = ({ onCancel }) => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const initialRenderRef = useRef(false);
   const [noOfSeats, setNoOfSeats] = useState('1');
@@ -138,18 +139,16 @@ const SeatsManagement: React.FC<Props> = ({ onCancel }) => {
   const paymentLabel = useMemo(() => {
     const { nextCurrency } = subscription;
     if (isAddingSeats) {
-      return textForKey(
-        'payment_info',
-        formatAmountWithSymbol(totalCharge, nextCurrency),
-        noOfSeats,
-        subscription.totalSeats + parsedNoOfSeats,
-      ) as string;
+      return textForKey('payment_info', {
+        sum: formatAmountWithSymbol(totalCharge, nextCurrency),
+        seats: noOfSeats,
+        totalSeats: subscription.totalSeats + parsedNoOfSeats,
+      });
     } else {
-      return textForKey(
-        'payment_removal',
-        noOfSeats,
-        subscription.totalSeats - parsedNoOfSeats,
-      );
+      return textForKey('payment_removal', {
+        seats: noOfSeats,
+        leftSeats: subscription.totalSeats - parsedNoOfSeats,
+      });
     }
   }, [noOfSeats, costOfOneSeat, totalCharge]);
 
@@ -165,19 +164,20 @@ const SeatsManagement: React.FC<Props> = ({ onCancel }) => {
     } else {
       nextFullAmount = seatCount * costOfOneMonthYearPlan * 12;
     }
-    return textForKey(
-      'next_payment_info',
-      formatAmountWithSymbol(nextFullAmount, nextCurrency),
-      paymentDueString,
-    );
+    return textForKey('next_payment_info', {
+      money: formatAmountWithSymbol(nextFullAmount, nextCurrency),
+      time: paymentDueString,
+    });
   }, [noOfSeats, subscription.nextPayment, subscription.interval]);
 
   const seatRemovalNotice = useMemo(() => {
-    return textForKey('remove_notice', doctors.length) as string;
+    return textForKey('remove_notice', { doctors: doctors.length }) as string;
   }, []);
 
   const seatRemovalTakeEffectNotice = useMemo(() => {
-    return textForKey('removal_date_notice', paymentDueString) as string;
+    return textForKey('removal_date_notice', {
+      date: paymentDueString,
+    });
   }, []);
 
   const taxAndProratiedInfo = useMemo(() => {
@@ -186,11 +186,10 @@ const SeatsManagement: React.FC<Props> = ({ onCancel }) => {
         ? costOfOneMonthMonthPlan
         : costOfOneMonthYearPlan;
 
-    return textForKey(
-      'tax_prorated_info',
-      formatAmountWithSymbol(oneMothPrice, subscription.nextCurrency),
-      timeLeftTillPaymentDue,
-    );
+    return textForKey('tax_prorated_info', {
+      price: formatAmountWithSymbol(oneMothPrice, subscription.nextCurrency),
+      days: timeLeftTillPaymentDue,
+    });
   }, []);
 
   const isSubmitDisabled = useMemo(() => {

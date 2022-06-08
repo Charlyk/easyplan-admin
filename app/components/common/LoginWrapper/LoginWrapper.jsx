@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch } from 'react-redux';
 import AppLogoWhite from 'app/components/icons/AppLogoWhite';
 import NotificationsContext from 'app/context/notificationsContext';
@@ -11,7 +12,6 @@ import useIsMobileDevice from 'app/hooks/useIsMobileDevice';
 import { RestrictedSubdomains } from 'app/utils/constants';
 import getClinicUrl from 'app/utils/getClinicUrl';
 import getRedirectUrlForUser from 'app/utils/getRedirectUrlForUser';
-import { textForKey } from 'app/utils/localization';
 import { appBaseUrl, environment, isDev } from 'eas.config';
 import { loginUser, resetUserPassword, signOut } from 'middleware/api/auth';
 import ConfirmationModal from '../modals/ConfirmationModal';
@@ -34,6 +34,7 @@ export default function LoginWrapper({
   authToken,
   isMobile,
 }) {
+  const textForKey = useTranslate();
   const toast = useContext(NotificationsContext);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -220,7 +221,7 @@ export default function LoginWrapper({
   return (
     <div className={styles.loginFormRoot}>
       <Head>
-        <title>EasyPlan.pro - {textForKey('Authentication')}</title>
+        <title>EasyPlan.pro - {textForKey('authentication')}</title>
       </Head>
       <ConfirmationModal
         show={showBlockedAccess}

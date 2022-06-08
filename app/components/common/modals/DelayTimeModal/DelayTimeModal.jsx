@@ -5,7 +5,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
-import { textForKey } from 'app/utils/localization';
+import { useTranslate } from 'react-polyglot';
 import valueToNumber from 'app/utils/valueToNumber';
 import EASModal from '../EASModal';
 import styles from './DelayTimeModal.module.scss';
@@ -13,6 +13,7 @@ import styles from './DelayTimeModal.module.scss';
 const suggestions = ['5', '10', '15', '20', '25', '30'];
 
 const DelayTimeModal = ({ open, initialTime, onSave, onClose }) => {
+  const textForKey = useTranslate();
   const [value, setValue] = useState(initialTime);
 
   useEffect(() => {
@@ -49,7 +50,7 @@ const DelayTimeModal = ({ open, initialTime, onSave, onClose }) => {
       onClose={onClose}
     >
       <Typography className={styles.fieldLabel}>
-        {textForKey('How long the patient was late')}?
+        {textForKey('how long the patient was late')}?
       </Typography>
       <FormControl variant='outlined' className={styles.formControl}>
         <OutlinedInput

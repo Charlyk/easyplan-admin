@@ -6,9 +6,9 @@ import {
   TextField,
 } from '@easyplanpro/easyplan-components';
 import { Popper, Paper, ClickAwayListener } from '@material-ui/core';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import { PatientSources } from 'app/utils/constants';
-import { textForKey } from 'app/utils/localization';
 import { patientsLoadingSelector } from 'redux/selectors/patientsSelector';
 import { dispatchCreateAppointmentPatient } from 'redux/slices/patientsSlice';
 import { NewPatientPopperProps } from '.';
@@ -28,6 +28,7 @@ const NewPatientPopper: React.FC<NewPatientPopperProps> = ({
   popperRef,
   ...props
 }) => {
+  const textForKey = useTranslate();
   const [formData, setFormData] = useState(blankFormData);
   const dispatch = useDispatch();
   const loading = useSelector(patientsLoadingSelector);

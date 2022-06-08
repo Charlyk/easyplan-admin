@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import Box from '@material-ui/core/Box';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -9,23 +9,9 @@ import { createFilterOptions } from '@material-ui/lab';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
-import { textForKey } from 'app/utils/localization';
+import { useTranslate } from 'react-polyglot';
 import ServiceRow from '../ServiceRow';
 import styles from './ServicesList.module.scss';
-
-const getOptionLabel = (option) => {
-  let name = option.name;
-  if (option.destination != null) {
-    name = `${name} (${textForKey(option.destination)})`;
-  }
-  return name;
-};
-
-const filterOptions = createFilterOptions({
-  matchFrom: 'any',
-  stringify: getOptionLabel,
-  ignoreCase: true,
-});
 
 const ServicesList = ({
   isDebt,
@@ -37,10 +23,25 @@ const ServicesList = ({
   onServiceSelected,
   onServiceDeleted,
 }) => {
+  const textForKey = useTranslate();
   const [autocompleteClearKey, setAutocompleteClearKey] = useState(false);
   const autocompleteInput = (params) => {
     return <TextField {...params} placeholder={textForKey('all services')} />;
   };
+
+  const getOptionLabel = (option) => {
+    let name = option.name;
+    if (option.destination != null) {
+      name = `${name} (${textForKey(option.destination)})`;
+    }
+    return name;
+  };
+
+  const filterOptions = createFilterOptions({
+    matchFrom: 'any',
+    stringify: getOptionLabel,
+    ignoreCase: true,
+  });
 
   const autocompleteOption = (option) => {
     return (
@@ -80,7 +81,7 @@ const ServicesList = ({
   return (
     <Box className={styles.servicesList}>
       <Typography classes={{ root: styles.title }}>
-        {textForKey('Services')}
+        {textForKey('services')}
       </Typography>
       <TableContainer classes={{ root: styles.servicesTableContainer }}>
         <Table classes={{ root: styles.servicesTable }}>

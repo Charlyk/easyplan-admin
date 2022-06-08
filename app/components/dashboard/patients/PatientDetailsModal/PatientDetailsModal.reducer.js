@@ -21,67 +21,67 @@ export const MenuItem = {
 export const MenuItems = [
   {
     id: MenuItem.personalInfo,
-    name: textForKey('Personal info'),
+    name: 'personal info',
     type: 'default',
   },
   {
     id: MenuItem.purchases,
-    name: textForKey('Payments'),
+    name: 'payments',
     type: 'default',
   },
   {
     id: MenuItem.debts,
-    name: textForKey('Debts'),
+    name: 'debts',
     type: 'default',
   },
   {
     id: MenuItem.notes,
-    name: textForKey('Notes'),
+    name: 'notes',
     type: 'default',
   },
   {
     id: MenuItem.appointments,
-    name: textForKey('Appointments'),
+    name: 'appointments',
     type: 'default',
   },
   {
     id: MenuItem.xRay,
-    name: textForKey('X-Ray'),
+    name: 'X-Ray',
     type: 'default',
   },
   {
     id: MenuItem.treatmentPlan,
-    name: textForKey('Appointments notes'),
+    name: 'appointments notes',
     type: 'default',
   },
   {
     id: MenuItem.orthodonticPlan,
-    name: textForKey('Orthodontic plan'),
+    name: 'orthodontic plan',
     type: 'default',
   },
   {
     id: MenuItem.generalTreatmentPlan,
-    name: textForKey('Treatment plan'),
+    name: 'treatment plan',
     type: 'default',
   },
   {
     id: MenuItem.messages,
-    name: textForKey('Messages'),
+    name: 'messages',
     type: 'default',
   },
   {
     id: MenuItem.phoneRecords,
-    name: textForKey('Phone records'),
+    name: 'phone records',
     type: 'default',
   },
   {
     id: MenuItem.history,
-    name: textForKey('History of changes'),
+    name: 'history of changes',
     type: 'default',
   },
   {
     id: MenuItem.delete,
-    name: textForKey('Delete'),
+    name: 'delete',
     type: 'destructive',
   },
 ];

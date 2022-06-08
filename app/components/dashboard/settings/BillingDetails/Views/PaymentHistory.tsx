@@ -8,10 +8,10 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { formatInTimeZone } from 'date-fns-tz';
+import { useTranslate } from 'react-polyglot';
 import { useSelector } from 'react-redux';
 import { DateLocales } from 'app/utils/constants';
 import formattedAmount from 'app/utils/formattedAmount';
-import { textForKey } from 'app/utils/localization';
 import {
   appLanguageSelector,
   clinicTimeZoneSelector,
@@ -20,6 +20,7 @@ import { paymentsInvoicesSelector } from 'redux/selectors/paymentsSelector';
 import styles from './ViewStyles/PaymentHistory.module.scss';
 
 const PaymentHistory = () => {
+  const textForKey = useTranslate();
   const { data, error } = useSelector(paymentsInvoicesSelector);
   const timeZone = useSelector(clinicTimeZoneSelector);
   const appLanguage = useSelector(appLanguageSelector);

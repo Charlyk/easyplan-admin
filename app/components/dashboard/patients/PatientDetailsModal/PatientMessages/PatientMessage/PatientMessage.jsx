@@ -3,15 +3,16 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import { useSelector } from 'react-redux';
 import IconError from 'app/components/icons/iconError';
 import IconPending from 'app/components/icons/IconPending';
 import IconSuccess from 'app/components/icons/iconSuccess';
-import { textForKey } from 'app/utils/localization';
 import { updateSMSMessageStatusSelector } from 'redux/selectors/patientSelector';
 import styles from './PatientMessage.module.scss';
 
 const PatientMessage = ({ message }) => {
+  const textForKey = useTranslate();
   const updateMessage = useSelector(updateSMSMessageStatusSelector);
   const [messageStatus, setMessageStatus] = useState(message.status);
 
@@ -23,7 +24,7 @@ const PatientMessage = ({ message }) => {
 
   const sentByLabel = () => {
     if (message.sentByFirstName == null && message.sentByLastName == null) {
-      return textForKey('System');
+      return textForKey('system');
     }
     return `${message.sentByFirstName} ${message.sentByLastName}`;
   };
@@ -31,13 +32,13 @@ const PatientMessage = ({ message }) => {
   const statusText = () => {
     switch (messageStatus) {
       case 'Success':
-        return textForKey('Delivered successfully');
+        return textForKey('delivered successfully');
       case 'Submit':
-        return textForKey('Pending delivery');
+        return textForKey('pending delivery');
       case 'Failure':
-        return textForKey('Message not delivered');
+        return textForKey('message not delivered');
       default:
-        return textForKey('Unknown delivery status');
+        return textForKey('unknown delivery status');
     }
   };
 
@@ -63,7 +64,7 @@ const PatientMessage = ({ message }) => {
         {message.messageText}
       </Typography>
       <Typography classes={{ root: styles['sent-by-label'] }}>
-        {textForKey('Sent by')}: {sentByLabel()} {textForKey('at')}{' '}
+        {textForKey('sent by')}: {sentByLabel()} {textForKey('at')}{' '}
         {moment(message.created).format('DD.MM.YYYY HH:mm')}
       </Typography>
     </div>

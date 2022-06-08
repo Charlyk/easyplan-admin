@@ -1,7 +1,7 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Image from 'next/image';
-import { textForKey } from 'app/utils/localization';
+import { useTranslate } from 'react-polyglot';
 import homeProfile from 'public/howto/moizvonki/home-profile.png';
 import homeSettings from 'public/howto/moizvonki/home-settings.png';
 import homePage from 'public/howto/moizvonki/home.png';
@@ -12,6 +12,7 @@ import SupportArticles from '../SupportArticles';
 import styles from './MoizvonkiTutorial.module.scss';
 
 const MoizvonkiTutorial: React.FC = () => {
+  const textForKey = useTranslate();
   return (
     <SupportArticles>
       <div className={styles.moizvonkiTutorial}>

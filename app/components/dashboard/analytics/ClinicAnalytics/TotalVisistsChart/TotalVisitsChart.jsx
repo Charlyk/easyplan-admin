@@ -3,13 +3,14 @@ import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import IconClose from 'app/components/icons/iconClose';
 import formattedNumber from 'app/utils/formattedNumber';
-import { textForKey } from 'app/utils/localization';
 import { ChartType } from 'types/ChartType.type';
 import styles from './TotalVisitsChart.module.scss';
 
 const TotalVisitsChart = ({ visits, removeable, onClose, visible = true }) => {
+  const textForKey = useTranslate();
   if (!visible || visits == null) {
     return null;
   }

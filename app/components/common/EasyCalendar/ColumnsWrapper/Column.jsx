@@ -5,11 +5,11 @@ import { extendMoment } from 'moment-range';
 import Moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { useDrop } from 'react-dnd';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import IconUmbrella from 'app/components/icons/iconUmbrella';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import createContainerHours from 'app/utils/createContainerHours';
-import { textForKey } from 'app/utils/localization';
 import { clinicDoctorsSelector } from 'redux/selectors/appDataSelector';
 import { calendarViewModeSelector } from 'redux/selectors/scheduleSelector';
 import { requestUpdateScheduleDateAndDoctor } from 'redux/slices/calendarData';
@@ -32,6 +32,7 @@ const Column = ({
   onAddSchedule,
   onScheduleSelected,
 }) => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const hoursContainers = createContainerHours(hours);
   const handleAddSchedule = (startHour, endHour) => {

@@ -4,10 +4,11 @@ import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { textForKey } from 'app/utils/localization';
+import { useTranslate } from 'react-polyglot';
 import styles from './SupportArticles.module.scss';
 
 const SupportArticles: React.FC = ({ children }) => {
+  const textForKey = useTranslate();
   const router = useRouter();
   return (
     <div className={styles.supportArticles}>

@@ -3,14 +3,15 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import IconAppointmentCalendar from 'app/components/icons/iconAppointmentCalendar';
 import IconAppointmentClock from 'app/components/icons/iconAppointmentClock';
 import { Statuses } from 'app/utils/constants';
-import { textForKey } from 'app/utils/localization';
 import { baseApiUrl } from 'eas.config';
 import styles from './Appointment.module.scss';
 
 const Appointment = ({ appointment }) => {
+  const textForKey = useTranslate();
   const scheduleDate = moment(appointment.dateAndTime);
   const { service, clinic, doctor } = appointment;
   const status = Statuses.find((item) => item.id === appointment.status);
@@ -19,19 +20,19 @@ const Appointment = ({ appointment }) => {
       <div className={styles.appointmentInfo}>
         <div className={styles.appointmentInfoRow}>
           <div className={styles.appointmentInfoTitle}>
-            {textForKey('Doctor')}:
+            {textForKey('doctor')}:
           </div>
           <div>{doctor.fullName}</div>
         </div>
         <div className={styles.appointmentInfoRow}>
           <div className={styles.appointmentInfoTitle}>
-            {textForKey('Services')}:
+            {textForKey('services')}:
           </div>
           <div>{service.name}</div>
         </div>
         <div className={styles.appointmentInfoRow}>
           <div className={styles.appointmentInfoTitle}>
-            {textForKey('Clinic')}:
+            {textForKey('clinic')}:
           </div>
           <div>{clinic.clinicName}</div>
         </div>
@@ -74,7 +75,7 @@ const Appointment = ({ appointment }) => {
             rel='noreferrer'
           >
             <span className={styles.printLabel}>
-              {textForKey('Print receipt')}
+              {textForKey('print receipt')}
             </span>
           </a>
         )}

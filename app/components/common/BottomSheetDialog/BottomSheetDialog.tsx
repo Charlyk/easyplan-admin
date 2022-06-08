@@ -9,7 +9,7 @@ import Slide from '@material-ui/core/Slide';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
-import { textForKey } from 'app/utils/localization';
+import { useTranslate } from 'react-polyglot';
 import styles from './BottomSheetDialog.module.scss';
 
 const Transition = React.forwardRef<unknown, SlideProps>(function Transition(
@@ -39,6 +39,7 @@ const BottomSheetDialog: React.FC<BottomSheetDialogProps> = ({
   onClose,
   onSave,
 }) => {
+  const textForKey = useTranslate();
   const handleClose = () => {
     onClose?.();
   };

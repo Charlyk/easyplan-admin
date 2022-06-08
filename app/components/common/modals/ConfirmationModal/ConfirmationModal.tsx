@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
-import { textForKey } from 'app/utils/localization';
+import { useTranslate } from 'react-polyglot';
 import EASModal from '../EASModal';
 import styles from './ConfirmationModal.module.scss';
 
@@ -21,11 +21,17 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   title,
   message,
   isLoading,
-  primaryBtnText = textForKey('Confirm'),
+  primaryBtnText,
   onConfirm,
   onClose,
-  secondaryBtnText = textForKey('cancel_schedule'),
+  secondaryBtnText,
 }) => {
+  const textForKey = useTranslate();
+  const [primaryButtonText] = useState(primaryBtnText ?? textForKey('confirm'));
+  const [secondaryButtonText] = useState(
+    secondaryBtnText ?? textForKey('cancel_schedule'),
+  );
+
   return (
     <EASModal
       open={show}
@@ -37,8 +43,8 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
       hidePositiveBtn={onConfirm == null}
       isPositiveLoading={isLoading}
       className={styles['confirmation-modal']}
-      primaryBtnText={primaryBtnText}
-      secondaryBtnText={secondaryBtnText}
+      primaryBtnText={primaryButtonText}
+      secondaryBtnText={secondaryButtonText}
       size='small'
     >
       <Box padding='16px'>

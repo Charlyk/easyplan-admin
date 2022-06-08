@@ -10,15 +10,16 @@ import FailedCallIcon from '@material-ui/icons/CallMissed';
 import IncomeCallIcon from '@material-ui/icons/CallReceived';
 import CloudDownload from '@material-ui/icons/CloudDownload';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import PhoneCallItem from 'app/components/crm/DealDetails/RightContainer/DealHistory/PhoneCallItem';
-import { textForKey } from 'app/utils/localization';
 import { playPhoneCallRecord } from 'redux/slices/mainReduxSlice';
 import styles from './PatientPhoneRecords.module.scss';
 import { dispatchFetchCallRecords } from './PatientPhoneRecords.reducer';
 import { patientPhoneRecordsSelector } from './PatientPhoneRecords.selector';
 
 const RecordItem = ({ record, onDownload }) => {
+  const textForKey = useTranslate();
   const callIcon = useMemo(() => {
     switch (record.direction) {
       case 'Incoming':
@@ -47,13 +48,13 @@ const RecordItem = ({ record, onDownload }) => {
           </Typography>
           <Box flex='1' display='flex'>
             <Typography classes={{ root: styles.operatorLabel }}>
-              {textForKey('Operator')}: {record.destination};
+              {textForKey('operator')}: {record.destination.toLowerCase()};
             </Typography>
             <Typography classes={{ root: styles.operatorLabel }}>
-              {textForKey('Status')}: {textForKey(record.status)};
+              {textForKey('status')}: {textForKey(record.status.toLowerCase())};
             </Typography>
             <Typography classes={{ root: styles.operatorLabel }}>
-              {textForKey('Duration')}: {record.duration}s;
+              {textForKey('duration')}: {record.duration.toLocaleString()}s;
             </Typography>
           </Box>
         </Box>
@@ -69,6 +70,7 @@ const RecordItem = ({ record, onDownload }) => {
 };
 
 const PatientPhoneRecords = ({ patient }) => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const { isFetching, records } = useSelector(patientPhoneRecordsSelector);
   const [page, setPage] = useState(0);
@@ -109,14 +111,14 @@ const PatientPhoneRecords = ({ patient }) => {
   return (
     <div className={styles.phoneRecordsRoot}>
       <Typography classes={{ root: 'title-label' }}>
-        {textForKey('Phone records')}
+        {textForKey('phone records')}
       </Typography>
       {isFetching && (
         <CircularProgress classes={{ root: 'circular-progress-bar' }} />
       )}
       {records.length === 0 && !isFetching && (
         <Typography classes={{ root: 'no-data-label' }}>
-          {textForKey('No data here yet')} :(
+          {textForKey('no data here yet')} :(
         </Typography>
       )}
       <div className={styles.recordsWrapper}>
@@ -140,7 +142,7 @@ const PatientPhoneRecords = ({ patient }) => {
           }}
           onClick={handlePrevClick}
         >
-          {textForKey('Previous')}
+          {textForKey('previous')}
         </Button>
         <Button
           variant='outlined'
@@ -153,7 +155,7 @@ const PatientPhoneRecords = ({ patient }) => {
           }}
           onClick={handleNextClick}
         >
-          {textForKey('Next')}
+          {textForKey('next')}
         </Button>
       </div>
     </div>

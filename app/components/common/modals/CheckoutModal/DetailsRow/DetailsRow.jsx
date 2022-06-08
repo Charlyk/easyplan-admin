@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { textForKey } from 'app/utils/localization';
+import { useTranslate } from 'react-polyglot';
 import styles from './DetailsRow.module.scss';
 
 const DetailsRow = ({
@@ -24,6 +24,7 @@ const DetailsRow = ({
   onSearch,
   onValueSelected,
 }) => {
+  const textForKey = useTranslate();
   const handleValueClick = () => {
     if (!clickableValue) {
       return;
@@ -105,8 +106,8 @@ const DetailsRow = ({
             }}
             noOptionsText={
               searchable
-                ? textForKey('Type to search')
-                : textForKey('No options')
+                ? textForKey('type to search')
+                : textForKey('no options')
             }
             loading={isLoading}
             onInputChange={onSearch}

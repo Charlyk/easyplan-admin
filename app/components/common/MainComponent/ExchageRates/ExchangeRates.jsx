@@ -8,10 +8,10 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import formattedAmount from 'app/utils/formattedAmount';
-import { textForKey } from 'app/utils/localization';
 import { setIsExchangeRatesModalOpen } from 'redux/actions/exchangeRatesActions';
 import { clinicCurrencySelector } from 'redux/selectors/appDataSelector';
 import { updateExchangeRatesSelector } from 'redux/selectors/rootSelector';
@@ -20,6 +20,7 @@ import { exchangeRatesSelector } from './ExchangeRates.selector';
 import { fetchExchangeRatesList } from './ExchangeRates.slice';
 
 const ExchangeRates = ({ canEdit }) => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const { rates, isFetching: isLoading } = useSelector(exchangeRatesSelector);
   const clinicCurrency = useSelector(clinicCurrencySelector);
@@ -53,7 +54,7 @@ const ExchangeRates = ({ canEdit }) => {
     >
       {!isLoading && (
         <Typography className={styles.titleLabel}>
-          {textForKey('Exchange rate')}
+          {textForKey('exchange rate')}
         </Typography>
       )}
       {!isLoading ? (
@@ -89,7 +90,7 @@ const ExchangeRates = ({ canEdit }) => {
           className={styles.editButton}
           onPointerUp={handleOpenExchangeRatesModal}
         >
-          {textForKey('Edit')}
+          {textForKey('edit')}
         </Button>
       )}
     </div>

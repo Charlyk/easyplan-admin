@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import IconButton from '@material-ui/core/IconButton';
@@ -6,9 +6,9 @@ import Modal from '@material-ui/core/Modal';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
+import { useTranslate } from 'react-polyglot';
 import IconClose from 'app/components/icons/iconClose';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
-import { textForKey } from 'app/utils/localization';
 import styles from './EASModal.module.scss';
 
 interface Props {
@@ -39,9 +39,9 @@ const EASModal: React.FC<Props> = ({
   open,
   title,
   size = 'small',
-  destroyBtnText = textForKey('Delete'),
-  primaryBtnText = textForKey('Save'),
-  secondaryBtnText = textForKey('Close'),
+  destroyBtnText,
+  primaryBtnText,
+  secondaryBtnText,
   hidePositiveBtn,
   isPositiveLoading,
   isPositiveDisabled,
@@ -57,6 +57,13 @@ const EASModal: React.FC<Props> = ({
   onSecondaryClick,
   onBackdropClick,
 }) => {
+  const textForKey = useTranslate();
+  const [destroyButtonText] = useState(destroyBtnText ?? textForKey('delete'));
+  const [primaryButtonText] = useState(primaryBtnText ?? textForKey('save'));
+  const [secondaryButtonText] = useState(
+    secondaryBtnText ?? textForKey('close'),
+  );
+
   const showDestroyBtn = typeof onDestroyClick === 'function';
 
   const handleCloseModal = (event) => {
@@ -133,7 +140,7 @@ const EASModal: React.FC<Props> = ({
               onClick={handleSecondaryClick}
               variant='text'
             >
-              {secondaryBtnText}
+              {secondaryButtonText}
             </Button>
           )}
           {!isPositiveLoading && showDestroyBtn && (
@@ -150,7 +157,7 @@ const EASModal: React.FC<Props> = ({
                 disabled: styles.buttonDisabled,
               }}
             >
-              {destroyBtnText}
+              {destroyButtonText}
             </Button>
           )}
           {!hidePositiveBtn && (
@@ -168,7 +175,7 @@ const EASModal: React.FC<Props> = ({
                   className={clsx('circular-progress-bar', styles.progressBar)}
                 />
               ) : (
-                primaryBtnText
+                primaryButtonText
               )}
             </Button>
           )}

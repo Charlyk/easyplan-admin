@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import orderBy from 'lodash/orderBy';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import { Role } from 'app/utils/constants';
-import { textForKey } from 'app/utils/localization';
 import DoctorBracesSettings from '../DoctorBracesSettings';
 import DoctorCabinets from '../DoctorCabinets';
 import DoctorHolidays from '../DoctorHolidays';
@@ -19,6 +19,8 @@ const DoctorForm = ({
   onCreateHoliday,
   onDeleteHoliday,
 }) => {
+  const textForKey = useTranslate();
+
   const handleServicesChange = (services) => {
     onChange({ services });
   };
@@ -51,7 +53,7 @@ const DoctorForm = ({
       <div className={styles.group}>
         <div className={styles.groupHeader}>
           <div className={styles.titleContainer}>
-            {textForKey('Work hours')}
+            {textForKey('work hours')}
           </div>
         </div>
         <DoctorWorkHours show data={data} onChange={handleWorkDaysChange} />
@@ -59,7 +61,7 @@ const DoctorForm = ({
 
       <div className={styles.group}>
         <div className={styles.groupHeader}>
-          <div className={styles.titleContainer}>{textForKey('Holidays')}</div>
+          <div className={styles.titleContainer}>{textForKey('holidays')}</div>
         </div>
         <DoctorHolidays
           show
@@ -86,7 +88,7 @@ const DoctorForm = ({
 
       <div className={styles.group}>
         <div className={styles.groupHeader}>
-          <div className={styles.titleContainer}>{textForKey('Braces')}</div>
+          <div className={styles.titleContainer}>{textForKey('braces')}</div>
         </div>
         <DoctorBracesSettings
           show
@@ -99,7 +101,7 @@ const DoctorForm = ({
       <div className={styles.group}>
         <div className={styles.groupHeader}>
           <div className={styles.titleContainer}>
-            {textForKey('Provided services')}
+            {textForKey('provided services')}
           </div>
         </div>
         <DoctorServices

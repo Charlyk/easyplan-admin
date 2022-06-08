@@ -8,8 +8,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import dynamic from 'next/dynamic';
+import { useTranslate } from 'react-polyglot';
 import NotificationsContext from 'app/context/notificationsContext';
-import { textForKey } from 'app/utils/localization';
 import {
   deleteMessage,
   getMessages,
@@ -26,6 +26,7 @@ const ConfirmationModal = dynamic(() =>
 const CreateMessageDialog = dynamic(() => import('../CreateMessageDialog'));
 
 const SMSMessages = ({ currentClinic, messages: initialMessages }) => {
+  const textForKey = useTranslate();
   const toast = useContext(NotificationsContext);
   const hasSMSAlias = currentClinic?.smsAlias != null;
   const [
@@ -128,7 +129,7 @@ const SMSMessages = ({ currentClinic, messages: initialMessages }) => {
       />
       {needsDeleteConfirmation && (
         <ConfirmationModal
-          title={textForKey('Delete message')}
+          title={textForKey('delete message')}
           message={textForKey('delete_message_desc')}
           show={needsDeleteConfirmation}
           onConfirm={handleDeleteConfirmed}
@@ -162,10 +163,10 @@ const SMSMessages = ({ currentClinic, messages: initialMessages }) => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>{textForKey('Title')}</TableCell>
-                  <TableCell>{textForKey('Message')}</TableCell>
-                  <TableCell>{textForKey('Message type')}</TableCell>
-                  <TableCell>{textForKey('Send time')}</TableCell>
+                  <TableCell>{textForKey('title')}</TableCell>
+                  <TableCell>{textForKey('message')}</TableCell>
+                  <TableCell>{textForKey('message type')}</TableCell>
+                  <TableCell>{textForKey('send time')}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

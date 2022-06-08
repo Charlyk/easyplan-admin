@@ -1,7 +1,14 @@
-import React, { useContext, useEffect, useReducer, useRef } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useReducer,
+  useRef,
+  useMemo,
+} from 'react';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch } from 'react-redux';
 import EASPhoneInput from 'app/components/common/EASPhoneInput';
 import EASSelect from 'app/components/common/EASSelect';
@@ -11,12 +18,12 @@ import {
   EmailRegex,
   HeaderKeys,
   Languages,
-  PatientSources,
+  PatientSources as rawPatientSources,
 } from 'app/utils/constants';
 import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
-import { textForKey } from 'app/utils/localization';
 import { requestCreatePatient } from 'middleware/api/patients';
 import { toggleUpdatePatients } from 'redux/slices/mainReduxSlice';
+import useMappedValue from '../../../../utils/hooks/useMappedValue';
 import EASModal from '../../../common/modals/EASModal';
 import styles from './CreatePatientModal.module.scss';
 import { reducer, initialState, actions } from './CreatePatientModal.reducer';
@@ -26,6 +33,8 @@ const EasyDatePicker = dynamic(() =>
 );
 
 const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
+  const textForKey = useTranslate();
+  const patientSources = useMappedValue(rawPatientSources);
   const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
   const birthdayPickerAnchor = useRef();
@@ -162,10 +171,10 @@ const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
     <EASModal
       className={styles['create-patient-modal']}
       paperClass={styles.modalPaper}
-      title={textForKey('Create patient')}
+      title={textForKey('create patient')}
       onClose={onClose}
       open={open}
-      primaryBtnText={textForKey('Create')}
+      primaryBtnText={textForKey('create')}
       onPrimaryClick={handleSavePatient}
       isPositiveLoading={isLoading}
       isPositiveDisabled={!isFormValid}
@@ -176,14 +185,14 @@ const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
           <EASTextField
             type='text'
             containerClass={styles.nameField}
-            fieldLabel={textForKey('Last name')}
+            fieldLabel={textForKey('last name')}
             value={lastName}
             onChange={handlePatientLastNameChange}
           />
           <EASTextField
             type='text'
             containerClass={styles.nameField}
-            fieldLabel={textForKey('First name')}
+            fieldLabel={textForKey('first name')}
             value={firstName}
             onChange={handlePatientFirstNameChange}
           />
@@ -191,7 +200,7 @@ const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
 
         <EASPhoneInput
           rootClass={styles.simpleField}
-          fieldLabel={textForKey('Phone number')}
+          fieldLabel={textForKey('phone number')}
           value={`+${phoneCountry?.dialCode}${phoneNumber}`}
           country={phoneCountry.countryCode || 'md'}
           onChange={handlePhoneChange}
@@ -200,7 +209,7 @@ const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
         <EASTextField
           type='email'
           containerClass={styles.simpleField}
-          fieldLabel={textForKey('Email')}
+          fieldLabel={textForKey('email')}
           value={email}
           error={!isEmailFieldValid}
           helperText={
@@ -224,7 +233,7 @@ const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
         <EASTextField
           readOnly
           ref={birthdayPickerAnchor}
-          fieldLabel={textForKey('Birthday')}
+          fieldLabel={textForKey('birthday')}
           value={birthday ? moment(birthday).format('DD MMM YYYY') : ''}
           onPointerUp={handleOpenBirthdayPicker}
         />
@@ -246,7 +255,7 @@ const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
         <EASSelect
           label={textForKey('patient_source')}
           labelId='patient-source-select'
-          options={PatientSources}
+          options={patientSources}
           value={source}
           rootClass={styles.simpleField}
           onChange={handleSourceChange}

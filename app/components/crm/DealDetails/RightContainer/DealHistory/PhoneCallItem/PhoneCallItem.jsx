@@ -7,12 +7,13 @@ import FailedCallIcon from '@material-ui/icons/CallMissed';
 import IncomeCallIcon from '@material-ui/icons/CallReceived';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import formatSeconds from 'app/utils/formatSeconds';
 import getCallRecordUrl from 'app/utils/getCallRecordUrl';
-import { textForKey } from 'app/utils/localization';
 import styles from './PhoneCallItem.module.scss';
 
 const PhoneCallItem = ({ call, onPlayAudio }) => {
+  const textForKey = useTranslate();
   const dateText = useMemo(() => {
     if (call == null) {
       return '-';
@@ -35,11 +36,10 @@ const PhoneCallItem = ({ call, onPlayAudio }) => {
     if (call == null) {
       return '-';
     }
-    return textForKey(
-      'call_direction_with_time',
-      textForKey(`call_${call.direction}`),
-      formatSeconds(call.duration),
-    );
+    return textForKey('call_direction_with_time', {
+      first: textForKey(`call_${call.direction?.toLowerCase()}`),
+      second: formatSeconds(call.duration),
+    });
   }, [call]);
 
   const callIcon = useMemo(() => {
@@ -121,7 +121,7 @@ const PhoneCallItem = ({ call, onPlayAudio }) => {
           </Button>
         </div>
         <Typography className={styles.detailsLabel}>
-          {textForKey(`call_${call.status}`)}
+          {textForKey(`call_${call.status?.toLowerCase()}`)}
         </Typography>
       </div>
     </div>

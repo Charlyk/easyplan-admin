@@ -2,11 +2,11 @@ import React, { useEffect, useMemo, useState } from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import orderBy from 'lodash/orderBy';
+import { useTranslate } from 'react-polyglot';
 import { useSelector } from 'react-redux';
 import EASAutocomplete from 'app/components/common/EASAutocomplete';
 import IconTrash from 'app/components/icons/iconTrash';
 import getServiceName from 'app/utils/getServiceName';
-import { textForKey } from 'app/utils/localization';
 import { clinicServicesSelector } from 'redux/selectors/appDataSelector';
 import {
   detailsModalSelector,
@@ -20,6 +20,7 @@ const IncludedServices: React.FC<IncludedServicesProps> = ({
   showStep,
   onChange,
 }) => {
+  const textForKey = useTranslate();
   const { service } = useSelector(detailsModalSelector);
   const allServices = useSelector(clinicServicesSelector);
   const initialServices = useSelector(serviceDetailsIncludedSelector);
@@ -67,9 +68,9 @@ const IncludedServices: React.FC<IncludedServicesProps> = ({
       <div className={styles.header}>
         <div className={styles.title}>
           {showStep && (
-            <div className={styles.step}>{textForKey('Step 2.')}</div>
+            <div className={styles.step}>{textForKey('step 2.')}</div>
           )}
-          {textForKey('Included services')}
+          {textForKey('included services')}
         </div>
       </div>
       <div className={styles.content}>
@@ -78,7 +79,7 @@ const IncludedServices: React.FC<IncludedServicesProps> = ({
             filterLocally
             clearOnSelect
             value={null}
-            placeholder={textForKey('Enter service name')}
+            placeholder={textForKey('enter service name')}
             options={mappedOptions}
             onChange={handleItemSelected}
             helperText={undefined}

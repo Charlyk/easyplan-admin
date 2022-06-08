@@ -6,10 +6,10 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { Alert } from '@material-ui/lab';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import EASTextField from 'app/components/common/EASTextField';
 import LoadingButton from 'app/components/common/LoadingButton';
 import { EmailRegex } from 'app/utils/constants';
-import { textForKey } from 'app/utils/localization';
 import styles from './LoginForm.module.scss';
 
 const LoginForm = ({
@@ -21,6 +21,7 @@ const LoginForm = ({
   onLogin,
   onChange,
 }) => {
+  const textForKey = useTranslate();
   const [data, setData] = useState({ email: '', password: '' });
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const isEmailValid = data.email.length === 0 || data.email.match(EmailRegex);
@@ -65,7 +66,7 @@ const LoginForm = ({
     >
       <span className='welcome-text'>{textForKey('Welcome to EasyPlan')}</span>
       <span className='form-title' style={{ marginBottom: '1rem' }}>
-        {textForKey('Log in to your account')}
+        {textForKey('log in to your account')}
       </span>
       <form onSubmit={handleLogin}>
         <EASTextField
@@ -74,7 +75,7 @@ const LoginForm = ({
           error={!isEmailValid}
           type='email'
           containerClass={styles.fieldContainer}
-          fieldLabel={textForKey('Email')}
+          fieldLabel={textForKey('email')}
           onChange={handleEmailChange}
         />
 
@@ -84,7 +85,7 @@ const LoginForm = ({
             value={data.password}
             containerClass={clsx(styles.fieldContainer, styles.password)}
             type={isPasswordVisible ? 'text' : 'password'}
-            fieldLabel={textForKey('Password')}
+            fieldLabel={textForKey('password')}
             onChange={handlePasswordChange}
             endAdornment={
               <IconButton
@@ -96,7 +97,7 @@ const LoginForm = ({
             }
           />
           <Box className={styles.forgotButton} onClick={onResetPassword}>
-            {textForKey('Forgot your password')}?
+            {textForKey('forgot your password')}?
           </Box>
         </div>
 
@@ -107,9 +108,9 @@ const LoginForm = ({
           }}
         >
           <div className={styles.footerSignUp}>
-            <span className='text'>{textForKey("Don't have an account")}?</span>
+            <span className='text'>{textForKey("don't have an account")}?</span>
             <Box className={styles.signUpBtn} onClick={onSignUp}>
-              {textForKey('Sign Up')}
+              {textForKey('sign Up')}
             </Box>
           </div>
           <LoadingButton
@@ -123,7 +124,7 @@ const LoginForm = ({
               minWidth: isMobile ? 'unset' : '8rem',
             }}
           >
-            {textForKey('Login')}
+            {textForKey('login')}
           </LoadingButton>
         </div>
         {errorMessage && (

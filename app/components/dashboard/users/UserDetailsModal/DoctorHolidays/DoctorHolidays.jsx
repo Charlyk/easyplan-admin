@@ -4,13 +4,14 @@ import Button from '@material-ui/core/Button';
 import clsx from 'clsx';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import IconDelete from 'app/components/icons/iconDelete';
 import IconEdit from 'app/components/icons/iconEdit';
 import IconUmbrella from 'app/components/icons/iconUmbrella';
-import { textForKey } from 'app/utils/localization';
 import styles from './DoctorHolidays.module.scss';
 
 const DoctorHoliday = ({ holiday, onEdit, onDelete }) => {
+  const textForKey = useTranslate();
   return (
     <div className={styles.holiday}>
       <IconUmbrella />
@@ -22,7 +23,7 @@ const DoctorHoliday = ({ holiday, onEdit, onDelete }) => {
         <div className={styles.description}>
           {holiday.description?.length > 0
             ? holiday.description
-            : textForKey('No description')}
+            : textForKey('no description')}
         </div>
       </div>
       <Box className={styles.edit} onClick={() => onEdit(holiday)}>
@@ -36,6 +37,7 @@ const DoctorHoliday = ({ holiday, onEdit, onDelete }) => {
 };
 
 const DoctorHolidays = (props) => {
+  const textForKey = useTranslate();
   const { show, data, onCreateOrUpdate, onDeleteHoliday } = props;
   const classes = clsx(
     styles.doctorHolidays,
@@ -52,7 +54,7 @@ const DoctorHolidays = (props) => {
           }}
           onClick={() => onCreateOrUpdate(null)}
         >
-          {textForKey('Add holiday')}
+          {textForKey('add holiday')}
         </Button>
       </div>
       {data.holidays.map((holiday, index) => (

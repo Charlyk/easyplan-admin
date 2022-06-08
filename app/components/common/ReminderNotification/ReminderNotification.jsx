@@ -2,11 +2,12 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import upperFirst from 'lodash/upperFirst';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import getReminderTexts from 'app/utils/getReminderTexts';
-import { textForKey } from 'app/utils/localization';
 import styles from './ReminderNotification.module.scss';
 
 const ReminderNotification = ({ reminder, isUpdate }) => {
+  const textForKey = useTranslate();
   const { timeText, createdByName } = getReminderTexts(reminder);
   return (
     <div className={styles.reminderNotification}>
@@ -14,7 +15,7 @@ const ReminderNotification = ({ reminder, isUpdate }) => {
         {textForKey(isUpdate ? 'reminder_updated' : 'crm_new_reminder')}
       </Typography>
       <Typography className={styles.createdLabel}>
-        {upperFirst(textForKey('Created by'))}: {createdByName}
+        {upperFirst(textForKey('created by'))}: {createdByName}
       </Typography>
       <Typography className={styles.timeLabel}>{timeText}</Typography>
       <Typography className={styles.typeLabel}>

@@ -9,9 +9,9 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import debounce from 'lodash/debounce';
 import sortBy from 'lodash/sortBy';
+import { useTranslate } from 'react-polyglot';
 import NotificationsContext from 'app/context/notificationsContext';
 import { WebRegex } from 'app/utils/constants';
-import { textForKey } from 'app/utils/localization';
 import {
   checkDomainAvailability,
   clinicTimeZones,
@@ -45,6 +45,7 @@ const CreateClinicForm = ({
   onGoBack,
   onSubmit,
 }) => {
+  const textForKey = useTranslate();
   const toast = useContext(NotificationsContext);
   const [
     {
@@ -205,14 +206,14 @@ const CreateClinicForm = ({
         width: isMobile ? 'calc(90% - 2rem)' : 'calc(70% - 4rem)',
       }}
     >
-      <span className={styles.formTitle}>{textForKey('Create clinic')}</span>
+      <span className={styles.formTitle}>{textForKey('create clinic')}</span>
       <form onSubmit={handleSubmitForm}>
         <UploadAvatar currentAvatar={logoFile} onChange={handleLogoChange} />
 
         <EASTextField
           type='text'
           containerClass={styles.textField}
-          fieldLabel={textForKey('Clinic name')}
+          fieldLabel={textForKey('clinic name')}
           value={clinicName}
           onChange={handleNameChange}
           helperText={textForKey('insert_at_least_3_characters')}
@@ -221,7 +222,7 @@ const CreateClinicForm = ({
         <EASTextField
           type='text'
           containerClass={styles.textField}
-          fieldLabel={textForKey('Domain name')}
+          fieldLabel={textForKey('domain name')}
           error={domainName.length > 0 && !isDomainAvailable}
           value={domainName}
           onChange={handleDomainChange}
@@ -235,7 +236,7 @@ const CreateClinicForm = ({
         <EASTextField
           type='text'
           containerClass={styles.textField}
-          fieldLabel={`${textForKey('Website')} (${textForKey(
+          fieldLabel={`${textForKey('website')} (${textForKey(
             'optional',
           ).toLowerCase()})`}
           value={website}
@@ -244,7 +245,7 @@ const CreateClinicForm = ({
 
         <EASSelect
           rootClass={styles.textField}
-          label={textForKey('Country')}
+          label={textForKey('country')}
           labelId='clinic-country-select'
           disabled={countries.length === 0}
           options={mappedCountries}
@@ -254,7 +255,7 @@ const CreateClinicForm = ({
 
         <EASSelect
           rootClass={styles.textField}
-          label={textForKey('Currency')}
+          label={textForKey('currency')}
           labelId='clinic-currency-select'
           disabled={currencies.length === 0}
           value={defaultCurrency}
@@ -264,7 +265,7 @@ const CreateClinicForm = ({
 
         <EASSelect
           rootClass={styles.textField}
-          label={textForKey('Time zone')}
+          label={textForKey('time zone')}
           labelId='time-zone-select'
           disabled={timeZones.length === 0}
           value={timeZone}
@@ -275,7 +276,7 @@ const CreateClinicForm = ({
         <EASTextarea
           type='text'
           containerClass={styles.textField}
-          fieldLabel={`${textForKey('About clinic')} (${textForKey(
+          fieldLabel={`${textForKey('about clinic')} (${textForKey(
             'optional',
           ).toLowerCase()})`}
           value={description}
@@ -285,7 +286,7 @@ const CreateClinicForm = ({
         <div className={styles.footer}>
           <Box className={styles.backButton} onClick={handleGoBack}>
             {redirect
-              ? `${textForKey('Already have an account')}?`
+              ? `${textForKey('already have an account')}?`
               : textForKey('go back')}
           </Box>
           <LoadingButton
@@ -295,8 +296,8 @@ const CreateClinicForm = ({
             disabled={!isFormValid}
           >
             {redirect
-              ? textForKey('Create new account')
-              : textForKey('Create clinic')}
+              ? textForKey('create new account')
+              : textForKey('create clinic')}
           </LoadingButton>
         </div>
       </form>

@@ -10,17 +10,21 @@ import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
+import { useSelector } from 'react-redux';
 import IconMore from 'app/components/icons/iconMore';
-import { getAppLanguage, textForKey } from 'app/utils/localization';
+import { appLanguageSelector } from 'redux/selectors/appDataSelector';
 import styles from './SMSMessageItem.module.scss';
 
 const SMSMessageItem = ({ message, onEdit, onDisable, onDelete }) => {
+  const textForKey = useTranslate();
   const menuAnchor = useRef(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const appLanguage = useSelector(appLanguageSelector);
 
   const messageText = () => {
     const textObject = JSON.parse(message.messageText);
-    return textObject[getAppLanguage()] || '';
+    return textObject[appLanguage] || '';
   };
 
   const messageTime = () => {
@@ -110,7 +114,7 @@ const SMSMessageItem = ({ message, onEdit, onDisable, onDelete }) => {
           {messageText()}
         </Typography>
       </TableCell>
-      <TableCell>{textForKey(message.messageType)}</TableCell>
+      <TableCell>{textForKey(message.messageType.toLowerCase())}</TableCell>
       <TableCell>{messageTime()}</TableCell>
       <TableCell classes={{ root: styles.actions }}>
         <Box

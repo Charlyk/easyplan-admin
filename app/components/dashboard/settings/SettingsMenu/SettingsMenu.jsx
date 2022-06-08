@@ -1,48 +1,40 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import clsx from 'clsx';
-import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import IconNext from 'app/components/icons/iconNext';
 import { Role } from 'app/utils/constants';
 import { AppLanguages } from 'app/utils/constants';
-import { textForKey } from 'app/utils/localization';
-import { setAppLanguage } from 'app/utils/localization';
 import { appLanguageSelector } from 'redux/selectors/appDataSelector';
 import { dispatchUpdateUserLanguage } from 'redux/slices/appDataSlice';
 import styles from './SettingsMenu.module.scss';
+
 const managersMenuItems = [
-  { name: 'Company Details', url: 'company-details' },
-  { name: 'Application settings', url: 'app-settings' },
+  { name: 'company details', url: 'company-details' },
+  { name: 'application settings', url: 'app-settings' },
   { name: 'crm_settings', url: 'crm-settings' },
-  { name: 'Braces settings', url: 'braces-settings' },
-  { name: 'Working hours', url: 'working-hours' },
+  { name: 'braces settings', url: 'braces-settings' },
+  { name: 'working hours', url: 'working-hours' },
   { name: 'billing_details', url: 'billing-details' },
 ];
 
 const generalMenuItems = [
-  { name: 'Account settings', url: 'account-settings' },
-  { name: 'Security settings', url: 'security-settings' },
+  { name: 'account settings', url: 'account-settings' },
+  { name: 'security settings', url: 'security-settings' },
 ];
 
 const SettingsMenu = ({ onSelect, currentOption, selectedClinic }) => {
-  const router = useRouter();
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const appLanguage = useSelector(appLanguageSelector);
-  const [languageOnRender] = useState(appLanguage);
   const isSelected = (type) => {
     return currentOption === type;
   };
 
-  useEffect(() => {
-    if (appLanguage === languageOnRender) return;
-    router.reload();
-  }, [appLanguage, languageOnRender]);
-
   const handleLanguageButtonClick = (key) => {
-    setAppLanguage(key);
     dispatch(dispatchUpdateUserLanguage(key));
   };
 
@@ -93,13 +85,14 @@ export default SettingsMenu;
 SettingsMenu.propTypes = {
   onSelect: PropTypes.func,
   currentOption: PropTypes.oneOf([
-    'companyDetails',
-    'workingHours',
-    'appSettings',
-    'securitySettings',
-    'accountSettings',
-    'bracesSettings',
-    'crmSettings',
+    'company-details',
+    'working-hours',
+    'app-settings',
+    'security-settings',
+    'account-settings',
+    'braces-settings',
+    'crm-settings',
+    'billing-details',
   ]),
   selectedClinic: PropTypes.shape({
     roleInClinic: PropTypes.string,

@@ -4,11 +4,11 @@ import Typography from '@material-ui/core/Typography';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch } from 'react-redux';
 import AppLogoWhite from 'app/components/icons/AppLogoWhite';
 import NotificationsContext from 'app/context/notificationsContext';
 import useIsMobileDevice from 'app/hooks/useIsMobileDevice';
-import { textForKey } from 'app/utils/localization';
 import { isDev, loginUrl } from 'eas.config';
 import { registerUser } from 'middleware/api/auth';
 import { setAuthenticationData } from 'redux/slices/appDataSlice';
@@ -21,6 +21,7 @@ import reducer, {
 const RegisterForm = dynamic(() => import('./RegisterForm'));
 
 export default function RegistrationWrapper({ isMobile }) {
+  const textForKey = useTranslate();
   const router = useRouter();
   const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
@@ -58,7 +59,7 @@ export default function RegistrationWrapper({ isMobile }) {
   return (
     <div className={styles.registerFormRoot}>
       <Head>
-        <title>EasyPlan.pro - {textForKey('Create new account')}</title>
+        <title>EasyPlan.pro - {textForKey('create new account')}</title>
       </Head>
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       {!isMobileDevice && (

@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { textForKey } from 'app/utils/localization';
+import { useTranslate } from 'react-polyglot';
 import styles from './EASAutocomplete.module.scss';
 
 const EASAutocomplete = ({
@@ -26,6 +26,7 @@ const EASAutocomplete = ({
   onChange,
   onCreateOption,
 }) => {
+  const textForKey = useTranslate();
   const [open, setOpen] = useState(false);
   const [focused, setFocused] = useState(false);
   const [fieldKey, setFieldKey] = useState(1);
@@ -156,7 +157,7 @@ const EASAutocomplete = ({
           renderOption={renderOption}
           getOptionLabel={getOptionLabel}
           getOptionSelected={getOptionSelected}
-          noOptionsText={textForKey('No options')}
+          noOptionsText={textForKey('no options')}
           onChange={handleChange}
           onOpen={() => {
             setOpen(true);

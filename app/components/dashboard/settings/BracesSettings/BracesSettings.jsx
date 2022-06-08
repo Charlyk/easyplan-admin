@@ -1,13 +1,13 @@
 import React, { useContext, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import isEqual from 'lodash/isEqual';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import EASTextField from 'app/components/common/EASTextField';
 import LoadingButton from 'app/components/common/LoadingButton';
 import SwitchButton from 'app/components/common/SwitchButton';
 import IconSuccess from 'app/components/icons/iconSuccess';
 import NotificationsContext from 'app/context/notificationsContext';
-import { textForKey } from 'app/utils/localization';
 import onRequestFailed from 'app/utils/onRequestFailed';
 import { updateClinicBraces } from 'middleware/api/clinic';
 import {
@@ -18,6 +18,7 @@ import { setCurrentClinic } from 'redux/slices/appDataSlice';
 import styles from './BracesSettings.module.scss';
 
 const BracesSettings = () => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
   const braces = useSelector(clinicBracesSelector);
@@ -67,7 +68,7 @@ const BracesSettings = () => {
     try {
       const response = await updateClinicBraces({ services: clinicBraces });
       dispatch(setCurrentClinic(response.data));
-      toast.success(textForKey('Saved successfully'));
+      toast.success(textForKey('saved successfully'));
     } catch (error) {
       onRequestFailed(error, toast);
     } finally {
@@ -78,7 +79,7 @@ const BracesSettings = () => {
   return (
     <div className={styles['braces-settings']}>
       <span className={styles['form-title']}>
-        {textForKey('Braces settings')}
+        {textForKey('braces settings')}
       </span>
       <div className={styles['braces-settings__data-wrapper']}>
         <table>
@@ -87,12 +88,12 @@ const BracesSettings = () => {
               <th width={42} align='center'>
                 {''}
               </th>
-              <th align='left'>{textForKey('Name')}</th>
+              <th align='left'>{textForKey('name')}</th>
               <th width={150} align='right'>
-                {textForKey('Price')}
+                {textForKey('price')}
               </th>
               <th width={150} align='right'>
-                {textForKey('Duration')}
+                {textForKey('duration')}
               </th>
             </tr>
           </thead>
@@ -105,7 +106,7 @@ const BracesSettings = () => {
                     onChange={() => handleItemToggle(item)}
                   />
                 </td>
-                <td>{textForKey(item.name)}</td>
+                <td>{item.name}</td>
                 <td width={150} align='right'>
                   <EASTextField
                     type='number'
@@ -142,7 +143,7 @@ const BracesSettings = () => {
           isLoading={isSaving}
           disabled={isSaving || isEqual(braces, clinicBraces)}
         >
-          {textForKey('Save')}
+          {textForKey('save')}
           <IconSuccess />
         </LoadingButton>
       </div>

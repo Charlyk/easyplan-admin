@@ -4,13 +4,13 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { remove, cloneDeep, isEqual } from 'lodash';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import LeftSideModal from 'app/components/common/LeftSideModal';
 import LoadingButton from 'app/components/common/LoadingButton';
 import IconClose from 'app/components/icons/iconClose';
 import IconSuccess from 'app/components/icons/iconSuccess';
 import NotificationsContext from 'app/context/notificationsContext';
 import { Role } from 'app/utils/constants';
-import { textForKey } from 'app/utils/localization';
 import {
   deleteUserHoliday,
   getUserDetails,
@@ -32,6 +32,7 @@ const CreateHolidayModal = dynamic(() => import('./CreateHolidayModal'));
 const DoctorForm = dynamic(() => import('./DoctorForm'));
 
 const UserDetailsModal = ({ onClose, show, user, currentClinic }) => {
+  const textForKey = useTranslate();
   const toast = useContext(NotificationsContext);
   const [{ isSaving, userData, isCreatingHoliday, isLoading }, localDispatch] =
     useReducer(reducer, initialState);
@@ -179,17 +180,17 @@ const UserDetailsModal = ({ onClose, show, user, currentClinic }) => {
     localDispatch(setIsCreatingHoliday({ open: false, holiday: null }));
   };
 
-  const steps = [textForKey('Users')];
+  const steps = [textForKey('users')];
   if (user != null) {
     steps.push(textForKey(`${user.firstName} ${user.lastName}`));
-    steps.push(textForKey('Edit user'));
+    steps.push(textForKey('edit user'));
   } else {
-    steps.push(textForKey('Add user'));
+    steps.push(textForKey('add user'));
   }
 
   return (
     <LeftSideModal
-      title={user ? textForKey('Edit user') : textForKey('Add user')}
+      title={user ? textForKey('edit user') : textForKey('add user')}
       steps={steps}
       show={show}
       onClose={handleModalClose}
@@ -225,7 +226,7 @@ const UserDetailsModal = ({ onClose, show, user, currentClinic }) => {
             </div>
             <div className={styles.footer}>
               <Button className='cancel-button' onClick={handleModalClose}>
-                {textForKey('Close')}
+                {textForKey('close')}
                 <IconClose />
               </Button>
               <LoadingButton
@@ -234,7 +235,7 @@ const UserDetailsModal = ({ onClose, show, user, currentClinic }) => {
                 disabled={isSaving || isLoading}
                 isLoading={isSaving}
               >
-                {textForKey('Save')}
+                {textForKey('save')}
                 {!isSaving && <IconSuccess />}
               </LoadingButton>
             </div>

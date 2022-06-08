@@ -10,6 +10,7 @@ import { Alert } from '@material-ui/lab';
 import orderBy from 'lodash/orderBy';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import { useSelector } from 'react-redux';
 import EASAutocomplete from 'app/components/common/EASAutocomplete';
 import EASSelect from 'app/components/common/EASSelect';
@@ -18,7 +19,6 @@ import EASTextField from 'app/components/common/EASTextField';
 import EasyDatePicker from 'app/components/common/EasyDatePicker';
 import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
-import { textForKey } from 'app/utils/localization';
 import {
   createPauseRecord,
   deletePauseRecord,
@@ -60,6 +60,7 @@ const AddPauseModal = ({
   comment: defaultComment,
   onClose,
 }) => {
+  const textForKey = useTranslate();
   const toast = useContext(NotificationsContext);
   const datePickerAnchor = useRef(null);
   const clinicDoctors = useSelector(activeClinicDoctorsSelector);
@@ -358,10 +359,10 @@ const AddPauseModal = ({
       open={open}
       paperClass={styles.modalPaper}
       className={styles['add-pause-root']}
-      title={id === null ? textForKey('Add pause') : textForKey('edit_pause')}
+      title={id === null ? textForKey('add pause') : textForKey('edit_pause')}
       onNegativeClick={handleDeletePause}
-      primaryBtnText={textForKey('Save')}
-      secondaryBtnText={textForKey('Close')}
+      primaryBtnText={textForKey('save')}
+      secondaryBtnText={textForKey('close')}
       isPositiveDisabled={!isFormValid() || isLoading || isDeleting}
       onDestroyClick={id != null && handleDeletePause}
       onPrimaryClick={handleCreateSchedule}
@@ -384,15 +385,15 @@ const AddPauseModal = ({
             containerClass={styles.simpleField}
             options={doctors}
             value={doctor}
-            fieldLabel={textForKey('Doctor')}
-            placeholder={textForKey('Enter doctor name or phone')}
+            fieldLabel={textForKey('doctor')}
+            placeholder={textForKey('enter doctor name or phone')}
             onChange={handleDoctorChange}
           />
           <EASTextField
             readOnly
             containerClass={styles.simpleField}
             ref={datePickerAnchor}
-            fieldLabel={textForKey('Date')}
+            fieldLabel={textForKey('date')}
             value={moment(pauseDate).format('DD MMMM YYYY')}
             onPointerUp={handleDateFieldClick}
           />
@@ -400,7 +401,7 @@ const AddPauseModal = ({
             <EASSelect
               id='startTime'
               rootClass={styles.timeSelect}
-              label={textForKey('Start time')}
+              label={textForKey('start time')}
               labelId='start-time-select'
               onChange={handleStartHourChange}
               value={startHour}
@@ -410,7 +411,7 @@ const AddPauseModal = ({
             <EASSelect
               id='endTime'
               rootClass={styles.timeSelect}
-              label={textForKey('End time')}
+              label={textForKey('end time')}
               labelId='end-time-select'
               onChange={handleEndHourChange}
               value={endHour}
@@ -420,7 +421,7 @@ const AddPauseModal = ({
           </div>
 
           <EASTextarea
-            fieldLabel={textForKey('Notes')}
+            fieldLabel={textForKey('notes')}
             value={comment || ''}
             onChange={handleCommentChange}
           />

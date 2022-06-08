@@ -16,9 +16,9 @@ import isEqual from 'lodash/isEqual';
 import Image from 'next/image';
 import PropTypes from 'prop-types';
 import { CSVReader } from 'react-papaparse';
+import { useTranslate } from 'react-polyglot';
 import IconsUploadCSV from 'app/components/icons/iconsUploadCSV';
 import getCSVRowsCount from 'app/utils/getCSVRowsCount';
-import { textForKey } from 'app/utils/localization';
 import EASModal from '../modals/EASModal';
 import styles from './CSVImportModal.module.scss';
 import reducer, {
@@ -43,6 +43,7 @@ const CSVImportModal = ({
   onImport,
   onClose,
 }) => {
+  const textForKey = useTranslate();
   const [{ data, file, mappedFields, snackbar, rowsCount }, localDispatch] =
     useReducer(reducer, initialState);
 
@@ -169,7 +170,7 @@ const CSVImportModal = ({
 
   const renderSelectedFields = (fieldId) => {
     const field = mappedFields.find((item) => item.id === fieldId);
-    return field?.name ?? `${textForKey('Choose match')}...`;
+    return field?.name ?? `${textForKey('choose match')}...`;
   };
 
   const handleSnackbarClose = () => {
@@ -262,7 +263,7 @@ const CSVImportModal = ({
                               className={styles.menuItemRoot}
                             >
                               <Typography className={styles.menuItemText}>
-                                {`${textForKey('Choose match')}...`}
+                                {`${textForKey('choose match')}...`}
                               </Typography>
                             </MenuItem>
                             {fields.map((field) => (

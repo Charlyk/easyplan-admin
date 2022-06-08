@@ -4,11 +4,11 @@ import clsx from 'clsx';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import getDays from 'app/utils/getDays';
-import { textForKey } from 'app/utils/localization';
 import { getPeriodSchedules } from 'middleware/api/schedules';
 import { setIsCalendarLoading } from 'redux/actions/calendar';
 import { updateAppointmentsSelector } from 'redux/selectors/rootSelector';
@@ -17,6 +17,7 @@ import styles from './CalendarMonthView.module.scss';
 const ScheduleItem = dynamic(() => import('./ScheduleItem'));
 
 const CalendarMonthView = ({ viewDate, doctorId, onDateClick }) => {
+  const textForKey = useTranslate();
   const toast = useContext(NotificationsContext);
   const dispatch = useDispatch();
   const updateAppointments = useSelector(updateAppointmentsSelector);

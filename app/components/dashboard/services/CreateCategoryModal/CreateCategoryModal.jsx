@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import EASTextField from 'app/components/common/EASTextField';
 import NotificationsContext from 'app/context/notificationsContext';
-import { textForKey } from 'app/utils/localization';
 import {
   requestCreateCategory,
   requestEditCategory,
@@ -11,6 +11,7 @@ import EASModal from '../../../common/modals/EASModal';
 import styles from './CreateCategoryModal.module.scss';
 
 const CreateCategoryModal = (props) => {
+  const textForKey = useTranslate();
   const toast = useContext(NotificationsContext);
   const { show, onClose, onSaved, category, onDelete, destroyBtnText } = props;
   const [isLoading, setIsLoading] = useState(false);
@@ -71,8 +72,8 @@ const CreateCategoryModal = (props) => {
 
   const getTitle = () => {
     return category?.name?.length > 0
-      ? textForKey('Edit category')
-      : textForKey('Add category');
+      ? textForKey('edit category')
+      : textForKey('add category');
   };
 
   const handleOnDelete = () => {
@@ -100,7 +101,7 @@ const CreateCategoryModal = (props) => {
       <form style={{ padding: '16px' }} onSubmit={handleCategorySave}>
         <EASTextField
           autoFocus
-          fieldLabel={textForKey('Enter category name')}
+          fieldLabel={textForKey('enter category name')}
           value={categoryName}
           onChange={handleCategoryNameChange}
         />

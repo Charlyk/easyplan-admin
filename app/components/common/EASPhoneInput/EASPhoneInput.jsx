@@ -3,8 +3,8 @@ import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import PhoneInput from 'react-phone-input-2';
+import { useTranslate } from 'react-polyglot';
 import isPhoneInputValid from 'app/utils/isPhoneInputValid';
-import { textForKey } from 'app/utils/localization';
 import styles from './EASPhoneInput.module.scss';
 
 const EASPhoneInput = ({
@@ -16,6 +16,7 @@ const EASPhoneInput = ({
   rootClass,
   onChange,
 }) => {
+  const textForKey = useTranslate();
   const [focused, setFocused] = useState(false);
   const [isValid, setIsValid] = useState(true);
 

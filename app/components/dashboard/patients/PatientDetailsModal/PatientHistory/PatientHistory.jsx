@@ -3,13 +3,14 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import Pagination from '@material-ui/lab/Pagination';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import NotificationsContext from 'app/context/notificationsContext';
-import { textForKey } from 'app/utils/localization';
 import { getPatientHistory } from 'middleware/api/patients';
 import HistoryItem from './HistoryItem';
 import styles from './PatientHistory.module.scss';
 
 const PatientHistory = ({ patient, clinic }) => {
+  const textForKey = useTranslate();
   const toast = useContext(NotificationsContext);
   const [isLoading, setIsLoading] = useState(true);
   const [pageData, setPageData] = useState({ page: 1, itemsPerPage: 10 });
@@ -44,11 +45,11 @@ const PatientHistory = ({ patient, clinic }) => {
   return (
     <div className={styles['patient-history']}>
       <Typography classes={{ root: 'title-label' }}>
-        {textForKey('History of changes')}
+        {textForKey('history of changes')}
       </Typography>
       {historyData.data.length === 0 && !isLoading && (
         <Typography classes={{ root: 'no-data-label' }}>
-          {textForKey('No data here yet')} :(
+          {textForKey('no data here yet')} :(
         </Typography>
       )}
       {isLoading && (

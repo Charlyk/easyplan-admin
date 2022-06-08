@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import { useColor } from 'react-color-palette';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch } from 'react-redux';
 import SwitchButton from 'app/components/common/SwitchButton';
-import { textForKey } from 'app/utils/localization';
 import {
   requestAllowDoctorCreateOthersSchedules,
   requestAllowDoctorCreateSchedules,
@@ -24,6 +24,7 @@ interface Props {
 }
 
 const DoctorScheduleCreation: React.FC<Props> = ({ user }) => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const paletteRef = useRef(null);
   const [stateUser, setStateUser] = useState(user);

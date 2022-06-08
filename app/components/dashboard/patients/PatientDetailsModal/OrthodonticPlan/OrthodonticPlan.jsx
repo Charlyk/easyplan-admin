@@ -7,6 +7,7 @@ import clsx from 'clsx';
 import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import { useSelector } from 'react-redux';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextarea from 'app/components/common/EASTextarea';
@@ -15,7 +16,6 @@ import LoadingButton from 'app/components/common/LoadingButton';
 import IconSuccess from 'app/components/icons/iconSuccess';
 import NotificationsContext from 'app/context/notificationsContext';
 import { Role } from 'app/utils/constants';
-import { textForKey } from 'app/utils/localization';
 import {
   clinicBracesServicesSelector,
   clinicEnabledBracesSelector,
@@ -36,34 +36,35 @@ import {
 const molarOptions = [
   {
     id: 1,
-    name: `${textForKey('Molar')} 1`,
+    name: 'molar-1',
   },
   {
     id: 2,
-    name: `${textForKey('Molar')} 2`,
+    name: 'molar-2',
   },
   {
     id: 3,
-    name: `${textForKey('Molar')} 3`,
+    name: 'molar-3',
   },
 ];
 
 const caninOptions = [
   {
     id: 1,
-    name: `${textForKey('Canin')} 1`,
+    name: 'canin-1',
   },
   {
     id: 2,
-    name: `${textForKey('Canin')} 2`,
+    name: 'canin-2',
   },
   {
     id: 3,
-    name: `${textForKey('Canin')} 3`,
+    name: 'canin-3',
   },
 ];
 
 const OrthodonticPlan = ({ patient, scheduleId, onSave }) => {
+  const textForKey = useTranslate();
   const toast = useContext(NotificationsContext);
   const services = useSelector(clinicBracesServicesSelector);
   const braces = useSelector(clinicEnabledBracesSelector);
@@ -272,7 +273,7 @@ const OrthodonticPlan = ({ patient, scheduleId, onSave }) => {
   const classRow = (
     <tr>
       <td valign='top' style={{ paddingTop: '1rem', minWidth: '10rem' }}>
-        <span className={styles.groupSubtitle}>{textForKey('Class')}</span>
+        <span className={styles.groupSubtitle}>{textForKey('class')}</span>
       </td>
       <td valign='top'>
         <div className={styles.optionsContainer}>
@@ -296,7 +297,7 @@ const OrthodonticPlan = ({ patient, scheduleId, onSave }) => {
   const occlusionRow = (
     <tr>
       <td valign='top' style={{ paddingTop: '1rem', minWidth: '10rem' }}>
-        <span className={styles.groupSubtitle}>{textForKey('Occlusion')}</span>
+        <span className={styles.groupSubtitle}>{textForKey('occlusion')}</span>
       </td>
       <td valign='top'>
         <div className={styles.optionsContainer}>
@@ -321,7 +322,7 @@ const OrthodonticPlan = ({ patient, scheduleId, onSave }) => {
     <tr>
       <td valign='top' style={{ paddingTop: '1rem', minWidth: '10rem' }}>
         <span className={styles.groupSubtitle}>
-          {textForKey('Fallen brackets')}
+          {textForKey('fallen brackets')}
         </span>
       </td>
       <td valign='top'>
@@ -346,9 +347,7 @@ const OrthodonticPlan = ({ patient, scheduleId, onSave }) => {
   const radiographRow = (
     <tr>
       <td valign='top' style={{ paddingTop: '1rem', minWidth: '10rem' }}>
-        <span className={styles.groupSubtitle}>
-          {textForKey('Radiografie')}
-        </span>
+        <span className={styles.groupSubtitle}>{textForKey('radiograph')}</span>
       </td>
       <td valign='top'>
         <div className={styles.optionsContainer}>
@@ -372,7 +371,7 @@ const OrthodonticPlan = ({ patient, scheduleId, onSave }) => {
   const bracesRow = (
     <tr>
       <td valign='top' style={{ paddingTop: '1rem', minWidth: '10rem' }}>
-        <span className={styles.groupSubtitle}>{textForKey('Braces')}</span>
+        <span className={styles.groupSubtitle}>{textForKey('braces')}</span>
       </td>
       <td valign='top'>
         <div className={styles.optionsContainer}>
@@ -398,7 +397,7 @@ const OrthodonticPlan = ({ patient, scheduleId, onSave }) => {
     <tr>
       <td valign='top' style={{ paddingTop: '1rem', minWidth: '10rem' }}>
         <span className={styles.groupSubtitle}>
-          {textForKey('Service type')}
+          {textForKey('service type')}
         </span>
       </td>
       <td valign='top'>
@@ -425,7 +424,7 @@ const OrthodonticPlan = ({ patient, scheduleId, onSave }) => {
     <tr>
       <td valign='top' style={{ paddingTop: '1rem', minWidth: '10rem' }}>
         <span className={styles.groupSubtitle}>
-          {textForKey('Angle Class')}
+          {textForKey('angle class')}
         </span>
       </td>
       <td valign='top'>
@@ -436,7 +435,7 @@ const OrthodonticPlan = ({ patient, scheduleId, onSave }) => {
             value={bracketsPlan[planType].angleClasses.molarCaninMolar}
             defaultOption={{
               id: 0,
-              name: `${textForKey('Molar')}...`,
+              name: `${textForKey('molar')}...`,
             }}
             options={molarOptions}
             onChange={handleMolarCaninMolarChange}
@@ -447,7 +446,7 @@ const OrthodonticPlan = ({ patient, scheduleId, onSave }) => {
             value={bracketsPlan[planType].angleClasses.molarCaninCanin}
             defaultOption={{
               id: 0,
-              name: `${textForKey('Canin')}...`,
+              name: `${textForKey('canin')}...`,
             }}
             options={caninOptions}
             onChange={handleMolarCaninCaninChange}
@@ -459,7 +458,7 @@ const OrthodonticPlan = ({ patient, scheduleId, onSave }) => {
             value={bracketsPlan[planType].angleClasses.caninMolarCanin}
             defaultOption={{
               id: 0,
-              name: `${textForKey('Canin')}...`,
+              name: `${textForKey('canin')}...`,
             }}
             options={caninOptions}
             onChange={handleCaninMolarCaninChange}
@@ -470,7 +469,7 @@ const OrthodonticPlan = ({ patient, scheduleId, onSave }) => {
             value={bracketsPlan[planType].angleClasses.caninMolarMolar}
             defaultOption={{
               id: 0,
-              name: `${textForKey('Molar')}...`,
+              name: `${textForKey('molar')}...`,
             }}
             options={molarOptions}
             onChange={handleCaninMolarMolarChange}
@@ -483,7 +482,7 @@ const OrthodonticPlan = ({ patient, scheduleId, onSave }) => {
   return (
     <div className={styles.patientTreatmentPlans}>
       <Typography classes={{ root: 'title-label' }}>
-        {textForKey('Orthodontic plan')}
+        {textForKey('orthodontic plan')}
       </Typography>
       {isLoading && (
         <div className='progress-bar-wrapper'>
@@ -496,12 +495,12 @@ const OrthodonticPlan = ({ patient, scheduleId, onSave }) => {
             <div className={styles.tabsContainer}>
               <EasyTab
                 onClick={() => handlePlanTypeChange(PlanType.mandible)}
-                title={textForKey('Mandible')}
+                title={textForKey('mandible')}
                 selected={planType === PlanType.mandible}
               />
               <EasyTab
                 onClick={() => handlePlanTypeChange(PlanType.maxillary)}
-                title={textForKey('Maxillary')}
+                title={textForKey('maxillary')}
                 selected={planType === PlanType.maxillary}
               />
             </div>
@@ -510,7 +509,7 @@ const OrthodonticPlan = ({ patient, scheduleId, onSave }) => {
                 <tr>
                   <td>
                     <span className={styles.groupTitle}>
-                      {textForKey('Diagnosis')}
+                      {textForKey('diagnosis')}
                     </span>
                   </td>
                 </tr>
@@ -526,7 +525,7 @@ const OrthodonticPlan = ({ patient, scheduleId, onSave }) => {
             <EASTextarea
               disabled={!isDoctor}
               value={bracketsPlan[planType].note}
-              fieldLabel={textForKey('Notes')}
+              fieldLabel={textForKey('notes')}
               rows={4}
               maxRows={5}
               onChange={handleNoteChange}
@@ -541,7 +540,7 @@ const OrthodonticPlan = ({ patient, scheduleId, onSave }) => {
             className='positive-button'
             onClick={handleSaveTreatmentPlan}
           >
-            {textForKey('Save')}
+            {textForKey('save')}
             <IconSuccess />
           </LoadingButton>
         </div>

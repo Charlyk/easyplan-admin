@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useMemo, useReducer } from 'react';
 import sortBy from 'lodash/sortBy';
 import upperFirst from 'lodash/upperFirst';
 import dynamic from 'next/dynamic';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import EASPhoneInput from 'app/components/common/EASPhoneInput';
 import EASSelect from 'app/components/common/EASSelect';
@@ -15,7 +16,6 @@ import IconTrash from 'app/components/icons/iconTrash';
 import NotificationsContext from 'app/context/notificationsContext';
 import { EmailRegex, HeaderKeys } from 'app/utils/constants';
 import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
-import { textForKey } from 'app/utils/localization';
 import onRequestFailed from 'app/utils/onRequestFailed';
 import {
   clinicTimeZones,
@@ -45,6 +45,7 @@ const ConfirmationModal = dynamic(() =>
 );
 
 const CompanyDetailsForm = ({ countries }) => {
+  const textForKey = useTranslate();
   const toast = useContext(NotificationsContext);
   const dispatch = useDispatch();
   const currentClinic = useSelector(currentClinicSelector);
@@ -240,7 +241,7 @@ const CompanyDetailsForm = ({ countries }) => {
         [HeaderKeys.subdomain]: currentClinic.domainName,
       });
       dispatch(setCurrentClinic(response.data));
-      toast.success(textForKey('Saved successfully'));
+      toast.success(textForKey('saved successfully'));
     } catch (error) {
       onRequestFailed(error, toast);
     } finally {
@@ -263,12 +264,12 @@ const CompanyDetailsForm = ({ countries }) => {
       <ConfirmationModal
         show={deleteModal.open}
         isLoading={isDeleting}
-        title={textForKey('Delete clinic')}
+        title={textForKey('delete clinic')}
         message={textForKey('delete_clinic_message')}
         onClose={handleCloseDelete}
         onConfirm={handleConfirmDelete}
       />
-      <span className={styles.formTitle}>{textForKey('Company details')}</span>
+      <span className={styles.formTitle}>{textForKey('company details')}</span>
       <UploadAvatar
         currentAvatar={data.logoFile || logoSrc}
         placeholder={<IconLogoPlaceholder />}
@@ -280,7 +281,7 @@ const CompanyDetailsForm = ({ countries }) => {
           <EASTextField
             type='text'
             containerClass={styles.simpleField}
-            fieldLabel={textForKey('Clinic name')}
+            fieldLabel={textForKey('clinic name')}
             value={data.clinicName}
             onChange={handleClinicNameChange}
           />
@@ -288,7 +289,7 @@ const CompanyDetailsForm = ({ countries }) => {
           <EASTextField
             type='email'
             containerClass={styles.simpleField}
-            fieldLabel={textForKey('Email')}
+            fieldLabel={textForKey('email')}
             value={data.email}
             onChange={handleEmailChange}
           />
@@ -296,7 +297,7 @@ const CompanyDetailsForm = ({ countries }) => {
           <EASPhoneInput
             rootClass={styles.simpleField}
             value={data.phoneNumber || ''}
-            fieldLabel={textForKey('Phone number')}
+            fieldLabel={textForKey('phone number')}
             onChange={handlePhoneChange('phoneNumber')}
             country={phoneCountry}
           />
@@ -304,7 +305,7 @@ const CompanyDetailsForm = ({ countries }) => {
           <EASPhoneInput
             rootClass={styles.simpleField}
             value={data.telegramNumber || ''}
-            fieldLabel={textForKey('Telegram')}
+            fieldLabel={'Telegram'}
             onChange={handlePhoneChange('telegramNumber')}
             country={phoneCountry}
           />
@@ -312,7 +313,7 @@ const CompanyDetailsForm = ({ countries }) => {
           <EASPhoneInput
             rootClass={styles.simpleField}
             value={data.viberNumber || ''}
-            fieldLabel={textForKey('Viber')}
+            fieldLabel={'Viber'}
             onChange={handlePhoneChange('viberNumber')}
             country={phoneCountry}
           />
@@ -320,7 +321,7 @@ const CompanyDetailsForm = ({ countries }) => {
           <EASPhoneInput
             rootClass={styles.simpleField}
             value={data.whatsappNumber || ''}
-            fieldLabel={textForKey('Whatsapp')}
+            fieldLabel={'Whatsapp'}
             onChange={handlePhoneChange('whatsappNumber')}
             country={phoneCountry}
           />
@@ -329,13 +330,13 @@ const CompanyDetailsForm = ({ countries }) => {
           <EASTextField
             type='text'
             containerClass={styles.simpleField}
-            fieldLabel={textForKey('Website')}
+            fieldLabel={'Website'}
             value={data.website || ''}
             onChange={handleWebsiteChange}
           />
 
           <EASSelect
-            label={textForKey('Default currency')}
+            label={textForKey('default currency')}
             labelId='currency-select-label'
             rootClass={styles.simpleField}
             options={data.allCurrencies}
@@ -344,7 +345,7 @@ const CompanyDetailsForm = ({ countries }) => {
           />
 
           <EASSelect
-            label={textForKey('Country')}
+            label={textForKey('country')}
             labelId='country-select-label'
             rootClass={styles.simpleField}
             options={mappedCountries}
@@ -353,7 +354,7 @@ const CompanyDetailsForm = ({ countries }) => {
           />
 
           <EASSelect
-            label={textForKey('Time zone')}
+            label={textForKey('time zone')}
             labelId='time-zone-select-label'
             rootClass={styles.simpleField}
             options={mappedTimeZones}
@@ -366,7 +367,7 @@ const CompanyDetailsForm = ({ countries }) => {
             maxRows={4}
             rows={4}
             containerClass={styles.descriptionTextArea}
-            fieldLabel={textForKey('About clinic')}
+            fieldLabel={textForKey('about clinic')}
             value={data.description}
             onChange={handleDescriptionChange}
           />
@@ -379,7 +380,7 @@ const CompanyDetailsForm = ({ countries }) => {
           className={styles.deleteButton}
           disabled={isDeleting || isSaving}
         >
-          {textForKey('Delete')}
+          {textForKey('delete')}
           <IconTrash />
         </LoadingButton>
         <LoadingButton
@@ -388,7 +389,7 @@ const CompanyDetailsForm = ({ countries }) => {
           className={styles.saveButton}
           disabled={isSaving || !isFormValid()}
         >
-          {textForKey('Save')}
+          {textForKey('save')}
           <IconSuccess />
         </LoadingButton>
       </div>

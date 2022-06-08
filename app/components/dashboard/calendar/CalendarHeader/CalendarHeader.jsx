@@ -11,6 +11,7 @@ import clsx from 'clsx';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch } from 'react-redux';
 import EASTextField from 'app/components/common/EASTextField';
 import EasyDatePicker from 'app/components/common/EasyDatePicker';
@@ -20,7 +21,6 @@ import IconInfo from 'app/components/icons/iconInfo';
 import IconPlus from 'app/components/icons/iconPlus';
 import IconSearch from 'app/components/icons/iconSearch';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
-import { textForKey } from 'app/utils/localization';
 import { updateFilterData } from 'redux/slices/calendarData';
 import styles from './CalendarHeader.module.scss';
 
@@ -43,6 +43,7 @@ const CalendarHeader = ({
   onDateChange,
   onAddAppointment,
 }) => {
+  const textForKey = useTranslate();
   const dispatch = useDispatch();
   const calendarAnchor = useRef(null);
   const legendAnchor = useRef(null);
@@ -142,24 +143,24 @@ const CalendarHeader = ({
           <ArrowRight />
         </IconButton>
         <Button onClick={handleTodayClick} classes={{ root: styles.todayBtn }}>
-          {textForKey('Today')}
+          {textForKey('today')}
         </Button>
       </div>
       {calendarPopper}
       <CalendarLegend open={legendVisible} anchorEl={legendAnchor} />
       <div className={styles.tabs}>
         <EasyTab
-          title={textForKey('Day')}
+          title={textForKey('day')}
           selected={currentTab === CalendarView.day}
           onClick={() => onTabChange(CalendarView.day)}
         />
         <EasyTab
-          title={textForKey('Week')}
+          title={textForKey('week')}
           selected={currentTab === CalendarView.week}
           onClick={() => onTabChange(CalendarView.week)}
         />
         <EasyTab
-          title={textForKey('Month')}
+          title={textForKey('month')}
           selected={currentTab === CalendarView.month}
           onClick={() => onTabChange(CalendarView.month)}
         />
@@ -193,7 +194,7 @@ const CalendarHeader = ({
         <Tooltip
           title={
             <Typography fontSize={11}>
-              {textForKey('Add appointment')}
+              {textForKey('add appointment')}
             </Typography>
           }
           arrow
@@ -211,8 +212,6 @@ const CalendarHeader = ({
     </div>
   );
 };
-
-// {textForKey('Add appointment')}
 
 CalendarHeader.propTypes = {
   dateBtnText: PropTypes.string,

@@ -3,10 +3,10 @@ import { Typography } from '@material-ui/core';
 import { Box } from '@material-ui/core';
 import Checkbox from '@material-ui/core/Checkbox';
 import Link from 'next/link';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch } from 'react-redux';
 import NotificationsContext from 'app/context/notificationsContext';
 import { useSelector } from 'app/hooks/useTypedSelector';
-import { textForKey } from 'app/utils/localization';
 import onRequestFailed from 'app/utils/onRequestFailed';
 import {
   getAllCabinetsInfo,
@@ -24,6 +24,7 @@ interface Props {
 }
 
 const DoctorCabinets: React.FC<Props> = ({ user }) => {
+  const textForKey = useTranslate();
   const clinicCabinets = useSelector(cabinetsSelector);
   const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);

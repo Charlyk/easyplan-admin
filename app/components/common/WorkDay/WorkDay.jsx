@@ -3,13 +3,14 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import { createHoursList, days } from 'app/utils/constants';
-import { textForKey } from 'app/utils/localization';
 import EASSelect from '../EASSelect';
 import SwitchButton from '../SwitchButton';
 import styles from './WorkDay.module.scss';
 
 const WorkDay = ({ day, isFirst, onChange, onApplyToAll }) => {
+  const textForKey = useTranslate();
   const hours = createHoursList();
   const titleClasses = clsx(
     styles.dayTitle,
@@ -57,11 +58,11 @@ const WorkDay = ({ day, isFirst, onChange, onApplyToAll }) => {
         <SwitchButton isChecked={day.selected} onChange={handleDayToggle} />
       </td>
       <td style={{ width: '20%' }}>
-        <div className={titleClasses}>{days[day.day - 1]}</div>
+        <div className={titleClasses}>{textForKey(days[day.day - 1])}</div>
       </td>
       {!day.selected && (
         <td colSpan={4}>
-          <div className={styles.dayOff}>{textForKey('Day off')}</div>
+          <div className={styles.dayOff}>{textForKey('day off')}</div>
         </td>
       )}
       {day.selected && (
@@ -72,7 +73,7 @@ const WorkDay = ({ day, isFirst, onChange, onApplyToAll }) => {
             onChange={handleStartHourChange}
             defaultOption={{
               id: 'none',
-              name: textForKey('Chose...'),
+              name: textForKey('chose...'),
             }}
             options={getMappedHours(hours)}
           />
@@ -93,7 +94,7 @@ const WorkDay = ({ day, isFirst, onChange, onApplyToAll }) => {
             onChange={handleEndHourChange}
             defaultOption={{
               id: 'none',
-              name: textForKey('Chose...'),
+              name: textForKey('chose...'),
             }}
             options={getMappedHours(hours)}
           />
@@ -109,7 +110,7 @@ const WorkDay = ({ day, isFirst, onChange, onApplyToAll }) => {
               !isFirst && styles.hidden,
             )}
           >
-            {textForKey('Apply to all')}
+            {textForKey('apply to all')}
           </Box>
         </td>
       )}

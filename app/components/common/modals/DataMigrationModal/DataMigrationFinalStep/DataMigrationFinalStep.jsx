@@ -2,11 +2,12 @@ import React from 'react';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import LoadingButton from 'app/components/common/LoadingButton';
-import { textForKey } from 'app/utils/localization';
 import styles from './DataMigrationFinalStep.module.scss';
 
 const DataMigrationFinalStep = ({ onStart }) => {
+  const textForKey = useTranslate();
   const handleStartImport = () => {
     onStart();
   };
@@ -19,13 +20,13 @@ const DataMigrationFinalStep = ({ onStart }) => {
       className={styles['import-final-step']}
     >
       <Typography classes={{ root: styles['form-title'] }}>
-        {textForKey('We are ready to start')}!
+        {textForKey('we are ready to start')}!
       </Typography>
       <Typography classes={{ root: styles['import-message'] }}>
         {textForKey('start_migration_message')}
       </Typography>
       <LoadingButton onClick={handleStartImport} className='positive-button'>
-        {textForKey('Start')}
+        {textForKey('start')}
       </LoadingButton>
     </Box>
   );

@@ -10,10 +10,10 @@ import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
+import { useTranslate } from 'react-polyglot';
 import IconMinus from 'app/components/icons/iconMinus';
 import IconPlus from 'app/components/icons/iconPlus';
 import IconTrash from 'app/components/icons/iconTrash';
-import { textForKey } from 'app/utils/localization';
 import styles from './ServiceRow.module.scss';
 
 const ServiceRow = ({
@@ -25,6 +25,7 @@ const ServiceRow = ({
   onChange,
   onDelete,
 }) => {
+  const textForKey = useTranslate();
   const [currency, setCurrency] = useState(service.currency);
   const [price, setPrice] = useState(service.amount);
   const [count, setCount] = useState(service.count);
@@ -68,15 +69,23 @@ const ServiceRow = ({
   const serviceTitle = () => {
     let name = service.name;
     const childIndicator = isChild ? '- ' : '';
-    const group = service.group ? ` | ${textForKey(service.group)}` : '';
+    const group = service.group
+      ? ` | ${textForKey(service.group?.toLowerCase())}`
+      : '';
     if (service.tooth != null) {
-      name = `${childIndicator}${name} | ${textForKey('tooth', service.tooth)}`;
+      name = `${childIndicator}${name} | ${textForKey('tooth', {
+        tooth: service.tooth,
+      })}`;
     }
     if (service.destination != null) {
-      name = `${childIndicator}${name} | ${textForKey(service.destination)}`;
+      name = `${childIndicator}${name} | ${textForKey(
+        service.destination?.toLowerCase(),
+      )}`;
     }
     if (service.bracesPlanType != null) {
-      name = `${childIndicator}${name} | ${textForKey(service.bracesPlanType)}`;
+      name = `${childIndicator}${name} | ${textForKey(
+        service.bracesPlanType?.toLowerCase(),
+      )}`;
     }
     return `${childIndicator}${name}${group}`;
   };

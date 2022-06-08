@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Box from '@material-ui/core/Box';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import EASPhoneInput from 'app/components/common/EASPhoneInput';
 import EASSelect from 'app/components/common/EASSelect';
@@ -7,7 +8,6 @@ import EASTextField from 'app/components/common/EASTextField';
 import EASModal from 'app/components/common/modals/EASModal';
 import { PatientSources } from 'app/utils/constants';
 import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
-import { textForKey } from 'app/utils/localization';
 import {
   arePatientsLoadingSelector,
   createdPatientSelector,
@@ -18,6 +18,7 @@ import {
 } from 'redux/slices/patientsListSlice';
 import { PatientSource } from 'types';
 import { CreatePatientRequest } from 'types/api';
+import useMappedValue from '../../../../../../utils/hooks/useMappedValue';
 import styles from './AppointmentPatient.module.scss';
 import {
   AppointmentPatientProps,
@@ -39,6 +40,8 @@ const AppointmentPatient: React.FC<AppointmentPatientProps> = ({
   onClose,
   onSaved,
 }) => {
+  const textForKey = useTranslate();
+  const mappedPatientSources = useMappedValue(PatientSources);
   const dispatch = useDispatch();
   const createdPatient = useSelector(createdPatientSelector);
   const isLoading = useSelector(arePatientsLoadingSelector);
@@ -132,7 +135,7 @@ const AppointmentPatient: React.FC<AppointmentPatientProps> = ({
       onPrimaryClick={handleSavePatient}
       isPositiveLoading={isLoading}
       isPositiveDisabled={!patientData.isPhoneValid || isLoading}
-      title={textForKey('Create patient')}
+      title={textForKey('create patient')}
     >
       <div className={styles.appointmentPatient}>
         <Box display='flex' flexDirection='column'>
@@ -147,7 +150,7 @@ const AppointmentPatient: React.FC<AppointmentPatientProps> = ({
           />
 
           <EASPhoneInput
-            fieldLabel={textForKey('Phone number')}
+            fieldLabel={textForKey('phone number')}
             rootClass={styles.phoneInput}
             value={patientData.phoneNumber}
             country={patientData.country.countryCode}
@@ -157,7 +160,7 @@ const AppointmentPatient: React.FC<AppointmentPatientProps> = ({
           <EASSelect
             label={textForKey('patient_source')}
             labelId='patient-source-select'
-            options={PatientSources}
+            options={mappedPatientSources}
             value={patientData.source}
             rootClass={styles.simpleField}
             onChange={handlePatientSourceChange}

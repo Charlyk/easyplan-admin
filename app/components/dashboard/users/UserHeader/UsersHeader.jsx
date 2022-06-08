@@ -1,13 +1,14 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import EasyTab from 'app/components/common/EasyTab';
 import IconPlus from 'app/components/icons/iconPlus';
 import { Role } from 'app/utils/constants';
-import { textForKey } from 'app/utils/localization';
 import styles from './UserHeader.module.scss';
 
 const UsersHeader = ({ onFilterChange, filter, onInviteUser }) => {
+  const textForKey = useTranslate();
   const handleTabClick = (tabName) => {
     onFilterChange(tabName);
   };
@@ -16,27 +17,27 @@ const UsersHeader = ({ onFilterChange, filter, onInviteUser }) => {
     <div className={styles['users-header']}>
       <div className={styles['users-header__tabs']}>
         <EasyTab
-          title={textForKey('All')}
+          title={textForKey('all')}
           onClick={() => handleTabClick(Role.all)}
           selected={filter === Role.all}
         />
         <EasyTab
-          title={textForKey('Doctors')}
+          title={textForKey('doctors')}
           onClick={() => handleTabClick(Role.doctor)}
           selected={filter === Role.doctor}
         />
         <EasyTab
-          title={textForKey('Receptionists')}
+          title={textForKey('receptionists')}
           onClick={() => handleTabClick(Role.reception)}
           selected={filter === Role.reception}
         />
         <EasyTab
-          title={textForKey('Administrators')}
+          title={textForKey('administrators')}
           onClick={() => handleTabClick(Role.admin)}
           selected={filter === Role.admin}
         />
         <EasyTab
-          title={textForKey('Invitations')}
+          title={textForKey('invitations')}
           onClick={() => handleTabClick(Role.invitations)}
           selected={filter === Role.invitations}
         />
@@ -48,7 +49,7 @@ const UsersHeader = ({ onFilterChange, filter, onInviteUser }) => {
           }}
           onPointerUp={() => onInviteUser(Role.reception)}
         >
-          {textForKey('Invite user')}
+          {textForKey('invite user')}
           <IconPlus />
         </Button>
       </div>

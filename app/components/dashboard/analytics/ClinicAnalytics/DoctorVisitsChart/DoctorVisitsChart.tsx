@@ -5,8 +5,8 @@ import Typography from '@material-ui/core/Typography';
 import { TooltipItem } from 'chart.js';
 import clsx from 'clsx';
 import { Pie } from 'react-chartjs-2';
+import { useTranslate } from 'react-polyglot';
 import IconClose from 'app/components/icons/iconClose';
-import { textForKey } from 'app/utils/localization';
 import { ChartType } from 'types/ChartType.type';
 import { getDoctorVisitsData } from '../ClinicAnalytics.utils';
 import styles from './DoctorVisitsChart.module.scss';
@@ -18,6 +18,7 @@ const DoctorVisitsChart: React.FC<DoctorVisitsChartProps> = ({
   onClose,
   visible = true,
 }) => {
+  const textForKey = useTranslate();
   const data = useMemo(() => {
     return getDoctorVisitsData(visits);
   }, [visits]);

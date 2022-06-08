@@ -13,12 +13,12 @@ import orderBy from 'lodash/orderBy';
 import sortBy from 'lodash/sortBy';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import IconEdit from 'app/components/icons/iconEdit';
 import IconPlus from 'app/components/icons/iconPlus';
 import NotificationsContext from 'app/context/notificationsContext';
 import { HeaderKeys } from 'app/utils/constants';
-import { textForKey } from 'app/utils/localization';
 import {
   deleteService,
   importServicesFromFile,
@@ -41,6 +41,7 @@ import {
   requestDeleteCategory,
   toggleServiceDeletion,
 } from 'redux/slices/servicesListSlice';
+import useMappedValue from '../../../../utils/hooks/useMappedValue';
 import ServiceRow from '../ServiceRow';
 import styles from './ServicesContainer.module.scss';
 import reducer, {
@@ -66,27 +67,29 @@ const ServiceDetailsModal = dynamic(() => import('../ServiceDetailsModal'));
 const importServicesFields = [
   {
     id: 'serviceName',
-    name: textForKey('Service name'),
+    name: 'service name',
     required: true,
   },
   {
     id: 'duration',
-    name: textForKey('Duration'),
+    name: 'duration',
     required: false,
   },
   {
     id: 'price',
-    name: textForKey('Price'),
+    name: 'price',
     required: false,
   },
   {
     id: 'currency',
-    name: textForKey('Currency'),
+    name: 'currency',
     required: false,
   },
 ];
 
 const ServicesContainer = () => {
+  const textForKey = useTranslate();
+  const mappedImportServicesFields = useMappedValue(importServicesFields);
   const router = useRouter();
   const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
@@ -306,12 +309,12 @@ const ServicesContainer = () => {
       <ServiceDetailsModal />
       <CSVImportModal
         open={showImportModal}
-        title={textForKey('Import services')}
+        title={textForKey('import services')}
         importBtnTitle={textForKey('import_n_services')}
         note={textForKey('import_services_note')}
         iconTitle={textForKey('upload csv file')}
         iconSubtitle={textForKey('n_services_only')}
-        fields={importServicesFields}
+        fields={mappedImportServicesFields}
         onImport={handleImportServices}
         onClose={handleCloseUpload}
       />
@@ -326,8 +329,8 @@ const ServicesContainer = () => {
         }
         message={
           deleteServiceModal.service?.deleted
-            ? textForKey('Are you sure you want to restore this service?')
-            : textForKey('Are you sure you want to delete this service?')
+            ? textForKey('are you sure you want to restore this service?')
+            : textForKey('are you sure you want to delete this service?')
         }
         show={deleteServiceModal.open}
       />
@@ -361,7 +364,7 @@ const ServicesContainer = () => {
                 className={styles['add-btn']}
                 onClick={handleAddOrEditService}
               >
-                {textForKey('Add service')}
+                {textForKey('add service')}
                 <IconPlus fill='#3A83DC' />
               </span>
             </Typography>
@@ -377,14 +380,14 @@ const ServicesContainer = () => {
                 className={styles['add-btn']}
                 onClick={handleCreateCategory}
               >
-                {textForKey('Add category')}
+                {textForKey('add category')}
                 <IconPlus fill='#3A83DC' />
               </span>
             </Typography>
           </div>
         )}
         <div className={styles['tabs-container']}>
-          <Tooltip title={textForKey('Add category')}>
+          <Tooltip title={textForKey('add category')}>
             <Box
               onClick={handleCreateCategory}
               className={styles['services-root__add-tab']}
@@ -406,7 +409,7 @@ const ServicesContainer = () => {
               style={{ outline: 'none', maxHeight: 50, maxWidth: 'unset' }}
               value={-1}
               label={tabLabel(
-                textForKey('All services'),
+                textForKey('all services'),
                 getServicesCount({ id: 'all-services' }),
               )}
             />
@@ -430,7 +433,7 @@ const ServicesContainer = () => {
                       root: clsx(styles['row-label'], styles['title-label']),
                     }}
                   >
-                    {textForKey('Service name')}
+                    {textForKey('service name')}
                   </Typography>
                 </td>
                 <td align='left'>
@@ -439,7 +442,7 @@ const ServicesContainer = () => {
                       root: clsx(styles['row-label'], styles['title-label']),
                     }}
                   >
-                    {textForKey('Description')}
+                    {textForKey('description')}
                   </Typography>
                 </td>
                 <td align='right'>
@@ -448,7 +451,7 @@ const ServicesContainer = () => {
                       root: clsx(styles['row-label'], styles['title-label']),
                     }}
                   >
-                    {textForKey('Duration')}
+                    {textForKey('duration')}
                   </Typography>
                 </td>
                 <td align='right'>
@@ -457,7 +460,7 @@ const ServicesContainer = () => {
                       root: clsx(styles['row-label'], styles['title-label']),
                     }}
                   >
-                    {textForKey('Price')}
+                    {textForKey('price')}
                   </Typography>
                 </td>
                 <td align='right'>
@@ -466,7 +469,7 @@ const ServicesContainer = () => {
                       root: clsx(styles['row-label'], styles['title-label']),
                     }}
                   >
-                    {textForKey('Actions')}
+                    {textForKey('actions')}
                   </Typography>
                 </td>
               </tr>
@@ -497,7 +500,7 @@ const ServicesContainer = () => {
             }}
             onPointerUp={openUploading}
           >
-            {textForKey('Import services')}
+            {textForKey('import services')}
             <UploadIcon />
           </Button>
           <Button
@@ -510,7 +513,7 @@ const ServicesContainer = () => {
             }}
             onPointerUp={handleEditCategory}
           >
-            {textForKey('Edit category')}
+            {textForKey('edit category')}
             <IconEdit />
           </Button>
           <Button
@@ -523,7 +526,7 @@ const ServicesContainer = () => {
             }}
             onPointerUp={handleAddOrEditService}
           >
-            {textForKey('Add service')}
+            {textForKey('add service')}
             <IconPlus fill='#00E987' />
           </Button>
         </div>

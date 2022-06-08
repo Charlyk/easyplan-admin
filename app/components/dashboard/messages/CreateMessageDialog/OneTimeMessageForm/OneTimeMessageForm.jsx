@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 import Typography from '@material-ui/core/Typography';
 import moment from 'moment-timezone';
-import { textForKey } from 'app/utils/localization';
+import { useTranslate } from 'react-polyglot';
 import {
   charactersRegex,
   messageTypeEnum,
@@ -24,6 +24,7 @@ const OneTimeMessageForm = ({
   onMessageChange,
   onLanguageChange,
 }) => {
+  const textForKey = useTranslate();
   const availableTags = tags.filter((item) =>
     item.availableFor.includes(messageTypeEnum.OnetimeMessage),
   );
@@ -97,7 +98,7 @@ const OneTimeMessageForm = ({
     <div className={styles.oneTimeMessageRoot}>
       <div className={styles.formContainer}>
         <Typography className={styles.formTitle}>
-          {textForKey(messageTypeEnum.OnetimeMessage)}
+          {textForKey(messageTypeEnum.OnetimeMessage.toLowerCase())}
         </Typography>
         <MainMessageForm
           hideHour

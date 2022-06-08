@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import IconNext from 'app/components/icons/iconNext';
-import { textForKey } from 'app/utils/localization';
 import styles from '../GeneralAnalytics.module.scss';
 
 const IncomeStatisticItem = ({ title, icon, persons, amount }) => {
+  const textForKey = useTranslate();
   return (
     <div className={styles['income-statistic-item']}>
       <div className={styles['icon-wrapper']}>{icon}</div>
