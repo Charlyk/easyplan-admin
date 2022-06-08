@@ -17,6 +17,7 @@ import {
   SubscriptionStatuses,
 } from 'app/utils/constants';
 import getCallRecordUrl from 'app/utils/getCallRecordUrl';
+import { useAnalytics } from 'app/utils/hooks';
 import rawPaths from 'app/utils/paths';
 import { loginUrl } from 'eas.config';
 import { signOut } from 'middleware/api/auth';
@@ -60,7 +61,6 @@ import {
   toggleImportModal,
   triggerUserLogOut,
 } from 'redux/slices/mainReduxSlice';
-import { useAnalytics } from '../../../utils/hooks';
 import GlobalNotificationView from '../GlobalNotificationView';
 import ReminderNotification from '../ReminderNotification';
 import styles from './MainComponent.module.scss';

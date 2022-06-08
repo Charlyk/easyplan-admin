@@ -283,8 +283,6 @@ const AppointmentDetails = ({
   const serviceName = details?.service?.name || schedule.serviceName;
   const serviceColor = details?.service?.color || schedule.serviceColor;
 
-  console.log(Statuses);
-
   const statusesList = (
     <Popper
       disablePortal
