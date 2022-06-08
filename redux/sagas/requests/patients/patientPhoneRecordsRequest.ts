@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import { getPatientPhoneRecords } from 'middleware/api/patients';
 import { PatientCallRecord } from 'types';
-import { UpdatePatientPhonePayload } from '../../../../types/api';
+import { UpdatePatientPhonePayload } from 'types/api';
 
 export async function requestFetchPatientPhoneRecords(
   patientId: number,

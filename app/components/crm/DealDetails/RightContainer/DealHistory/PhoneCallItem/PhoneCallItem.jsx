@@ -7,13 +7,12 @@ import FailedCallIcon from '@material-ui/icons/CallMissed';
 import IncomeCallIcon from '@material-ui/icons/CallReceived';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
+import { useTranslate } from 'react-polyglot';
 import { useDispatch } from 'react-redux';
 import TextField from 'app/components/common/EASTextField';
-import { useTranslate } from 'react-polyglot';
+import { dispatchUpdateCallRecords } from 'app/components/dashboard/patients/PatientDetailsModal/PatientPhoneRecords/PatientPhoneRecords.reducer';
 import formatSeconds from 'app/utils/formatSeconds';
 import getCallRecordUrl from 'app/utils/getCallRecordUrl';
-import { textForKey } from 'app/utils/localization';
-import { dispatchUpdateCallRecords } from '../../../../../dashboard/patients/PatientDetailsModal/PatientPhoneRecords/PatientPhoneRecords.reducer';
 import styles from './PhoneCallItem.module.scss';
 
 const PhoneCallItem = ({ call, onPlayAudio }) => {
