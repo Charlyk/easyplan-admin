@@ -36,12 +36,12 @@ jobs:
 
 
       - name: Install dependecies
-        uses: borales/actions-yarn@v2.3.0
+        uses: borales/actions-yarn@latest
         with:
           auth-token: ${{ secrets.NPM_AUTH_TOKEN }}
           cmd: install
 
       - name: Build application
-        uses: borales/actions-yarn@v2.3.0
+        uses: borales/actions-yarn@latest
         with:
           cmd: build:testing
