@@ -887,4 +887,6 @@ export default {
   identity_card: 'Carte de identitate',
   series: 'Serie',
   idnp: 'IDNP',
+  add_comment: 'Adaugă comentariu',
+  no_comment_label: 'Nu există un comentariu atașat acestui apel.',
 };
