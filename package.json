@@ -5,7 +5,7 @@
   "dependencies": {
     "@date-io/date-fns": "^2.11.0",
     "@date-io/moment": "^2.11.0",
-    "@easyplanpro/easyplan-components": "^0.1.179",
+    "@easyplanpro/easyplan-components": "^0.1.183",
     "@emotion/server": "^11.4.0",
     "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
