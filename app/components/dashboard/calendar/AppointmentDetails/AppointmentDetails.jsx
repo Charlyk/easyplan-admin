@@ -23,8 +23,12 @@ import IconEdit from 'app/components/icons/iconEdit';
 import IconTrash from 'app/components/icons/iconTrash';
 import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
-import { ManualStatuses, Statuses } from 'app/utils/constants';
+import {
+  ManualStatuses as rawManualStatuses,
+  Statuses as rawStatuses,
+} from 'app/utils/constants';
 import formattedAmount from 'app/utils/formattedAmount';
+import useMappedValue from 'app/utils/hooks/useMappedValue';
 import { baseApiUrl } from 'eas.config';
 import {
   getAvailableHours,
@@ -72,6 +76,8 @@ const AppointmentDetails = ({
   onAddSchedule,
 }) => {
   const textForKey = useTranslate();
+  const Statuses = useMappedValue(rawStatuses);
+  const ManualStatuses = useMappedValue(rawManualStatuses);
   const toast = useContext(NotificationsContext);
   const dispatch = useDispatch();
   const statusesAnchor = useRef(null);
@@ -276,6 +282,8 @@ const AppointmentDetails = ({
   const patientName = details?.patient?.fullName || schedule.patient.fullName;
   const serviceName = details?.service?.name || schedule.serviceName;
   const serviceColor = details?.service?.color || schedule.serviceColor;
+
+  console.log(Statuses);
 
   const statusesList = (
     <Popper

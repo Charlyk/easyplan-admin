@@ -25,7 +25,6 @@ import NotificationsProvider from 'app/context/NotificationsProvider';
 import useWindowFocused from 'app/hooks/useWindowFocused';
 import theme from 'app/styles/theme';
 import { checkIfHasUnreadUpdates } from 'app/utils/checkIfHasUnreadUpdates';
-import { textForKey } from 'app/utils/localization';
 import parseCookies from 'app/utils/parseCookies';
 import paths from 'app/utils/paths';
 import { isDev, loginUrl, pubNubEnv } from 'eas.config';
@@ -41,7 +40,6 @@ import {
 } from 'redux/selectors/appDataSelector';
 import { appointmentModalSelector } from 'redux/selectors/appointmentModalSelector';
 import { imageModalSelector } from 'redux/selectors/imageModalSelector';
-import { logoutSelector } from 'redux/selectors/rootSelector';
 import { setAppData } from 'redux/slices/appDataSlice';
 import { closeAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
 import { triggerUserLogOut } from 'redux/slices/mainReduxSlice';
@@ -65,9 +63,6 @@ const AddAppointmentModal = dynamic(() =>
 const FullScreenImageModal = dynamic(() =>
   import('app/components/common/modals/FullScreenImageModal'),
 );
-const ConfirmationModal = dynamic(() =>
-  import('../app/components/common/modals/ConfirmationModal/ConfirmationModal'),
-);
 
 const ChangeLogModal = dynamic(() =>
   import('app/components/common/modals/ChangeLogsModal'),
@@ -88,10 +83,8 @@ const EasyApp = ({
   const appointmentModal = useSelector(appointmentModalSelector);
   const changeLogModal = useSelector(changeLogModalSelector);
   const [isChecking, setIsChecking] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const isWindowFocused = useWindowFocused();
   const imageModal = useSelector(imageModalSelector);
-  const logout = useSelector(logoutSelector);
   const [logEvent] = useAnalytics();
   const currentPage = router.asPath;
   const locale = useSelector(appLanguageSelector);
@@ -241,7 +234,6 @@ const EasyApp = ({
   };
 
   const handleUserLogout = async () => {
-    setIsLoading(true);
     await signOut();
     logEvent({
       event: 'user_logout',
@@ -250,12 +242,7 @@ const EasyApp = ({
     router.replace(loginUrl).then(() => {
       dispatch(triggerUserLogOut(false));
       dispatch(setAppData(initialState.appData));
-      setIsLoading(false);
     });
-  };
-
-  const handleCancelLogout = () => {
-    dispatch(triggerUserLogOut(false));
   };
 
   const handleCloseChangeLogModal = () => {
@@ -289,16 +276,7 @@ const EasyApp = ({
                             Dev
                           </Typography>
                         )}
-                        {logout && (
-                          <ConfirmationModal
-                            title={textForKey('Logout')}
-                            message={textForKey('logout message')}
-                            onConfirm={handleUserLogout}
-                            onClose={handleCancelLogout}
-                            isLoading={isLoading}
-                            show={logout}
-                          />
-                        )}
+
                         {changeLogModal.open && (
                           <ChangeLogModal
                             {...changeLogModal}

@@ -834,5 +834,7 @@
   "address": "Адрес",
   "identity_card": "Удостоверение личности",
   "series": "Серия",
-  "idnp": "ИДНП"
+  "idnp": "ИДНП",
+  "trial_days_left_notification": "Дней испытаний осталось",
+  "trial_day_left_notification": "День испытаний остался"
 }

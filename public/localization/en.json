@@ -834,5 +834,7 @@
   "address": "Adresa",
   "identity_card": "Carte de identitate",
   "series": "Serie",
-  "idnp": "IDNP"
+  "idnp": "IDNP",
+  "trial_days_left_notification": "Days of trial left",
+  "trial_day_left_notification": "Day of trial left"
 }
