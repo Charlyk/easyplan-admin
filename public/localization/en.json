@@ -834,5 +834,6 @@
   "address": "Adresa",
   "identity_card": "Carte de identitate",
   "series": "Serie",
-  "idnp": "IDNP"
+  "idnp": "IDNP",
+  "subscription_canceled": "Subscription canceled"
 }

@@ -32,6 +32,7 @@
 
       &.clinic {
         justify-content: space-between;
+        cursor: pointer;
 
         &.selected {
           color: #3a83dc;
@@ -39,6 +40,11 @@
           svg {
             visibility: visible;
           }
+        }
+
+        &.disabled {
+          background-color: #9d9d9d;
+          cursor: not-allowed;
         }
 
         svg {
@@ -68,7 +74,6 @@
   font-weight: normal !important;
   font-size: 12px !important;
   line-height: 24px !important;
-  cursor: pointer !important;
   width: 100% !important;
   padding: 0 !important;
   display: block;

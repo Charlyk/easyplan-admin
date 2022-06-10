@@ -580,3 +580,11 @@ export const PaymentStatuses = {
   uncollectible: 'uncollectible',
   trialing: 'trialing',
 };
+
+export const DeniedAccessSubscriptionStatuses = [
+  SubscriptionStatuses.canceled,
+  SubscriptionStatuses.incomplete,
+  SubscriptionStatuses.incomplete_expired,
+  SubscriptionStatuses.unpaid,
+  SubscriptionStatuses.past_due,
+];
