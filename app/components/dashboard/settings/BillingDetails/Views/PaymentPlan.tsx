@@ -9,6 +9,7 @@ import {
 import { useTranslate } from 'react-polyglot';
 import { useSelector, useDispatch } from 'react-redux';
 import ConfirmationModal from 'app/components/common/modals/ConfirmationModal';
+import { SubscriptionStatuses } from 'app/utils/constants';
 import { paymentsSubscriptionSelector } from 'redux/selectors/paymentsSelector';
 import {
   dispatchCancelSubcription,
@@ -121,6 +122,9 @@ const PaymentPlan: React.FC<Props> = () => {
                   onClick={() => setModalOpen(true)}
                   size={'small'}
                   className={styles.cancelButton}
+                  disabled={
+                    subscription.status === SubscriptionStatuses.canceled
+                  }
                 />
               </div>
             </div>
