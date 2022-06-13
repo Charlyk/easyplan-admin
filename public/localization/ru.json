@@ -834,5 +834,10 @@
   "address": "Адрес",
   "identity_card": "Удостоверение личности",
   "series": "Серия",
-  "idnp": "ИДНП"
+  "idnp": "ИДНП",
+  "total": "Итого",
+  "user-comment": "Комментарий пользователя",
+  "total-prepayment": "Total avans",
+  "total-debt": "Total datorii",
+  "total-cost": "Pret total"
 }

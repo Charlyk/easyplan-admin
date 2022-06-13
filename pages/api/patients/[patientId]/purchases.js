@@ -11,7 +11,7 @@ function fetchPatientPurchases(req) {
     req.headers.cookie,
   );
   const { patientId } = req.query;
-  return axios.get(`${updatedServerUrl(req)}/patients/purchases/${patientId}`, {
+  return axios.get(`${updatedServerUrl(req)}/invoices/patient/${patientId}`, {
     headers: {
       [HeaderKeys.authorization]: authToken,
       [HeaderKeys.clinicId]: clinicId,

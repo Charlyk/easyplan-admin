@@ -1,12 +1,20 @@
 export interface PatientPurchase {
+  created: string;
+  currency: string;
+  discount: number;
+  id: number;
+  paid: number;
+  services: string[];
+  total: number;
+  payments: DetailedPayment[];
+}
+
+export interface DetailedPayment {
   amount: number;
-  clinicName: string;
-  comment?: string;
+  comment: string;
+  created: string;
   currency: string;
   id: number;
-  invoiceId: number;
-  scheduleId?: number | null;
-  userComment?: number | null;
-  userId: number;
+  userComment: string | null;
   userName: string;
 }
