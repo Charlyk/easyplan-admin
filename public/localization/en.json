@@ -834,12 +834,11 @@
   "address": "Adresa",
   "identity_card": "Carte de identitate",
   "series": "Serie",
-  "idnp": "IDNP",
   "total": "Total",
   "user-comment": "User comment",
   "total-prepayment": "Total prepayment",
   "total-debt": "Total debt",
-  "total-cost": "Total price"
+  "total-cost": "Total price",
   "idnp": "IDNP",
   "subscription_canceled": "Subscription canceled"
 }
