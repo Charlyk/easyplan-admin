@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { textForKey } from 'app/utils/localization';
 
 export const MenuItem = {
   personalInfo: 'personal-info',
@@ -30,11 +29,6 @@ export const MenuItems = [
     type: 'default',
   },
   {
-    id: MenuItem.debts,
-    name: 'debts',
-    type: 'default',
-  },
-  {
     id: MenuItem.notes,
     name: 'notes',
     type: 'default',
@@ -52,11 +46,6 @@ export const MenuItems = [
   {
     id: MenuItem.treatmentPlan,
     name: 'appointments notes',
-    type: 'default',
-  },
-  {
-    id: MenuItem.orthodonticPlan,
-    name: 'orthodontic plan',
     type: 'default',
   },
   {

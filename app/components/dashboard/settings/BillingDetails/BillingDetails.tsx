@@ -170,11 +170,13 @@ const BillingDetails: React.FC<BillingDetailsProps> = ({ countries }) => {
                 root: styles.infoBoxAmount,
               }}
             >
-              {formatAmountWithSymbol(
-                subscriptionData.nextAmount,
-                subscriptionData.nextCurrency,
-              )}{' '}
-              / {subscriptionData.totalSeats} {textForKey('seats')}
+              {subscriptionData.status === SubscriptionStatuses.canceled
+                ? textForKey('subscription_canceled')
+                : `${formatAmountWithSymbol(
+                    subscriptionData.nextAmount,
+                    subscriptionData.nextCurrency,
+                  )}
+              / ${subscriptionData.totalSeats} ${textForKey('seats')}`}
             </Typography>
             <Box onClick={() => handleViewModeSwitch('manage-seats')}>
               <Typography classes={{ root: styles.infoBoxLink }}>

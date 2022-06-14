@@ -837,4 +837,11 @@
   "idnp": "ИДНП",
   "trial_days_left_notification": "Дней испытаний осталось",
   "trial_day_left_notification": "День испытаний остался"
+  "idnp": "ИДНП",
+  "subscription_canceled": "Подписка анулированная",
+  "total": "Итого",
+  "user-comment": "Комментарий пользователя",
+  "total-prepayment": "Total avans",
+  "total-debt": "Total datorii",
+  "total-cost": "Pret total"
 }

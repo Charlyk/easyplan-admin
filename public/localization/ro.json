@@ -837,4 +837,11 @@
   "idnp": "IDNP",
   "trial_days_left_notification": "Zile de probă rămase",
   "trial_day_left_notification": "Zi de probă rămasă"
+  "idnp": "IDNP",
+  "subscription_canceled": "Subscripție anulată",
+  "total": "Total",
+  "user-comment": "Comentariu utilizator",
+  "total-prepayment": "Total avans",
+  "total-debt": "Total datorii",
+  "total-cost": "Pret total"
 }
