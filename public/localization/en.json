@@ -840,5 +840,10 @@
   "total-debt": "Total debt",
   "total-cost": "Total price",
   "idnp": "IDNP",
-  "subscription_canceled": "Subscription canceled"
+  "subscription_canceled": "Subscription canceled",
+  "cash": "Cash",
+  "card": "Debit Card",
+  "transfer": "Transfer",
+  "gift_certificate": "Gift Certificate",
+  "select_payment_method": "Select payment method"
 }

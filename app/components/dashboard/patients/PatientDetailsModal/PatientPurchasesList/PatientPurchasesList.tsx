@@ -32,8 +32,6 @@ const PatientPurchasesList = ({ patient }) => {
   const { isLoading, payments } = useSelector(patientPurchasesListSelector);
   const [undoModal, setUndoModal] = useState({ open: false, payment: null });
 
-  console.log({ payments });
-
   useEffect(() => {
     if (patient != null) {
       fetchPurchases();

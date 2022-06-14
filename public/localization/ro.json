@@ -840,5 +840,10 @@
   "user-comment": "Comentariu utilizator",
   "total-prepayment": "Total avans",
   "total-debt": "Total datorii",
-  "total-cost": "Pret total"
+  "total-cost": "Pret total",
+  "cash": "Numerar",
+  "card": "Card bancar",
+  "transfer": "Transfer",
+  "gift_certificate": "Certificat Cadou",
+  "select_payment_method": "Selectati metoda de plata"
 }
