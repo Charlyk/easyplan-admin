@@ -836,12 +836,11 @@
   "series": "Serie",
   "idnp": "IDNP",
   "trial_days_left_notification": "Days of trial left",
-  "trial_day_left_notification": "Day of trial left"
+  "trial_day_left_notification": "Day of trial left",
   "total": "Total",
   "user-comment": "User comment",
   "total-prepayment": "Total prepayment",
   "total-debt": "Total debt",
   "total-cost": "Total price",
-  "idnp": "IDNP",
   "subscription_canceled": "Subscription canceled"
 }

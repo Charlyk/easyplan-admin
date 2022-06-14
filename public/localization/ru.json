@@ -836,8 +836,7 @@
   "series": "Серия",
   "idnp": "ИДНП",
   "trial_days_left_notification": "Дней испытаний осталось",
-  "trial_day_left_notification": "День испытаний остался"
-  "idnp": "ИДНП",
+  "trial_day_left_notification": "День испытаний остался",
   "subscription_canceled": "Подписка анулированная",
   "total": "Итого",
   "user-comment": "Комментарий пользователя",
