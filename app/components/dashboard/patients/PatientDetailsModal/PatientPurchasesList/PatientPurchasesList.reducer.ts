@@ -15,7 +15,7 @@ const patientPurchasesSlice = createSlice({
     },
     removePayments(state, action: PayloadAction<ShortInvoice>) {
       state.payments = state.payments.filter(
-        (payment) => payment.invoiceId !== action.payload.id,
+        (payment) => payment.id !== action.payload.id,
       );
       state.isLoading = false;
     },

@@ -835,5 +835,10 @@
   "identity_card": "Carte de identitate",
   "series": "Serie",
   "idnp": "IDNP",
-  "subscription_canceled": "Subscripție anulată"
+  "subscription_canceled": "Subscripție anulată",
+  "total": "Total",
+  "user-comment": "Comentariu utilizator",
+  "total-prepayment": "Total avans",
+  "total-debt": "Total datorii",
+  "total-cost": "Pret total"
 }

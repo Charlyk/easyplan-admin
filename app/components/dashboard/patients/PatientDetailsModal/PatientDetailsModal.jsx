@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useEffect,
-  useReducer,
-  useRef,
-  useMemo,
-} from 'react';
+import React, { useContext, useEffect, useReducer, useRef } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import IconButton from '@material-ui/core/IconButton';
 import MuiMenuItem from '@material-ui/core/MenuItem';
@@ -17,11 +11,13 @@ import PropTypes from 'prop-types';
 import { useTranslate } from 'react-polyglot';
 import { useDispatch } from 'react-redux';
 import EASImage from 'app/components/common/EASImage';
+import ConfirmationModal from 'app/components/common/modals/ConfirmationModal';
 import IconAvatar from 'app/components/icons/iconAvatar';
 import IconClose from 'app/components/icons/iconClose';
 import IconEdit from 'app/components/icons/iconEdit';
 import NotificationsContext from 'app/context/notificationsContext';
 import { HeaderKeys } from 'app/utils/constants';
+import useMappedValue from 'app/utils/hooks/useMappedValue';
 import onRequestError from 'app/utils/onRequestError';
 import {
   getPatientDetails,
@@ -31,17 +27,13 @@ import { setPatientXRayModal } from 'redux/actions/actions';
 import { setAddPaymentModal } from 'redux/actions/addPaymentModalActions';
 import { toggleUpdatePatients } from 'redux/slices/mainReduxSlice';
 import { requestDeletePatient } from 'redux/slices/patientsListSlice';
-import ConfirmationModal from '../../../common/modals/ConfirmationModal';
 import AppointmentNotes from './AppointmentNotes';
-import OrthodonticPlan from './OrthodonticPlan';
 import PatientAppointments from './PatientAppointments';
-import PatientDebtsList from './PatientDebtsList';
 import styles from './PatientDetailsModal.module.scss';
 import reducer, {
   initialState,
   setAvatarFile,
   setCurrentMenu,
-  setViewInvoice,
   setPatient,
   setIsFetching,
   MenuItem,
@@ -69,6 +61,7 @@ const PatientDetailsModal = ({
   onClose,
 }) => {
   const textForKey = useTranslate();
+  const mappedMenuItems = useMappedValue(MenuItems);
   const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
   const inputRef = useRef(null);
@@ -77,7 +70,6 @@ const PatientDetailsModal = ({
       currentMenu,
       isFetching,
       patient,
-      viewInvoice,
       avatarFile,
       showDeleteConfirmation,
       isDeleting,
@@ -85,10 +77,6 @@ const PatientDetailsModal = ({
     localDispatch,
   ] = useReducer(reducer, initialState);
   const patientAvatar = avatarFile ?? patient?.avatar;
-
-  const mappedMenuItems = useMemo(() => {
-    return MenuItems.map((item) => ({ ...item, name: textForKey(item.name) }));
-  }, []);
 
   useEffect(() => {
     if (!show) {
@@ -162,10 +150,6 @@ const PatientDetailsModal = ({
     }
   };
 
-  const handleDebtViewed = () => {
-    localDispatch(setViewInvoice(null));
-  };
-
   const handleAddXRayImages = () => {
     dispatch(setPatientXRayModal({ open: true, patientId: patient.id }));
   };
@@ -205,22 +189,6 @@ const PatientDetailsModal = ({
         );
       case MenuItem.treatmentPlan:
         return <AppointmentNotes currentUser={currentUser} patient={patient} />;
-      case MenuItem.orthodonticPlan:
-        return (
-          <OrthodonticPlan
-            currentClinic={currentClinic}
-            currentUser={currentUser}
-            patient={patient}
-          />
-        );
-      case MenuItem.debts:
-        return (
-          <PatientDebtsList
-            patient={patient}
-            viewInvoice={viewInvoice}
-            onDebtShowed={handleDebtViewed}
-          />
-        );
       case MenuItem.purchases:
         return <PatientPurchasesList patient={patient} />;
       case MenuItem.messages:

@@ -835,5 +835,10 @@
   "identity_card": "Удостоверение личности",
   "series": "Серия",
   "idnp": "ИДНП",
-  "subscription_canceled": "Подписка анулированная"
+  "subscription_canceled": "Подписка анулированная",
+  "total": "Итого",
+  "user-comment": "Комментарий пользователя",
+  "total-prepayment": "Total avans",
+  "total-debt": "Total datorii",
+  "total-cost": "Pret total"
 }
