@@ -844,5 +844,10 @@
   "user-comment": "Комментарий пользователя",
   "total-prepayment": "Total avans",
   "total-debt": "Total datorii",
-  "total-cost": "Pret total"
+  "total-cost": "Pret total",
+  "cash": "Наличные",
+  "card": "Банковская карточка",
+  "transfer": "Перевод",
+  "gift_certificate": "Подарочный сертификат",
+  "select_payment_method": "Selectati metoda de plata"
 }

@@ -587,3 +587,25 @@ export const DeniedAccessSubscriptionStatuses = [
   SubscriptionStatuses.unpaid,
   SubscriptionStatuses.past_due,
 ];
+
+export const PatientPaymentStatus = {
+  cash: 'Cash',
+  card: 'CreditCard',
+  transfer: 'BankTransfer',
+  employer_certificate: 'EmployerCertificate',
+  gift_certificate: 'GiftCard',
+};
+
+export const PatientPaymentOptions = [
+  { name: 'cash', id: PatientPaymentStatus.cash },
+  { name: 'card', id: PatientPaymentStatus.card },
+  { name: 'transfer', id: PatientPaymentStatus.transfer },
+  {
+    name: 'employer_certificate',
+    id: PatientPaymentStatus.employer_certificate,
+  },
+  {
+    name: 'gift_certificate',
+    id: PatientPaymentStatus.gift_certificate,
+  },
+];
