@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
@@ -17,6 +17,7 @@ import {
   SubscriptionStatuses,
 } from 'app/utils/constants';
 import getCallRecordUrl from 'app/utils/getCallRecordUrl';
+import { useAnalytics } from 'app/utils/hooks';
 import rawPaths from 'app/utils/paths';
 import { loginUrl } from 'eas.config';
 import { signOut } from 'middleware/api/auth';
@@ -48,6 +49,7 @@ import {
 import { paymentsSubscriptionSelector } from 'redux/selectors/paymentsSelector';
 import {
   isImportModalOpenSelector,
+  logoutSelector,
   patientDetailsSelector,
   phoneCallRecordSelector,
 } from 'redux/selectors/rootSelector';
@@ -80,6 +82,7 @@ const CheckoutModal = dynamic(() => import('../modals/CheckoutModal'));
 const MainMenu = dynamic(() => import('./MainMenu'));
 const PageHeader = dynamic(() => import('./PageHeader'));
 const AddReminderModal = dynamic(() => import('../modals/AddReminderModal'));
+const ConfirmationModal = dynamic(() => import('../modals/ConfirmationModal'));
 
 const MainComponent = ({ children, currentPath, provideAppData = true }) => {
   const textForKey = useTranslate();
@@ -102,6 +105,9 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
   const clinicAccessChange = useSelector(userClinicAccessChangeSelector);
   const appLanguage = useSelector(appLanguageSelector);
   const { data: subscription } = useSelector(paymentsSubscriptionSelector);
+  const [logEvent] = useAnalytics();
+  const logout = useSelector(logoutSelector);
+  const [isLoading, setIsLoading] = useState(false);
   let childrenProps = children.props;
   if (provideAppData) {
     childrenProps = { ...childrenProps, currentUser, currentClinic, authToken };
@@ -186,6 +192,24 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handleCancelLogout = () => {
+    dispatch(triggerUserLogOut(false));
+  };
+
+  const handleUserLogout = async () => {
+    setIsLoading(true);
+    await signOut();
+    logEvent({
+      event: 'user_logout',
+      payload: { currentUser, currentClinic },
+    });
+    router.replace(loginUrl).then(() => {
+      dispatch(triggerUserLogOut(false));
+      dispatch(setAppData(initialState.appData));
+      setIsLoading(false);
+    });
   };
 
   const headerTitle = useMemo(() => {
@@ -280,6 +304,16 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
             <AddNote
               {...patientNoteModal}
               onClose={handleClosePatientNoteModal}
+            />
+          )}
+          {logout && (
+            <ConfirmationModal
+              title={textForKey('logout')}
+              message={textForKey('logout message')}
+              onConfirm={handleUserLogout}
+              onClose={handleCancelLogout}
+              isLoading={isLoading}
+              show={logout}
             />
           )}
           {patientXRayModal.open && (

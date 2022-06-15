@@ -2,16 +2,17 @@ import React, { useEffect } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import { useRouter } from 'next/router';
+import { useTranslate } from 'react-polyglot';
 import { connect } from 'react-redux';
 import getRedirectUrlForUser from 'app/utils/getRedirectUrlForUser';
 import handleRequestError from 'app/utils/handleRequestError';
-import { textForKey } from 'app/utils/localization';
 import setCookies from 'app/utils/setCookies';
 import { environment, loginUrl } from 'eas.config';
 import { getCurrentUser, signOut } from 'middleware/api/auth';
 import checkIsAuthenticated from '../../app/utils/checkIsAuthenticated';
 
 const Redirect = ({ clinicId, path }) => {
+  const textForKey = useTranslate();
   const router = useRouter();
 
   useEffect(() => {
@@ -59,7 +60,7 @@ const Redirect = ({ clinicId, path }) => {
     >
       <CircularProgress className='circular-progress-bar' />
       <Typography className='typography' style={{ marginTop: '1rem' }}>
-        {textForKey('Redirecting to clinic')}...
+        {textForKey('redirecting to clinic')}...
       </Typography>
     </div>
   );
