@@ -30,7 +30,9 @@ import EASTextarea from 'app/components/common/EASTextarea';
 import IconClose from 'app/components/icons/iconClose';
 import NotificationsContext from 'app/context/notificationsContext';
 import adjustValueToNumber from 'app/utils/adjustValueToNumber';
+import { PatientPaymentOptions as rawPatientPaymentOptions } from 'app/utils/constants';
 import formattedAmount from 'app/utils/formattedAmount';
+import useMappedValue from 'app/utils/hooks/useMappedValue';
 import onRequestError from 'app/utils/onRequestError';
 import {
   createNewInvoice,
@@ -47,6 +49,7 @@ import {
 import { updateInvoiceSelector } from 'redux/selectors/invoicesSelector';
 import { updateInvoicesSelector } from 'redux/selectors/rootSelector';
 import { setPatientDetails } from 'redux/slices/mainReduxSlice';
+import EASSelect from '../../EASSelect';
 import TeethModal from '../TeethModal';
 import styles from './CheckoutModal.module.scss';
 import {
@@ -61,6 +64,11 @@ import ServicesList from './ServicesList';
 const getDateHour = (date) => {
   if (date == null) return '';
   return moment(date).format('HH:mm');
+};
+
+const defaultPaymentMethod = {
+  id: 'SelectPaymentMethod',
+  name: 'select_payment_method',
 };
 
 const CheckoutModal = ({
@@ -96,10 +104,15 @@ const CheckoutModal = ({
   const currentClinic = useSelector(currentClinicSelector);
   const clinicDoctors = useSelector(activeClinicDoctorsSelector);
   const [commentValue, setCommentValue] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState(defaultPaymentMethod.id);
   const userClinic = useSelector(userClinicSelector);
   const { canRegisterPayments } = userClinic;
   const clinicCurrency = currentClinic.currency;
   const clinicBraces = currentClinic.braces ?? [];
+  const PatientPaymentOptions = useMappedValue(
+    rawPatientPaymentOptions,
+    defaultPaymentMethod,
+  );
 
   const scheduleTime = useMemo(() => {
     const startDate = moment(invoiceDetails?.schedule?.startTime).format(
@@ -385,6 +398,7 @@ const CheckoutModal = ({
       discount: discount,
       comment: commentValue || null,
       totalAmount: servicesPrice,
+
       services: services.map((item) => ({
         id: item.id,
         price: item.amount,
@@ -408,6 +422,10 @@ const CheckoutModal = ({
 
     if (schedule != null) {
       requestBody.scheduleId = schedule.id;
+    }
+
+    if (paymentMethod !== defaultPaymentMethod.id) {
+      requestBody.paymentMethod = paymentMethod;
     }
 
     return requestBody;
@@ -460,6 +478,10 @@ const CheckoutModal = ({
         menuItem: 'debts',
       }),
     );
+  };
+
+  const handlePaymentMethodChange = (evt) => {
+    setPaymentMethod(evt.target.value);
   };
 
   return (
@@ -617,6 +639,35 @@ const CheckoutModal = ({
                           onValueChange={handleDiscountChanged}
                           suffix='%'
                           placeholder='0%'
+                        />
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell colSpan={2}>
+                      <div
+                        className={'flex-container'}
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'center',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          gap: '.5em',
+                        }}
+                      >
+                        <Typography
+                          textAlign={'center'}
+                          classes={{ root: styles.paymentMethodLabel }}
+                        >
+                          {textForKey('payment_method')}
+                        </Typography>
+                        <EASSelect
+                          options={PatientPaymentOptions}
+                          onChange={handlePaymentMethodChange}
+                          value={paymentMethod}
+                          fullWidth
+                          rootClass={styles.selectMenu}
+                          selectClass={styles.selectMenu}
                         />
                       </div>
                     </TableCell>

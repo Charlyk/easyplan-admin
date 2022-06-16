@@ -17,7 +17,15 @@ import styles from './ServicesChart.module.scss';
 const ServicesChart = ({ services, removeable, onClose, visible = true }) => {
   const textForKey = useTranslate();
   const data = useMemo(() => {
-    return getServicesChartData(services);
+    const chartData = getServicesChartData(services);
+
+    return {
+      ...chartData,
+      datasets: chartData.datasets.map((set) => ({
+        ...set,
+        label: textForKey(set.label.toLowerCase()),
+      })),
+    };
   }, [services]);
 
   const options = useMemo(() => {
@@ -31,6 +39,8 @@ const ServicesChart = ({ services, removeable, onClose, visible = true }) => {
   const handleClose = () => {
     onClose?.(ChartType.Services);
   };
+
+  console.log(data);
 
   return (
     <Grid item xs={12} className={styles.servicesChart}>

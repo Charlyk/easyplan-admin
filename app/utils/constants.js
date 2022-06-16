@@ -46,7 +46,6 @@ import IconTooth46 from '../components/icons/iconTooth46';
 import IconTooth47 from '../components/icons/iconTooth47';
 import IconTooth48 from '../components/icons/iconTooth48';
 import IconXPerson from '../components/icons/iconXPerson';
-import { textForKey } from './localization';
 
 const host = typeof window !== 'undefined' ? window?.location.host : '';
 export const env = host.startsWith('develop')
@@ -587,4 +586,26 @@ export const DeniedAccessSubscriptionStatuses = [
   SubscriptionStatuses.incomplete_expired,
   SubscriptionStatuses.unpaid,
   SubscriptionStatuses.past_due,
+];
+
+export const PatientPaymentStatus = {
+  cash: 'Cash',
+  card: 'CreditCard',
+  transfer: 'BankTransfer',
+  employer_certificate: 'EmployerCertificate',
+  gift_certificate: 'GiftCard',
+};
+
+export const PatientPaymentOptions = [
+  { name: 'cash', id: PatientPaymentStatus.cash },
+  { name: 'card', id: PatientPaymentStatus.card },
+  { name: 'transfer', id: PatientPaymentStatus.transfer },
+  {
+    name: 'employer_certificate',
+    id: PatientPaymentStatus.employer_certificate,
+  },
+  {
+    name: 'gift_certificate',
+    id: PatientPaymentStatus.gift_certificate,
+  },
 ];
