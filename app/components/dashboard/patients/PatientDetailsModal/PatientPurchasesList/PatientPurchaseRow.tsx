@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Tooltip } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import Table from '@material-ui/core/Table';
@@ -10,7 +11,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { formatInTimeZone } from 'date-fns-tz';
 import { useTranslate } from 'react-polyglot';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import IconMinus from 'app/components/icons/iconMinus';
 import IconPlus from 'app/components/icons/iconPlus';
 import IconPrint from 'app/components/icons/iconPrint';
@@ -18,6 +19,7 @@ import IconTrash from 'app/components/icons/iconTrash';
 import { DateLocales } from 'app/utils/constants';
 import formattedAmount from 'app/utils/formattedAmount';
 import { baseApiUrl } from 'eas.config';
+import { setPaymentModal } from 'redux/actions/actions';
 import {
   appLanguageSelector,
   clinicTimeZoneSelector,
@@ -36,9 +38,14 @@ const PatientPurchaseRow: React.FC<Props> = ({
   handleUndoPayment,
 }) => {
   const textForKey = useTranslate();
+  const dispatch = useDispatch();
   const appLanguage = useSelector(appLanguageSelector);
   const timeZone = useSelector(clinicTimeZoneSelector);
   const isManager = useSelector(isManagerSelector);
+
+  const hasDebts = useMemo(() => {
+    return payment.paid < payment.total;
+  }, []);
 
   const [expanded, setExpanded] = useState(false);
 
@@ -62,6 +69,17 @@ const PatientPurchaseRow: React.FC<Props> = ({
       discount > 0 ? price - Math.trunc((price * discount) / 100) : price;
 
     return formattedAmount(discountedPrice, currency);
+  };
+
+  const handlePayDebt = () => {
+    dispatch(
+      setPaymentModal({
+        open: true,
+        invoice: payment,
+        schedule: null,
+        isNew: false,
+      }),
+    );
   };
 
   return (
@@ -119,6 +137,14 @@ const PatientPurchaseRow: React.FC<Props> = ({
                   <IconTrash fill={'#ec3276'} />
                 </IconButton>
               </Tooltip>
+              <Button
+                classes={{ root: styles.debtBtn }}
+                variant={'outlined'}
+                onClick={handlePayDebt}
+                disabled={!hasDebts}
+              >
+                {textForKey('pay')}
+              </Button>
             </Box>
           )}
         </TableCell>
