@@ -9,12 +9,12 @@ import Box from '@material-ui/core/Box';
 import Chip from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
 import moment from 'moment-timezone';
-import dynamic from 'next/dynamic';
 import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import EASPhoneInput from 'app/components/common/EASPhoneInput';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
+import EasyDatePicker from 'app/components/common/EasyDatePicker';
 import LoadingButton from 'app/components/common/LoadingButton';
 import IconSuccess from 'app/components/icons/iconSuccess';
 import NotificationsContext from 'app/context/notificationsContext';
@@ -62,10 +62,6 @@ import reducer, {
   setIdentificationNumber,
   setIdentityCard,
 } from './PatientPersonalData.reducer';
-
-const EasyDatePicker = dynamic(
-  () => import('app/components/common/EasyDatePicker'),
-);
 
 interface Props {
   patient: Patient;
@@ -300,6 +296,8 @@ const PatientPersonalData: React.FC<Props> = ({
       <Typography classes={{ root: 'title-label' }}>
         {textForKey('personal info')}
       </Typography>
+      {/*eslint-disable-next-line @typescript-eslint/ban-ts-comment*/}
+      {/*@ts-ignore*/}
       <Box className={styles['patient-form-wrapper']}>
         <EASTextField
           type='text'
@@ -428,6 +426,8 @@ const PatientPersonalData: React.FC<Props> = ({
           ))}
         </div>
 
+        {/*eslint-disable-next-line @typescript-eslint/ban-ts-comment*/}
+        {/*@ts-ignore*/}
         <Box
           mt='1rem'
           width='100%'

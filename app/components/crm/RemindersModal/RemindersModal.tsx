@@ -161,6 +161,8 @@ const RemindersModal: React.FC<RemindersModalProps> = ({ open, onClose }) => {
           </div>
           <div className={styles.filterOptionsContainer}>
             {filterOptions.map((item) => (
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
               <Box
                 key={item.id}
                 className={clsx(styles.filterOption, {

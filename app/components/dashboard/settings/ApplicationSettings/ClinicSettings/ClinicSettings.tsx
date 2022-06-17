@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
@@ -28,9 +27,11 @@ const ClinicSettings: React.FC = () => {
 
   return (
     <div className={styles.clinicSettings}>
-      <Box
+      <div
         className={styles.confirmationDoctor}
         onClick={handleConfirmationChange}
+        role='button'
+        tabIndex={0}
       >
         <Typography className={styles.title}>
           {textForKey('show_doctor_on_confirmation')}
@@ -39,7 +40,7 @@ const ClinicSettings: React.FC = () => {
           clickable={false}
           isChecked={settings?.showDoctorOnConfirmation ?? false}
         />
-      </Box>
+      </div>
     </div>
   );
 };

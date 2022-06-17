@@ -115,6 +115,8 @@ const EASModal: React.FC<Props> = ({
   };
 
   return (
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     <Modal
       open={open}
       className={clsx(styles.modalRoot, className)}

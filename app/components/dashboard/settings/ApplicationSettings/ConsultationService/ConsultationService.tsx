@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import { instanceOf } from 'prop-types';
 import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import EASAutocomplete from 'app/components/common/EASAutocomplete';
@@ -50,6 +49,8 @@ const ConsultationService: React.FC = () => {
         fieldLabel={textForKey('service')}
         placeholder={textForKey('enter service name')}
         onChange={handleServiceChange}
+        helperText={null}
+        error={null}
       />
     </div>
   );
