@@ -4,11 +4,8 @@
   width: 100%;
   height: 100%;
 
-  .table-pagination {
+  .tablePagination {
     background-color: white;
-    margin-left: 8px;
-    margin-right: 8px;
-    margin-bottom: 1rem;
 
     :global(.MuiTablePagination-caption), :global(.MuiTablePagination-input) {
       font-family: Inter, sans-serif !important;
@@ -30,13 +27,40 @@
     }
   }
 
-  .data-container {
+  .pageFooter {
+    background-color: white;
+    margin-left: 8px;
+    margin-right: 8px;
+    margin-bottom: 1rem;
+    position: relative;
+
+    .primaryButton {
+      outline: none;
+      color: #3A83DC;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-size: 13px;
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 100;
+
+      svg {
+        margin-right: 0.5rem;
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+
+  .dataContainer {
     height: 100%;
     overflow-y: auto;
     padding: unset;
     position: relative;
 
-    .no-data-label {
+    .noDataLabel {
       padding: 3rem;
       font-family: Inter, sans-serif;
       font-style: normal;
@@ -193,27 +217,4 @@
       font-size: 13px !important;
     }
   }
-}
-
-.analyticsMenuItemCheckbox {
-  padding: 0 !important;
-  margin-right: 5px !important;
-}
-
-.analyticsMenuItemCheckboxChecked {
-  color: #3A83DC !important;
-}
-
-.analyticsMenuItemRoot {
-  font-family: Inter, sans-serif !important;
-  font-style: normal !important;
-  font-weight: normal !important;
-  font-size: 13px !important;
-}
-
-.analyticsMenuItemText {
-  font-family: Inter, sans-serif !important;
-  font-style: normal !important;
-  font-weight: normal !important;
-  font-size: 13px !important;
 }

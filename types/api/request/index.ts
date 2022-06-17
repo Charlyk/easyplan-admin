@@ -13,3 +13,4 @@ export * from './patientsRequest.types';
 export * from './appointmentRequests.types';
 export * from './updateUserAccount';
 export * from './payments.types';
+export * from './paymentReportsRequest.types';

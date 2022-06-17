@@ -850,5 +850,7 @@
   "transfer": "Перевод",
   "gift_certificate": "Подарочный сертификат",
   "select_payment_method": "Выберите метод оплаты",
-  "reports": "Отчеты"
+  "reports": "Отчеты",
+  "user_comment": "Коментарий пользователя",
+  "export_excel": "Скачать как .xlsx"
 }

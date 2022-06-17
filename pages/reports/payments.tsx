@@ -4,14 +4,12 @@ import { NextPage } from 'next';
 import { connect } from 'react-redux';
 import { END } from 'redux-saga';
 import MainComponent from 'app/components/common/MainComponent';
-import { setInitialData } from 'app/components/dashboard/analytics/ClinicAnalytics/ClinicAnalytics.reducer';
 import { default as PaymentsComponent } from 'app/components/dashboard/reports/Payments';
 import { JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
 import parseCookies from 'app/utils/parseCookies';
 import redirectToUrl from 'app/utils/redirectToUrl';
 import { loginUrl } from 'eas.config';
-import { requestFetchSelectedCharts } from 'middleware/api/users';
 import {
   currentClinicSelector,
   currentUserSelector,
@@ -19,8 +17,10 @@ import {
 import { setCookies } from 'redux/slices/appDataSlice';
 import { ReduxState } from 'redux/types';
 import { wrapper } from 'store';
+import { PaymentReportResponse } from 'types/api/response/paymentReport.types';
 
 interface PaymentsPageProps {
+  payments: PaymentReportResponse;
   query: {
     page: number;
     itemsPerPage: number;
@@ -69,7 +69,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) =>
       const redirectTo = redirectToUrl(
         currentUser,
         currentClinic,
-        '/analytics/general',
+        '/reports/payments',
       );
       if (redirectTo != null) {
         return {
@@ -95,14 +95,6 @@ export const getServerSideProps = wrapper.getServerSideProps((store) =>
       if (query.itemsPerPage == null) {
         query.itemsPerPage = '25';
       }
-
-      const chartResponse = await requestFetchSelectedCharts(req.headers);
-      store.dispatch(
-        setInitialData([
-          [query.startDate.toString(), query.endDate.toString()],
-          chartResponse.data,
-        ]),
-      );
 
       return {
         props: {
