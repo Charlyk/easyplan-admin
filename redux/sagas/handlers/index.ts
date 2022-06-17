@@ -21,3 +21,4 @@ export * from './crmFilters';
 export * from './appointments';
 export * from './user';
 export * from './payments';
+export * from './reports';

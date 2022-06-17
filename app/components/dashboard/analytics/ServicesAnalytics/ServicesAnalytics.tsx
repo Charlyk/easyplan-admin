@@ -14,17 +14,18 @@ import isEqual from 'lodash/isEqual';
 import orderBy from 'lodash/orderBy';
 import sortBy from 'lodash/sortBy';
 import moment from 'moment-timezone';
-import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
+import EasyDateRangePicker from 'app/components/common/EasyDateRangePicker';
 import { Role, ScheduleStatuses } from 'app/utils/constants';
 import { currentClinicSelector } from 'redux/selectors/appDataSelector';
 import { openCreateReminderModal } from 'redux/slices/CreateReminderModal.reducer';
 import { setPatientDetails } from 'redux/slices/mainReduxSlice';
 import { ServicesStatisticResponse } from 'types';
+import StatisticFilter from '../StatisticFilter';
 import styles from './ServicesAnalytics.module.scss';
 import reducer, {
   initialState,
@@ -39,11 +40,6 @@ import reducer, {
   setServices,
   setShowRangePicker,
 } from './ServicesAnalytics.reducer';
-
-const EasyDateRangePicker = dynamic(
-  () => import('app/components/common/EasyDateRangePicker'),
-);
-const StatisticFilter = dynamic(() => import('../StatisticFilter'));
 
 interface ServicesAnalyticsQuery {
   page: string | number;

@@ -1507,10 +1507,10 @@
   dependencies:
     "@date-io/core" "^2.11.0"
 
-"@easyplanpro/easyplan-components@^0.1.179":
-  version "0.1.179"
-  resolved "https://registry.yarnpkg.com/@easyplanpro/easyplan-components/-/easyplan-components-0.1.179.tgz#42713e54e2719884b3cb99590e5a98dcf1d66d52"
-  integrity sha512-kwHCesLn/qMGSgT6rWI9NCBiGnczVE+na5dOuuB5MW7Xe2ttzUkubSXWbhXf5MiaPtcjijK79g9149H3/m0/nA==
+"@easyplanpro/easyplan-components@^0.1.184":
+  version "0.1.185"
+  resolved "https://registry.yarnpkg.com/@easyplanpro/easyplan-components/-/easyplan-components-0.1.185.tgz#e9892f117d4ff423e98cfced55bcbbe2c2d41732"
+  integrity sha512-6JwDau9Dpf4zxSp+54hD85lmvv/Qgk6D4DixOxapQuhhHVeQbqWVU2ylIEO1hEz9De/h6MoNqFjtigLtUQvY6g==
   dependencies:
     "@emotion/react" "^11.8.1"
     "@emotion/styled" "^11.8.1"

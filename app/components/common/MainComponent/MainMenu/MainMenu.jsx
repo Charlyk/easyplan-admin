@@ -8,6 +8,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
+import IconReport from '@material-ui/icons/Assignment';
 import IconLiveHelp from '@material-ui/icons/LiveHelp';
 import IconMessages from '@material-ui/icons/Message';
 import clsx from 'clsx';
@@ -78,6 +79,20 @@ const rawMenuItems = [
     ],
   },
   {
+    id: 'reports',
+    type: 'group',
+    text: 'reports',
+    icon: <IconReport />,
+    roles: [Role.admin, Role.manager, Role.reception],
+    children: [
+      {
+        text: 'payments',
+        href: '/reports/payments',
+        roles: [Role.admin, Role.manager],
+      },
+    ],
+  },
+  {
     id: 'services',
     type: 'link',
     roles: [Role.admin, Role.manager],
@@ -142,6 +157,16 @@ const rawMenuItems = [
   },
 ];
 
+const getExpandedGroup = (currentPath) => {
+  if (currentPath.startsWith('/analytics')) {
+    return 'analytics';
+  } else if (currentPath.startsWith('/reports')) {
+    return 'reports';
+  }
+
+  return '';
+};
+
 const MainMenu = ({ currentPath, onCreateClinic }) => {
   const textForKey = useTranslate();
   const buttonRef = useRef(null);
@@ -159,8 +184,8 @@ const MainMenu = ({ currentPath, onCreateClinic }) => {
   const [isClinicsOpen, setIsClinicsOpen] = useState(false);
   const [showTechSupportHelp, setShowTechSupportHelp] = useState(false);
   const appLanguage = useSelector(appLanguageSelector);
-  const [isAnalyticsExpanded, setIsAnalyticsExpanded] = useState(
-    currentPath.startsWith('/analytics'),
+  const [expandedGroup, setExpandedGroup] = useState(
+    getExpandedGroup(currentPath),
   );
 
   const menuItems = useMemo(() => {
@@ -178,7 +203,7 @@ const MainMenu = ({ currentPath, onCreateClinic }) => {
   }, [appLanguage]);
 
   useEffect(() => {
-    setIsAnalyticsExpanded(checkIsAnalyticsEnabled());
+    setExpandedGroup(getExpandedGroup(currentPath));
   }, [currentPath]);
 
   useEffect(() => {
@@ -189,12 +214,12 @@ const MainMenu = ({ currentPath, onCreateClinic }) => {
     dispatch(dispatchFetchRemindersCount());
   }, [remoteReminder, updatedReminder]);
 
-  const handleAnalyticsClick = () => {
-    setIsAnalyticsExpanded(!isAnalyticsExpanded);
+  const handleMenuGroupClick = (groupId) => {
+    setExpandedGroup(groupId);
   };
 
-  const checkIsAnalyticsEnabled = () => {
-    return currentPath !== '/' && currentPath.startsWith('/analytics');
+  const isGroupExpanded = (groupId) => {
+    return expandedGroup === groupId;
   };
 
   const handleCompanyClick = () => {
@@ -278,8 +303,8 @@ const MainMenu = ({ currentPath, onCreateClinic }) => {
               <React.Fragment key={item.id}>
                 <ListItem
                   classes={{ root: styles.listItem, selected: styles.selected }}
-                  onPointerUp={handleAnalyticsClick}
-                  selected={checkIsAnalyticsEnabled()}
+                  onPointerUp={() => handleMenuGroupClick(item.id)}
+                  selected={isGroupExpanded(item.id)}
                 >
                   <ListItemIcon className={styles.itemIcon}>
                     {item.icon}
@@ -289,7 +314,7 @@ const MainMenu = ({ currentPath, onCreateClinic }) => {
                     classes={{ primary: styles.itemText }}
                   />
                 </ListItem>
-                <Collapse in={isAnalyticsExpanded}>
+                <Collapse in={expandedGroup === item.id}>
                   <List>
                     {item.children.map((child) => {
                       if (!child.roles.includes(userClinic?.roleInClinic))

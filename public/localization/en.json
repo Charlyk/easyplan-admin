@@ -849,5 +849,8 @@
   "card": "Debit Card",
   "transfer": "Transfer",
   "gift_certificate": "Gift Certificate",
-  "select_payment_method": "Select payment method"
+  "select_payment_method": "Select payment method",
+  "reports": "Reports",
+  "user_comment": "User comment",
+  "export_excel": "Export as .xlsx"
 }

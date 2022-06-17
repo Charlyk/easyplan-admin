@@ -40,8 +40,6 @@ const ServicesChart = ({ services, removeable, onClose, visible = true }) => {
     onClose?.(ChartType.Services);
   };
 
-  console.log(data);
-
   return (
     <Grid item xs={12} className={styles.servicesChart}>
       <div className={clsx(styles.servicesChart, 'chartItem')}>

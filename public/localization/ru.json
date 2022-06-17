@@ -849,5 +849,8 @@
   "card": "Банковская карточка",
   "transfer": "Перевод",
   "gift_certificate": "Подарочный сертификат",
-  "select_payment_method": "Selectati metoda de plata"
+  "select_payment_method": "Выберите метод оплаты",
+  "reports": "Отчеты",
+  "user_comment": "Коментарий пользователя",
+  "export_excel": "Скачать как .xlsx"
 }

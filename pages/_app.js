@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { ThemeContainer } from '@easyplanpro/easyplan-components';
+import { CacheProvider } from '@emotion/react';
 import { ThemeProvider } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -25,6 +26,8 @@ import NotificationsProvider from 'app/context/NotificationsProvider';
 import useWindowFocused from 'app/hooks/useWindowFocused';
 import theme from 'app/styles/theme';
 import { checkIfHasUnreadUpdates } from 'app/utils/checkIfHasUnreadUpdates';
+import createEmotionCache from 'app/utils/createEmotionCache';
+import { useAnalytics } from 'app/utils/hooks';
 import parseCookies from 'app/utils/parseCookies';
 import paths from 'app/utils/paths';
 import { isDev, loginUrl, pubNubEnv } from 'eas.config';
@@ -50,9 +53,6 @@ import 'moment/locale/ro';
 import 'app/styles/base/base.scss';
 import 'react-h5-audio-player/src/styles.scss';
 import 'app/utils';
-import createEmotionCache from 'app/utils/createEmotionCache';
-import { useAnalytics } from 'app/utils/hooks';
-import { CacheProvider } from '@emotion/react';
 
 const AddAppointmentModal = dynamic(() =>
   import(

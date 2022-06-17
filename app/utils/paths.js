@@ -20,4 +20,5 @@ export default {
   '/create-clinic': 'create clinic',
   '/register': 'create new account',
   '/error': 'error',
+  '/reports/payments': 'payments',
 };
