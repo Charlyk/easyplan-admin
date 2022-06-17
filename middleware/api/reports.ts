@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 import moment from 'moment-timezone';
-import { PaymentReportResponse } from '../../types/api/response/paymentReport.types';
+import { PaymentReportResponse } from 'types/api/response';
 import { get } from './request';
 
 export const fetchPaymentReports = async (

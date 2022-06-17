@@ -39,8 +39,8 @@ import {
   PaymentInvoices,
   PaymentMethod,
   PaymentSubscription,
+  PaymentReportResponse,
 } from 'types/api';
-import { PaymentReportResponse } from '../../types/api/response/paymentReport.types';
 
 export interface CalendarDataState {
   schedules: ScheduleItem[];
