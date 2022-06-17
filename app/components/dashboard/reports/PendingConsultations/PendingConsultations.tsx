@@ -17,20 +17,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import EASTextField from 'app/components/common/EASTextField';
 import EasyDateRangePicker from 'app/components/common/EasyDateRangePicker';
 import StatisticFilter from 'app/components/dashboard/analytics/StatisticFilter';
-import formattedAmount from 'app/utils/formattedAmount';
+import { HeaderKeys } from 'app/utils/constants';
 import { baseApiUrl } from 'eas.config';
-import {
-  isPaymentReportsLoadingSelector,
-  paymentReportsDataSelector,
-} from 'redux/selectors/paymentReportsSelector';
-import { fetchPaymentReports } from 'redux/slices/paymentReportsSlice';
-import { PaymentReportsGetRequest } from 'types/api';
 import {
   authTokenSelector,
   currentClinicSelector,
-} from '../../../../../redux/selectors/appDataSelector';
-import { HeaderKeys } from '../../../../utils/constants';
-import styles from './Payments.module.scss';
+} from 'redux/selectors/appDataSelector';
+import {
+  isPendingConsultationsLoadingSelector,
+  pendingConsultationsDataSelector,
+} from 'redux/selectors/pendingConsultationsSelector';
+import { fetchPendingConsultations } from 'redux/slices/pendingConsultationsSlice';
+import { PaymentReportsGetRequest } from 'types/api';
+import styles from './PendingConsultations.module.scss';
 
 interface PaymentsQuery {
   page: number;
@@ -43,12 +42,12 @@ interface PaymentsProps {
   query: PaymentsQuery;
 }
 
-const Payments: React.FC<PaymentsProps> = ({ query }) => {
+const PendingConsultations: React.FC<PaymentsProps> = ({ query }) => {
   const textForKey = useTranslate();
   const dispatch = useDispatch();
   const router = useRouter();
-  const payments = useSelector(paymentReportsDataSelector);
-  const isLoading = useSelector(isPaymentReportsLoadingSelector);
+  const consultations = useSelector(pendingConsultationsDataSelector);
+  const isLoading = useSelector(isPendingConsultationsLoadingSelector);
   const currentClinic = useSelector(currentClinicSelector);
   const authToken = useSelector(authTokenSelector);
   const pickerRef = useRef(null);
@@ -85,7 +84,7 @@ const Payments: React.FC<PaymentsProps> = ({ query }) => {
   }, [query]);
 
   useEffect(() => {
-    dispatch(fetchPaymentReports(request));
+    dispatch(fetchPendingConsultations(request));
   }, [request]);
 
   const handleFilterSubmit = async () => {
@@ -110,7 +109,7 @@ const Payments: React.FC<PaymentsProps> = ({ query }) => {
     const startDateStr = moment(startDate).format('YYYY-MM-DD');
     const endDateStr = moment(endDate).format('YYYY-MM-DD');
     await router.replace(
-      `/reports/payments?page=${page}&startDate=${startDateStr}&endDate=${endDateStr}&itemsPerPage=${rows}`,
+      `/reports/pending-consultations?page=${page}&startDate=${startDateStr}&endDate=${endDateStr}&itemsPerPage=${rows}`,
     );
   };
 
@@ -130,7 +129,7 @@ const Payments: React.FC<PaymentsProps> = ({ query }) => {
     const endDate = moment(dateRange[1]).format('YYYY-MM-DD');
     axios
       .get(
-        `${baseApiUrl}/reports/payments/download?startDate=${startDate}&endDate=${endDate}`,
+        `${baseApiUrl}/reports/consultations/download?startDate=${startDate}&endDate=${endDate}`,
         {
           headers: {
             [HeaderKeys.authorization]: String(authToken),
@@ -150,7 +149,7 @@ const Payments: React.FC<PaymentsProps> = ({ query }) => {
   };
 
   return (
-    <div className={styles.reportPayments}>
+    <div className={styles.pendingConsultations}>
       <StatisticFilter onUpdate={handleFilterSubmit} isLoading={isLoading}>
         <EASTextField
           ref={pickerRef}
@@ -162,15 +161,15 @@ const Payments: React.FC<PaymentsProps> = ({ query }) => {
         />
       </StatisticFilter>
       <div className={styles.dataContainer}>
-        {isLoading && payments.data.length === 0 && (
+        {isLoading && consultations.data.length === 0 && (
           <div className={styles.progressWrapper}>
             <CircularProgress classes={{ root: 'circular-progress-bar' }} />
           </div>
         )}
-        {!isLoading && payments.data.length === 0 && (
+        {!isLoading && consultations.data.length === 0 && (
           <span className={styles.noDataLabel}>{textForKey('no results')}</span>
         )}
-        {payments.data.length > 0 && (
+        {consultations.data.length > 0 && (
           <TableContainer classes={{ root: styles['table-container'] }}>
             <Table classes={{ root: styles['data-table'] }}>
               <TableHead>
@@ -178,48 +177,27 @@ const Payments: React.FC<PaymentsProps> = ({ query }) => {
                   <TableCell>{textForKey('date')}</TableCell>
                   <TableCell>{textForKey('patient')}</TableCell>
                   <TableCell>{textForKey('phone number')}</TableCell>
-                  <TableCell>{textForKey('user')}</TableCell>
-                  <TableCell>{textForKey('amount')}</TableCell>
-                  <TableCell align='right'>
-                    {textForKey('payment_method')}
-                  </TableCell>
-                  <TableCell align='right'>{textForKey('services')}</TableCell>
+                  <TableCell>{textForKey('doctor')}</TableCell>
                   <TableCell align='right'>
                     {textForKey('user_comment')}
                   </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {payments.data.map((item) => (
+                {consultations.data.map((item) => (
                   <TableRow key={item.id}>
                     <TableCell>
-                      {moment(item.created).format('DD MMM YYYY HH:mm')}
+                      {moment(item.date).format('DD MMM YYYY HH:mm')}
                     </TableCell>
-                    <TableCell>
-                      {item.patient.firstName} {item.patient.lastName}
-                    </TableCell>
+                    <TableCell>{item.patient.name}</TableCell>
                     <TableCell className={styles['patient-name-label']}>
-                      <a
-                        href={`tel:${item.patient.phoneWithCode.replace(
-                          '+',
-                          '',
-                        )}`}
-                      >
-                        {item.patient.phoneWithCode}
+                      <a href={`tel:${item.patient.phone.replace('+', '')}`}>
+                        {item.patient.phone}
                       </a>
                     </TableCell>
-                    <TableCell>
-                      {item.user.firstName} {item.user.lastName}
-                    </TableCell>
-                    <TableCell className={styles['patient-name-label']}>
-                      {formattedAmount(item.amount, item.currency)}
-                    </TableCell>
-                    <TableCell align='right'>{item.paymentMethod}</TableCell>
+                    <TableCell>{item.doctor.name}</TableCell>
                     <TableCell size='small' align='right'>
                       {item.comment}
-                    </TableCell>
-                    <TableCell size='small' align='right'>
-                      {item.userComment}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -244,7 +222,7 @@ const Payments: React.FC<PaymentsProps> = ({ query }) => {
           classes={{ root: styles.tablePagination }}
           rowsPerPageOptions={[25, 50, 100]}
           colSpan={4}
-          count={payments.total}
+          count={consultations.total}
           rowsPerPage={request.itemsPerPage}
           labelRowsPerPage={textForKey('rows per page')}
           page={request.page}
@@ -271,4 +249,4 @@ const Payments: React.FC<PaymentsProps> = ({ query }) => {
   );
 };
 
-export default Payments;
+export default PendingConsultations;

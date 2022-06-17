@@ -90,6 +90,11 @@ const rawMenuItems = [
         href: '/reports/payments',
         roles: [Role.admin, Role.manager],
       },
+      {
+        text: 'pending_consultations',
+        href: '/reports/pending-consultations',
+        roles: [Role.admin, Role.manager, Role.reception],
+      },
     ],
   },
   {
