@@ -81,7 +81,9 @@ export const userCalendarOrderSelector = createSelector(
 
 export const clinicServicesSelector = createSelector(
   currentClinicSelector,
-  (clinic) => clinic?.services?.filter((item) => !item.deleted) || [],
+  (clinic) =>
+    clinic?.services?.filter((item) => !item.deleted && !item.isConsultation) ||
+    [],
 );
 
 export const isAppInitializedSelector = createSelector(
@@ -182,4 +184,14 @@ export const isUpdatingProfileSelector = createSelector(
 export const isEmailChangedSelector = createSelector(
   appDataSelector,
   (data) => data.isEmailChanged,
+);
+
+export const consultationServiceSelector = createSelector(
+  currentClinicSelector,
+  (clinic) => clinic.services.find((it) => it.isConsultation),
+);
+
+export const hasConsultationServiceSelector = createSelector(
+  currentClinicSelector,
+  (clinic) => clinic.hasConsultationService,
 );

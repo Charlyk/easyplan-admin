@@ -11,6 +11,7 @@ export interface ClinicService {
   categoryId: number;
   serviceType: ClinicServiceType;
   currency: string;
+  isConsultation: boolean;
 }
 
 export interface ClinicServiceCategory {

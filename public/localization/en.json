@@ -852,5 +852,7 @@
   "select_payment_method": "Select payment method",
   "reports": "Reports",
   "user_comment": "User comment",
-  "export_excel": "Export as .xlsx"
+  "export_excel": "Export as .xlsx",
+  "consultation_appointment": "Consultation appointment",
+  "consultation_service": "Consultation service"
 }
