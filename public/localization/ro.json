@@ -852,5 +852,6 @@
   "select_payment_method": "Selectati metoda de plata",
   "reports": "Rapoarte",
   "user_comment": "Comentariu utilizator",
-  "export_excel": "Exportă ca .xlsx"
+  "export_excel": "Exportă ca .xlsx",
+  "pending_consultations": "Consultații în așteptare"
 }

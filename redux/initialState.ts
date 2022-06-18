@@ -319,6 +319,11 @@ const initialState: ReduxState = {
     error: null,
     data: { total: 0, data: [] },
   },
+  pendingConsultations: {
+    loading: false,
+    error: null,
+    data: { total: 0, data: [] },
+  },
 };
 
 export default initialState;
