@@ -534,6 +534,14 @@ const AppointmentDetails = ({
                       </Box>
                     </td>
                   </tr>
+                  {details.patient.guide && (
+                    <tr>
+                      <td style={{ paddingRight: '1rem', userSelect: 'none' }}>
+                        {textForKey('patient_guide')}:
+                      </td>
+                      <td>{details.patient.guide.name}</td>
+                    </tr>
+                  )}
                   <tr>
                     <td style={{ paddingRight: '1rem', userSelect: 'none' }}>
                       {textForKey('phone')}:
