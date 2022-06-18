@@ -1,0 +1,220 @@
+.pendingConsultations {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+
+  .tablePagination {
+    background-color: white;
+
+    :global(.MuiTablePagination-caption), :global(.MuiTablePagination-input) {
+      font-family: Inter, sans-serif !important;
+      font-style: normal !important;
+      font-weight: normal !important;
+      font-size: 13px !important;
+    }
+
+    :global(.MuiTablePagination-toolbar) {
+      min-height: unset;
+      height: 100%;
+      overflow: hidden;
+
+      :global(.MuiTablePagination-actions) {
+        button {
+          outline: none;
+        }
+      }
+    }
+  }
+
+  .pageFooter {
+    background-color: white;
+    margin-left: 8px;
+    margin-right: 8px;
+    margin-bottom: 1rem;
+    position: relative;
+
+    .primaryButton {
+      outline: none;
+      color: #3A83DC;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-size: 13px;
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 100;
+
+      svg {
+        margin-right: 0.5rem;
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+
+  .dataContainer {
+    height: 100%;
+    overflow-y: auto;
+    padding: unset;
+    position: relative;
+
+    .noDataLabel {
+      padding: 3rem;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 15px;
+      line-height: 20px;
+      color: #6F7091;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .progressWrapper {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .table-container {
+      padding: .5rem 8px;
+      width: unset;
+
+      .data-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 .5rem;
+
+        thead > tr > td {
+          padding-left: .8rem;
+        }
+
+        thead > tr > th {
+          font-family: Inter, sans-serif;
+          font-style: normal;
+          font-weight: 600;
+          font-size: .8rem;
+          line-height: 24px;
+          padding: .2rem 1rem;
+          color: #A1A2C6;
+        }
+
+        tbody > tr {
+          margin-bottom: .3rem;
+          background: #FFFFFF;
+          box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
+          border-radius: 4px;
+
+          td {
+            padding: .8rem;
+            font-family: Inter, sans-serif;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 12px;
+            color: #34354C;
+
+            .reminderBtn {
+              padding: 0;
+
+              svg {
+                fill: #3a83dc;
+              }
+            }
+          }
+        }
+
+        tfoot > tr > td {
+          padding-left: .8rem;
+          font-family: Inter, sans-serif;
+          font-style: normal;
+          font-weight: 600;
+          font-size: 16px;
+          line-height: 20px;
+          color: #34354C;
+        }
+      }
+    }
+
+    .patient-name-label {
+      color: #3A83DC;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    .status-label {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      line-height: 20px;
+      padding: .4rem;
+
+      &.waiting {
+        color: #93C1EF;
+        background-color: #F4FAFE;
+      }
+
+      &.not-come {
+        color: #FF5C83;
+        background-color: rgba(253, 107, 143, 0.1);;
+      }
+
+      &.finished {
+        color: #7DD7C8;
+        background-color: #EFFFFE;
+      }
+
+      &.confirmed {
+        color: #FDC534;
+        background-color: rgba(252, 201, 74, 0.1);
+      }
+
+      &.paid {
+        color: #00E987;
+        background-color: rgba(28, 234, 149, 0.1);
+      }
+    }
+  }
+
+  .selectControlRoot {
+    width: 100%;
+    margin-right: 10px;
+
+    :global(.MuiSelect-root) {
+      border: #ced4da 1px solid;
+      border-radius: 4px;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+    :global(.MuiInput-underline:after) {
+      border-bottom-color: #3A83DC;
+    }
+
+    :global(.MuiFormLabel-root.Mui-focused) {
+      color: #3A83DC;
+    }
+
+    :global(.MuiFormLabel-root) {
+      font-family: Inter, sans-serif !important;
+      font-style: normal !important;
+      font-weight: normal !important;
+      font-size: 13px !important;
+    }
+
+    :global(.MuiSelect-select.MuiSelect-select) {
+      font-family: Inter, sans-serif !important;
+      font-style: normal !important;
+      font-weight: normal !important;
+      font-size: 13px !important;
+    }
+  }
+}

@@ -854,5 +854,6 @@
   "user_comment": "Коментарий пользователя",
   "export_excel": "Скачать как .xlsx",
   "consultation_appointment": "Запись на консультацию",
-  "consultation_service": "Услуга консультации"
+  "consultation_service": "Услуга консультации",
+  "pending_consultations": "Консультации в ожидании"
 }

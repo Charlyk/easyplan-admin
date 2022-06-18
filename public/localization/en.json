@@ -854,5 +854,6 @@
   "user_comment": "User comment",
   "export_excel": "Export as .xlsx",
   "consultation_appointment": "Consultation appointment",
-  "consultation_service": "Consultation service"
+  "consultation_service": "Consultation service",
+  "pending_consultations": "Pending consultations"
 }

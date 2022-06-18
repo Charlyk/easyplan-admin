@@ -30,6 +30,7 @@ import servicesList from 'redux/slices/servicesListSlice';
 import usersList from 'redux/slices/usersListSlice';
 import patientsAutocomplete from '../slices/patientsAutocompleteSlice';
 import paymentReports from '../slices/paymentReportsSlice';
+import pendingConsultations from '../slices/pendingConsultationsSlice';
 import addPaymentModal from './addPaymentModal';
 import calendar from './calendar';
 import clinic from './clinic';
@@ -91,6 +92,7 @@ const rootReducer = combineReducers({
   patientsAutocomplete,
   paymentsState: payments,
   paymentReports,
+  pendingConsultations,
 });
 
 export default rootReducer;

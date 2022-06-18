@@ -854,5 +854,6 @@
   "user_comment": "Comentariu utilizator",
   "export_excel": "Exportă ca .xlsx",
   "consultation_appointment": "Programare la conslutare",
-  "consultation_service": "Serviciu de consultare"
+  "consultation_service": "Serviciu de consultare",
+  "pending_consultations": "Consultații în așteptare"
 }
