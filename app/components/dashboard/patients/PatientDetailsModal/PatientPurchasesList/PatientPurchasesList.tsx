@@ -24,6 +24,10 @@ import {
 } from './PatientPurchasesList.reducer';
 import { patientPurchasesListSelector } from './PatientPurchasesList.selector';
 
+const getDiscountedAmount = (price: number, discount: number): number => {
+  return discount > 0 ? price - Math.trunc((price * discount) / 100) : price;
+};
+
 const PatientPurchasesList = ({ patient }) => {
   const textForKey = useTranslate();
   const dispatch = useDispatch();
@@ -37,6 +41,15 @@ const PatientPurchasesList = ({ patient }) => {
       fetchPurchases();
     }
   }, [patient]);
+
+  const discountedPayments = useMemo(() => {
+    return payments.map((payment) => ({
+      ...payment,
+      discountedTotal: getDiscountedAmount(payment.total, payment.discount),
+    }));
+  }, []);
+
+  console.log(payments);
 
   useEffect(() => {
     if (updateInvoice?.patientId !== patient?.id) {
@@ -64,10 +77,22 @@ const PatientPurchasesList = ({ patient }) => {
   };
 
   const { totalAmount, totalDebts, totalPrepayments } = useMemo(() => {
-    let total = 0;
+    const total = 0;
     let totalPaymentsMade = 0;
 
-    payments.forEach((payment) => {
+    const filteredByCurrencies: { [key: string]: number } = {};
+
+    discountedPayments.forEach((payment) => {
+      const currencyData = payment[payment.currency];
+      let total = 0;
+
+      console.log({ currencyData });
+
+      if (currencyData) {
+        const totalAmount = currencyData.total + payment.total;
+      } else {
+      }
+
       total += payment.total;
       payment.payments.forEach((madePayment) => {
         totalPaymentsMade += madePayment.amount;

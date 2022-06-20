@@ -60,17 +60,6 @@ const PatientPurchaseRow: React.FC<Props> = ({
     return formattedAmount(payment[mode], payment.currency);
   };
 
-  const getDiscountedAmount = (
-    price: number,
-    discount: number,
-    currency: string,
-  ): string => {
-    const discountedPrice =
-      discount > 0 ? price - Math.trunc((price * discount) / 100) : price;
-
-    return formattedAmount(discountedPrice, currency);
-  };
-
   const handlePayDebt = () => {
     dispatch(
       setPaymentModal({
