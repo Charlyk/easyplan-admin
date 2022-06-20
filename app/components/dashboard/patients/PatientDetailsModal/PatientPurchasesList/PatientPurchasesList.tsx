@@ -129,10 +129,6 @@ const PatientPurchasesList = ({ patient }) => {
     };
   }, [discountedPayments.length, clinicCurrency]);
 
-  console.log({ totalAmount });
-  console.log({ totalPrepayments });
-  console.log({ totalDebts });
-
   return (
     <div className={styles.patientPurchasesList}>
       <ConfirmationModal
