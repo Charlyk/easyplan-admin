@@ -856,5 +856,6 @@
   "consultation_appointment": "Programare la conslutare",
   "consultation_service": "Serviciu de consultare",
   "pending_consultations": "Consultații în așteptare",
-  "patient_guide": "Ghidul pacientului"
+  "patient_guide": "Ghidul pacientului",
+  "consultations": "Consultații"
 }

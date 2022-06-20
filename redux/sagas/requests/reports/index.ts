@@ -6,7 +6,7 @@ import {
 import {
   PaymentReportResponse,
   PendingConsultationsGetRequest,
-  PendingConsultationsResponse,
+  ConsultationsResponse,
 } from 'types/api';
 import { PaymentReportsGetRequest } from 'types/api/request';
 
@@ -23,7 +23,7 @@ export async function requestFetchPaymentReports(
 
 export async function requestFetchPendingConsultations(
   data: PendingConsultationsGetRequest,
-): Promise<AxiosResponse<PendingConsultationsResponse>> {
+): Promise<AxiosResponse<ConsultationsResponse>> {
   return fetchPendingConsultationsReport(
     data.page,
     data.itemsPerPage,

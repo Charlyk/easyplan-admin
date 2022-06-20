@@ -613,10 +613,10 @@
   "payment_valid_till": "Действительно до",
   "payment_yy": "ГГ",
   "payment_zip": "Почтовый индекс",
-  "pending": "Записан (а)",
+  "pending": "Записан(а)",
   "pending delivery": "Ожидает отправки",
-  "pending payment": "В ожидании",
-  "pendingpayment": "В ожидании",
+  "pending payment": "В ожидании оплаты",
+  "pendingpayment": "В ожидании оплаты",
   "period": "Период",
   "personal info": "Сведения о пациенте",
   "persons": "Человек (человека)",
@@ -856,5 +856,6 @@
   "consultation_appointment": "Запись на консультацию",
   "consultation_service": "Услуга консультации",
   "pending_consultations": "Консультации в ожидании",
-  "patient_guide": "Гид пациента"
+  "patient_guide": "Гид пациента",
+  "consultations": "Консультации"
 }

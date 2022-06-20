@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import EASTextField from 'app/components/common/EASTextField';
 import EasyDateRangePicker from 'app/components/common/EasyDateRangePicker';
 import StatisticFilter from 'app/components/dashboard/analytics/StatisticFilter';
-import { HeaderKeys } from 'app/utils/constants';
+import { HeaderKeys, ScheduleStatuses } from 'app/utils/constants';
 import { baseApiUrl } from 'eas.config';
 import {
   authTokenSelector,
@@ -42,7 +42,7 @@ interface PaymentsProps {
   query: PaymentsQuery;
 }
 
-const PendingConsultations: React.FC<PaymentsProps> = ({ query }) => {
+const Consultations: React.FC<PaymentsProps> = ({ query }) => {
   const textForKey = useTranslate();
   const dispatch = useDispatch();
   const router = useRouter();
@@ -109,13 +109,23 @@ const PendingConsultations: React.FC<PaymentsProps> = ({ query }) => {
     const startDateStr = moment(startDate).format('YYYY-MM-DD');
     const endDateStr = moment(endDate).format('YYYY-MM-DD');
     await router.replace(
-      `/reports/pending-consultations?page=${page}&startDate=${startDateStr}&endDate=${endDateStr}&itemsPerPage=${rows}`,
+      `/reports/consultations?page=${page}&startDate=${startDateStr}&endDate=${endDateStr}&itemsPerPage=${rows}`,
     );
   };
 
   const handleDatePickerOpen = () => setShowDatePicker(true);
 
   const handleDatePickerClose = () => setShowDatePicker(false);
+
+  const titleForStatus = (status) => {
+    const data = ScheduleStatuses.find((it) => it.id === status);
+    return textForKey(data?.name);
+  };
+
+  const colorForStatus = (status) => {
+    const data = ScheduleStatuses.find((it) => it.id === status);
+    return data?.color;
+  };
 
   const handleDateChange = (data: {
     range1: { startDate: Date; endDate: Date };
@@ -178,6 +188,10 @@ const PendingConsultations: React.FC<PaymentsProps> = ({ query }) => {
                   <TableCell>{textForKey('patient')}</TableCell>
                   <TableCell>{textForKey('phone number')}</TableCell>
                   <TableCell>{textForKey('doctor')}</TableCell>
+                  <TableCell>{textForKey('patient_guide')}</TableCell>
+                  <TableCell align='right' size='small'>
+                    {textForKey('status')}
+                  </TableCell>
                   <TableCell align='right'>
                     {textForKey('user_comment')}
                   </TableCell>
@@ -190,12 +204,24 @@ const PendingConsultations: React.FC<PaymentsProps> = ({ query }) => {
                       {moment(item.date).format('DD MMM YYYY HH:mm')}
                     </TableCell>
                     <TableCell>{item.patient.name}</TableCell>
-                    <TableCell className={styles['patient-name-label']}>
+                    <TableCell className={styles.patientNameLabel}>
                       <a href={`tel:${item.patient.phone.replace('+', '')}`}>
                         {item.patient.phone}
                       </a>
                     </TableCell>
                     <TableCell>{item.doctor.name}</TableCell>
+                    <TableCell>{item.guide ? item.guide.name : '-'}</TableCell>
+                    <TableCell size='small' align='right'>
+                      <span
+                        className={styles.statusLabel}
+                        style={{
+                          color: colorForStatus(item.status),
+                          backgroundColor: `${colorForStatus(item.status)}1A`,
+                        }}
+                      >
+                        {titleForStatus(item.status)}
+                      </span>
+                    </TableCell>
                     <TableCell size='small' align='right'>
                       {item.comment}
                     </TableCell>
@@ -249,4 +275,4 @@ const PendingConsultations: React.FC<PaymentsProps> = ({ query }) => {
   );
 };
 
-export default PendingConsultations;
+export default Consultations;
