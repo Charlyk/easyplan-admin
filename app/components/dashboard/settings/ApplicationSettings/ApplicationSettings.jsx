@@ -20,6 +20,7 @@ import styles from './ApplicationSettings.module.scss';
 import ClinicCabinets from './CliniCabinets';
 import ClinicSettings from './ClinicSettings';
 import ClinicTags from './ClinicTags';
+import ConsultationService from './ConsultationService';
 import TimeBeforeOnSite from './TimeBeforeOnSite';
 
 const ApplicationSettings = () => {
@@ -97,6 +98,11 @@ const ApplicationSettings = () => {
           {textForKey('app_settings_time_before_on_site')}
         </Typography>
         <TimeBeforeOnSite value={time} onChange={handleFormChange} />
+        <Divider className={styles.divider} />
+        <Typography className={styles.titleLabel}>
+          {textForKey('consultation_service')}
+        </Typography>
+        <ConsultationService />
         <Divider className={styles.divider} />
         <Typography className={styles.titleLabel}>
           {textForKey('app_settings_tags')}

@@ -6,11 +6,11 @@ import Zoom from '@material-ui/core/Zoom';
 import IconFilter from '@material-ui/icons/FilterList';
 import IconReminders from '@material-ui/icons/NotificationsActiveOutlined';
 import sortBy from 'lodash/sortBy';
-import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import InfiniteScrollDiv from 'app/components/common/InfiniteScrollDiv';
+import ConfirmationModal from 'app/components/common/modals/ConfirmationModal';
 import NotificationsContext from 'app/context/notificationsContext';
 import { Role } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
@@ -39,8 +39,11 @@ import {
 import { playPhoneCallRecord } from 'redux/slices/mainReduxSlice';
 import { CrmDealListItemType, DealStateView, DealView } from 'types';
 import { ColumnMoveDirection } from '../../../../types/api';
+import DealDetails from '../DealDetails';
 import DealsColumn from '../DealsColumn';
+import LinkPatientModal from '../LinkPatientModal';
 import RemindersModal from '../RemindersModal';
+import CrmFilters from './CrmFilters';
 import styles from './CrmMain.module.scss';
 import reducer, {
   initialState,
@@ -57,13 +60,6 @@ import reducer, {
   setCurrentPage,
   setShowPageConnectModal,
 } from './CrmMain.reducer';
-
-const ConfirmationModal = dynamic(
-  () => import('app/components/common/modals/ConfirmationModal'),
-);
-const LinkPatientModal = dynamic(() => import('../LinkPatientModal'));
-const DealDetails = dynamic(() => import('../DealDetails'));
-const CrmFilters = dynamic(() => import('./CrmFilters'));
 
 const COLUMN_WIDTH = 350;
 const itemsPerPage = 25;

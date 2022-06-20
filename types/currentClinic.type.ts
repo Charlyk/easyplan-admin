@@ -38,4 +38,5 @@ export interface CurrentClinic {
   facebookPages: FacebookPage[];
   users: ClinicUser[];
   cabinets: Cabinet[];
+  hasConsultationService: boolean;
 }

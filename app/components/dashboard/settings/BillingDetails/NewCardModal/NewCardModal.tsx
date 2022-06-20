@@ -174,6 +174,8 @@ const NewCardModal: React.FC<NewCardModalProps> = ({ countries }) => {
   };
 
   return (
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     <Modal open={modalOpen} onClose={handleCloseModal}>
       <form className={styles.container} onSubmit={handleSubmit}>
         <IconButton
@@ -293,6 +295,8 @@ const NewCardModal: React.FC<NewCardModalProps> = ({ countries }) => {
             }
           />
         </div>
+        {/*eslint-disable-next-line @typescript-eslint/ban-ts-comment*/}
+        {/*@ts-ignore*/}
         <Box
           display='flex'
           justifyContent='space-between'

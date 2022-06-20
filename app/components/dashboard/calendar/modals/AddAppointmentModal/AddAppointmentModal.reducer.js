@@ -67,6 +67,7 @@ export const initialState = {
   appointmentNote: '',
   appointmentStatus: 'Pending',
   isUrgent: false,
+  isConsultation: false,
   loading: { patients: false, services: false, doctors: false },
   cabinet: null,
   createPatientModal: { open: false, value: '' },
@@ -102,7 +103,7 @@ const addAppointmentModalSlice = createSlice({
         state.doctor = action.payload;
       }
       state.service = null;
-      state.isServiceValid = false;
+      state.isServiceValid = state.isConsultation;
       state.isDoctorValid = action.payload != null;
     },
     setService(state, action) {
@@ -167,6 +168,7 @@ const addAppointmentModalSlice = createSlice({
         scheduleStatus,
         isUrgent,
         cabinet,
+        isConsultation,
       } = schedule;
 
       state.scheduleId = schedule.id;
@@ -177,7 +179,9 @@ const addAppointmentModalSlice = createSlice({
       };
       state.cabinet = { ...cabinet, label: cabinet?.name };
       state.doctor = doctor;
-      state.service = { ...service, label: service.name };
+      state.service = isConsultation
+        ? null
+        : { ...service, label: service.name };
       state.appointmentNote = noteText;
       state.appointmentDate = scheduleStartDate.toDate();
       state.startTime = scheduleStartDate.format('HH:mm');
@@ -186,8 +190,9 @@ const addAppointmentModalSlice = createSlice({
       state.isUrgent = isUrgent;
       state.isPatientValid = true;
       state.isDoctorValid = true;
-      state.isServiceValid = true;
+      state.isServiceValid = isConsultation || service != null;
       state.isEditing = true;
+      state.isConsultation = isConsultation;
     },
     setIsUrgent(state, action) {
       state.isUrgent = action.payload;
@@ -269,6 +274,17 @@ const addAppointmentModalSlice = createSlice({
     setHoursError(state, action) {
       state.hoursError = action.payload;
       state.isFetchingHours = false;
+      state.availableTime = [];
+      state.availableEndTime = [];
+      state.availableStartTime = [];
+    },
+    setIsConsultation(state, action) {
+      state.isConsultation = action.payload;
+      state.service = action.payload ? null : state.service;
+      state.isServiceValid = action.payload || state.service != null;
+      state.availableTime = [];
+      state.availableEndTime = [];
+      state.availableStartTime = [];
     },
   },
 });
@@ -300,6 +316,7 @@ export const {
   setSelectedCabinetInDoctorMode,
   setShowCreateModal,
   setHoursError,
+  setIsConsultation,
   resetState,
 } = addAppointmentModalSlice.actions;
 

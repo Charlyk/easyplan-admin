@@ -30,7 +30,9 @@ import {
 import {
   clinicCabinetsSelector,
   clinicServicesSelector,
+  consultationServiceSelector,
   doctorsForScheduleSelector,
+  hasConsultationServiceSelector,
 } from 'redux/selectors/appDataSelector';
 import { updateAppointmentsList } from 'redux/slices/mainReduxSlice';
 import { ScheduleStatus } from 'types';
@@ -56,6 +58,7 @@ import reducer, {
   setShowCreateModal,
   setHoursError,
   resetState,
+  setIsConsultation,
 } from './AddAppointmentModal.reducer';
 import AppointmentPatient from './AppointmentPatient';
 
@@ -78,6 +81,8 @@ const AddAppointmentModal = ({
   const activeServices = useSelector(clinicServicesSelector);
   const clinicCabinets = useSelector(clinicCabinetsSelector);
   const clinicDoctors = useSelector(doctorsForScheduleSelector);
+  const consultationService = useSelector(consultationServiceSelector);
+  const hasConsultationService = useSelector(hasConsultationServiceSelector);
 
   const [
     {
@@ -102,6 +107,7 @@ const AddAppointmentModal = ({
       availableStartTime,
       availableEndTime,
       hoursError,
+      isConsultation,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
@@ -249,7 +255,7 @@ const AddAppointmentModal = ({
   // fetch available hours when service, doctor, cabinet and/or date is changed
   useEffect(() => {
     fetchAvailableHours();
-  }, [doctor, service, appointmentDate]);
+  }, [doctor, service, appointmentDate, isConsultation]);
 
   // set initial start and end time for appointment
   useEffect(() => {
@@ -293,16 +299,23 @@ const AddAppointmentModal = ({
   };
 
   const fetchAvailableHours = async () => {
-    if (doctor == null || service == null || appointmentDate == null) {
+    if (
+      doctor == null ||
+      (service == null && !isConsultation) ||
+      appointmentDate == null
+    ) {
       return;
     }
     localDispatch(setIsFetchingHours(true));
     try {
       const query = {
-        serviceId: service.serviceId || service.id,
         doctorId: doctor.id,
         date: moment(appointmentDate).format('YYYY-MM-DD'),
       };
+
+      if (!isConsultation) {
+        query.serviceId = service.serviceId || service.id;
+      }
 
       if (schedule != null) {
         query.scheduleId = schedule.id;
@@ -329,12 +342,15 @@ const AddAppointmentModal = ({
     if (schedule != null) {
       return;
     }
+    const serviceDuration = isConsultation
+      ? consultationService.duration
+      : service.duration;
     let approximatedDuration;
-    if (service.duration % 5 !== 0) {
-      let remainder = service.duration % 5;
-      approximatedDuration = service.duration - remainder + 5;
+    if (serviceDuration % 5 !== 0) {
+      let remainder = serviceDuration % 5;
+      approximatedDuration = serviceDuration - remainder + 5;
     } else {
-      approximatedDuration = service.duration;
+      approximatedDuration = serviceDuration;
     }
 
     setTimeout(() => {
@@ -405,6 +421,10 @@ const AddAppointmentModal = ({
     localDispatch(setIsUrgent(checked));
   };
 
+  const handleIsConsultationChange = (event, checked) => {
+    localDispatch(setIsConsultation(checked));
+  };
+
   const isFormValid = () => {
     return (
       isDoctorValid &&
@@ -438,10 +458,11 @@ const AddAppointmentModal = ({
       // build.yml request body
       const requestBody = {
         isUrgent,
+        isConsultation,
         patientId: patient?.id,
         doctorId: doctor?.id,
         cabinetId: cabinet?.id,
-        serviceId: service.serviceId || service.id,
+        serviceId: isConsultation ? null : service.serviceId || service.id,
         startDate: startDate.toDate(),
         endDate: endDate.toDate(),
         note: appointmentNote,
@@ -546,16 +567,31 @@ const AddAppointmentModal = ({
             />
           )}
 
-          <EASAutocomplete
-            filterLocally
-            disabled={mappedServices.length === 0}
-            containerClass={styles.simpleField}
-            options={mappedServices}
-            value={service}
-            fieldLabel={`${textForKey('service')} (${textForKey('required')})`}
-            placeholder={textForKey('enter service name')}
-            onChange={handleServiceChange}
-          />
+          {!isConsultation && (
+            <EASAutocomplete
+              filterLocally
+              disabled={mappedServices.length === 0}
+              containerClass={styles.simpleField}
+              options={mappedServices}
+              value={service}
+              fieldLabel={textForKey('service')}
+              placeholder={textForKey('enter service name')}
+              onChange={handleServiceChange}
+            />
+          )}
+
+          <div>
+            <FormControlLabel
+              disabled={!hasConsultationService}
+              control={<Checkbox checked={isConsultation} />}
+              label={textForKey('consultation_appointment')}
+              onChange={handleIsConsultationChange}
+              classes={{
+                root: styles.urgentCheck,
+                label: styles.consultationLabel,
+              }}
+            />
+          </div>
 
           <EASTextField
             readOnly

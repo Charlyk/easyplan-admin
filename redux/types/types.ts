@@ -39,6 +39,8 @@ import {
   PaymentInvoices,
   PaymentMethod,
   PaymentSubscription,
+  PaymentReportResponse,
+  PendingConsultationsResponse,
 } from 'types/api';
 
 export interface CalendarDataState {
@@ -292,6 +294,10 @@ export type PaymentsState = {
   isDataLoading: boolean;
 };
 
+export type PaymentReportsState = WithQuery<PaymentReportResponse>;
+
+export type PendingConsultationsState = WithQuery<PendingConsultationsResponse>;
+
 export interface ReduxState {
   updateCategories: boolean;
   updateServices: boolean;
@@ -344,4 +350,6 @@ export interface ReduxState {
   patientsAutocomplete: PatientsAutocompleteState;
   appointments: AppointmentsState;
   paymentsState: PaymentsState;
+  paymentReports: PaymentReportsState;
+  pendingConsultations: PendingConsultationsState;
 }

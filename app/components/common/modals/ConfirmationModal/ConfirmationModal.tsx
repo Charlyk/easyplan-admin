@@ -47,6 +47,8 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
       secondaryBtnText={secondaryButtonText}
       size='small'
     >
+      {/*eslint-disable-next-line @typescript-eslint/ban-ts-comment*/}
+      {/*@ts-ignore*/}
       <Box padding='16px'>
         <Typography className={styles.messageLabel}>{message}</Typography>
       </Box>

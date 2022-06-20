@@ -7,3 +7,5 @@ export * from './errorResponse.types';
 export * from './appUserInfo';
 export * from './payments.types';
 export * from './countries.types';
+export * from './paymentReport.types';
+export * from './pendingConsultations.types';

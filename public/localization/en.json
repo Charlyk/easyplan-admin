@@ -844,5 +844,17 @@
   "total-prepayment": "Total prepayment",
   "total-debt": "Total debt",
   "total-cost": "Total price",
-  "subscription_canceled": "Subscription canceled"
+  "subscription_canceled": "Subscription canceled",
+  "cash": "Cash",
+  "card": "Debit Card",
+  "transfer": "Transfer",
+  "gift_certificate": "Gift Certificate",
+  "select_payment_method": "Select payment method",
+  "reports": "Reports",
+  "user_comment": "User comment",
+  "export_excel": "Export as .xlsx",
+  "consultation_appointment": "Consultation appointment",
+  "consultation_service": "Consultation service",
+  "pending_consultations": "Pending consultations",
+  "patient_guide": "Patient guide"
 }

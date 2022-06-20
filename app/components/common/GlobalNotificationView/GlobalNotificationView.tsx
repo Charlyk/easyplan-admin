@@ -39,7 +39,7 @@ const GlobalNotificationView: React.FC = () => {
     dispatch(dispatchMarkNotificationAsRead(notification.id));
   };
 
-  if (notification == null || isLoading) {
+  if (notification == null || isLoading || notificationMessage == null) {
     return null;
   }
 

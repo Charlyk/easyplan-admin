@@ -19,7 +19,9 @@ export const makeStore = (_context: Context): SagaStore<ReduxState> => {
     reducer: rootReducer,
     devTools: process.env.APP_ENV !== 'production',
     middleware: (getDefaultMiddleware) => {
-      return getDefaultMiddleware().concat(sagaMiddleware);
+      return getDefaultMiddleware({
+        serializableCheck: false,
+      }).concat(sagaMiddleware);
     },
   });
 
