@@ -25,12 +25,12 @@ import {
   clinicTimeZoneSelector,
   isManagerSelector,
 } from 'redux/selectors/appDataSelector';
-import { PatientPurchase } from 'types';
+import { PatientPurchaseDiscounted } from 'types';
 import styles from './PatientPurchasesList.module.scss';
 
 interface Props {
-  payment: PatientPurchase;
-  handleUndoPayment(payment: PatientPurchase): void;
+  payment: PatientPurchaseDiscounted;
+  handleUndoPayment(payment: PatientPurchaseDiscounted): void;
 }
 
 const PatientPurchaseRow: React.FC<Props> = ({
@@ -95,11 +95,7 @@ const PatientPurchaseRow: React.FC<Props> = ({
         <TableCell>{payment.discount}%</TableCell>
         <TableCell>{getAmount(payment, 'paid')}</TableCell>
         <TableCell>
-          {getDiscountedAmount(
-            payment.total,
-            payment.discount,
-            payment.currency,
-          )}
+          {formattedAmount(payment.discountedTotal, payment.currency)}
         </TableCell>
         <TableCell classes={{ root: 'amount-cell' }}>
           {getAmount(payment)}

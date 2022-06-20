@@ -7,9 +7,9 @@ import { useTranslate } from 'react-polyglot';
 import styles from './PatientPurchasesList.module.scss';
 
 interface Props {
-  totalCost: number | string;
-  totalDebts: number | string;
-  totalPrepayment: number | string;
+  totalCost: Array<number | string>;
+  totalDebts: Array<number | string>;
+  totalPrepayment: Array<number | string>;
 }
 
 const PatientPurchaseListFooter: React.FC<Props> = ({
@@ -39,7 +39,7 @@ const PatientPurchaseListFooter: React.FC<Props> = ({
                 root: clsx('totals-text', styles.totalsAmount),
               }}
             >
-              {totalPrepayment}
+              {totalPrepayment.join(' | ')}
             </Typography>
           </div>
         </TableCell>
@@ -62,7 +62,7 @@ const PatientPurchaseListFooter: React.FC<Props> = ({
                 root: clsx('totals-text', styles.totalsAmount),
               }}
             >
-              {totalDebts}
+              {totalDebts.join(' | ')}
             </Typography>
           </div>
         </TableCell>
@@ -81,7 +81,7 @@ const PatientPurchaseListFooter: React.FC<Props> = ({
                 root: clsx('totals-text', styles.totalsAmount),
               }}
             >
-              {totalCost}
+              {totalCost.join(' | ')}
             </Typography>
           </div>
         </TableCell>

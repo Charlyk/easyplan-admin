@@ -9,6 +9,10 @@ export interface PatientPurchase {
   payments: DetailedPayment[];
 }
 
+export interface PatientPurchaseDiscounted extends PatientPurchase {
+  discountedTotal: number;
+}
+
 export interface DetailedPayment {
   amount: number;
   comment: string;

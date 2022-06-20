@@ -30,6 +30,7 @@ import {
   CrmDealDetailsType,
   WithQuery,
   PaginatedResponse,
+  PatientPurchase,
 } from 'types';
 import {
   AppointmentsDoctorsResponse,
@@ -210,7 +211,7 @@ export interface PatientVisitsState {
 
 export interface PatientPurchasesState {
   isLoading: boolean;
-  payments: any[];
+  payments: PatientPurchase[];
 }
 
 export interface ChangeLogModalState {

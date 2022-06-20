@@ -15,6 +15,7 @@ import ConfirmationModal from 'app/components/common/modals/ConfirmationModal';
 import formattedAmount from 'app/utils/formattedAmount';
 import { clinicCurrencySelector } from 'redux/selectors/appDataSelector';
 import { updateInvoiceSelector } from 'redux/selectors/invoicesSelector';
+import { PatientPurchaseDiscounted } from 'types';
 import PatientPurchaseListFooter from './PatientPurchaseListFooter';
 import PatientPurchaseRow from './PatientPurchaseRow';
 import styles from './PatientPurchasesList.module.scss';
@@ -23,6 +24,12 @@ import {
   dispatchUndoPayment,
 } from './PatientPurchasesList.reducer';
 import { patientPurchasesListSelector } from './PatientPurchasesList.selector';
+
+type CurrencyFilter = {
+  totalAmount: number;
+  totalDebts: number;
+  totalPrepayments: number;
+};
 
 const getDiscountedAmount = (price: number, discount: number): number => {
   return discount > 0 ? price - Math.trunc((price * discount) / 100) : price;
@@ -46,10 +53,8 @@ const PatientPurchasesList = ({ patient }) => {
     return payments.map((payment) => ({
       ...payment,
       discountedTotal: getDiscountedAmount(payment.total, payment.discount),
-    }));
-  }, []);
-
-  console.log(payments);
+    })) as PatientPurchaseDiscounted[];
+  }, [payments.length]);
 
   useEffect(() => {
     if (updateInvoice?.patientId !== patient?.id) {
@@ -77,39 +82,56 @@ const PatientPurchasesList = ({ patient }) => {
   };
 
   const { totalAmount, totalDebts, totalPrepayments } = useMemo(() => {
-    const total = 0;
-    let totalPaymentsMade = 0;
-
-    const filteredByCurrencies: { [key: string]: number } = {};
+    const filteredByCurrencies: {
+      [key: string]: CurrencyFilter;
+    } = {};
 
     discountedPayments.forEach((payment) => {
-      const currencyData = payment[payment.currency];
-      let total = 0;
-
-      console.log({ currencyData });
-
+      const currencyData = filteredByCurrencies[payment.currency];
+      const total = (currencyData?.totalAmount ?? 0) + payment.total;
+      const totalPaymentsMade = payment.payments.reduce(
+        (sum, detailedPayment) => sum + detailedPayment.amount,
+        0,
+      );
+      const debts = total - totalPaymentsMade;
+      const prepayments = totalPaymentsMade - total;
       if (currencyData) {
-        const totalAmount = currencyData.total + payment.total;
+        filteredByCurrencies[payment.currency] = {
+          totalAmount: total,
+          totalDebts: currencyData.totalDebts + debts > 0 ? debts : 0,
+          totalPrepayments:
+            currencyData.totalPrepayments + prepayments > 0 ? prepayments : 0,
+        };
       } else {
+        filteredByCurrencies[payment.currency] = {
+          totalAmount: total,
+          totalDebts: debts > 0 ? debts : 0,
+          totalPrepayments: prepayments > 0 ? prepayments : 0,
+        };
       }
-
-      total += payment.total;
-      payment.payments.forEach((madePayment) => {
-        totalPaymentsMade += madePayment.amount;
-      });
     });
-    const debts = total - totalPaymentsMade;
-    const prepayments = totalPaymentsMade - total;
+
+    const totalAmount: Array<string> = [];
+    const totalDebts: Array<string> = [];
+    const totalPrepayments: Array<string> = [];
+
+    Object.keys(filteredByCurrencies).forEach((key) => {
+      const data = filteredByCurrencies[key];
+      totalAmount.push(formattedAmount(data.totalAmount, key));
+      totalDebts.push(formattedAmount(data.totalDebts, key));
+      totalPrepayments.push(formattedAmount(data.totalPrepayments, key));
+    });
 
     return {
-      totalAmount: formattedAmount(total, clinicCurrency),
-      totalDebts: formattedAmount(debts > 0 ? debts : 0, clinicCurrency),
-      totalPrepayments: formattedAmount(
-        prepayments > 0 ? prepayments : 0,
-        clinicCurrency,
-      ),
+      totalAmount,
+      totalDebts,
+      totalPrepayments,
     };
-  }, [payments.length, clinicCurrency]);
+  }, [discountedPayments.length, clinicCurrency]);
+
+  console.log({ totalAmount });
+  console.log({ totalPrepayments });
+  console.log({ totalDebts });
 
   return (
     <div className={styles.patientPurchasesList}>
@@ -151,7 +173,7 @@ const PatientPurchasesList = ({ patient }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {payments.map((payment) => (
+              {discountedPayments.map((payment) => (
                 <PatientPurchaseRow
                   payment={payment}
                   key={payment.id}
