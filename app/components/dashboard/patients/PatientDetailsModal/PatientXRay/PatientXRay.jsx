@@ -7,10 +7,10 @@ import orderBy from 'lodash/orderBy';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
 import Lightbox from 'react-awesome-lightbox';
+import { useTranslate } from 'react-polyglot';
 import { useSelector } from 'react-redux';
 import IconPlus from 'app/components/icons/iconPlus';
 import NotificationsContext from 'app/context/notificationsContext';
-import { textForKey } from 'app/utils/localization';
 import urlToAWS from 'app/utils/urlToAWS';
 import {
   deletePatientXRayImage,
@@ -26,6 +26,7 @@ const ConfirmationModal = dynamic(() =>
 );
 
 const PatientXRay = ({ patient, onAddXRay }) => {
+  const textForKey = useTranslate();
   const toast = useContext(NotificationsContext);
   const updateXRay = useSelector(updateXRaySelector);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -117,13 +118,13 @@ const PatientXRay = ({ patient, onAddXRay }) => {
       <ConfirmationModal
         show={deleteModal.show}
         isLoading={isDeleting}
-        title={textForKey('Delete image')}
-        message={textForKey('deleteImageConfirmation')}
+        title={textForKey('delete image')}
+        message={textForKey('deleteimageconfirmation')}
         onConfirm={deleteXRayImage}
         onClose={closeConfirmation}
       />
       <Typography classes={{ root: 'title-label' }}>
-        {textForKey('X-Ray')}
+        {textForKey('x-ray')}
       </Typography>
       <div className={styles.imagesContainer}>
         {!isFetching && (
@@ -155,7 +156,7 @@ const PatientXRay = ({ patient, onAddXRay }) => {
           }}
           onClick={onAddXRay}
         >
-          {textForKey('Add image')}
+          {textForKey('add image')}
           <IconPlus fill={null} />
         </Button>
       </div>
