@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -8,14 +8,27 @@ import TableFooter from '@material-ui/core/TableFooter';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
+import axios from 'axios';
+import { formatInTimeZone } from 'date-fns-tz';
 import PropTypes from 'prop-types';
 import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
+import EASTextField from 'app/components/common/EASTextField';
+import EasyDateRangePicker from 'app/components/common/EasyDateRangePicker';
 import ConfirmationModal from 'app/components/common/modals/ConfirmationModal';
+import StatisticFilter from 'app/components/dashboard/analytics/StatisticFilter';
+import { HeaderKeys } from 'app/utils/constants';
 import formattedAmount from 'app/utils/formattedAmount';
-import { clinicCurrencySelector } from 'redux/selectors/appDataSelector';
+import updatedServerUrl from 'app/utils/updateServerUrl';
+import {
+  authTokenSelector,
+  clinicCurrencySelector,
+  clinicTimeZoneSelector,
+  currentClinicSelector,
+} from 'redux/selectors/appDataSelector';
 import { updateInvoiceSelector } from 'redux/selectors/invoicesSelector';
 import { PatientPurchaseDiscounted } from 'types';
+import getCurrentWeek from '../../../../../utils/getCurrentWeek';
 import PatientPurchaseListFooter from './PatientPurchaseListFooter';
 import PatientPurchaseRow from './PatientPurchaseRow';
 import styles from './PatientPurchasesList.module.scss';
@@ -35,13 +48,32 @@ const getDiscountedAmount = (price: number, discount: number): number => {
   return discount > 0 ? price - Math.trunc((price * discount) / 100) : price;
 };
 
+const currentWeek = getCurrentWeek(new Date());
+
 const PatientPurchasesList = ({ patient }) => {
   const textForKey = useTranslate();
   const dispatch = useDispatch();
+  const pickerRef = useRef<HTMLDivElement | null>(null);
   const updateInvoice = useSelector(updateInvoiceSelector);
   const clinicCurrency = useSelector(clinicCurrencySelector);
   const { isLoading, payments } = useSelector(patientPurchasesListSelector);
+  const clinicTimeZone = useSelector(clinicTimeZoneSelector);
+  const currentClinic = useSelector(currentClinicSelector);
+  const authToken = useSelector(authTokenSelector);
   const [undoModal, setUndoModal] = useState({ open: false, payment: null });
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const [dateRange, setDateRange] = useState([
+    new Date(currentWeek[0]),
+    new Date(currentWeek[currentWeek.length - 1]),
+  ]);
+
+  const dateRangeString = useMemo(() => {
+    return `${formatInTimeZone(
+      dateRange[0],
+      clinicTimeZone,
+      'dd MM yyyy',
+    )} - ${formatInTimeZone(dateRange[1], clinicTimeZone, 'dd MM yyyy')}`;
+  }, [dateRange]);
 
   useEffect(() => {
     if (patient != null) {
@@ -129,6 +161,56 @@ const PatientPurchasesList = ({ patient }) => {
     };
   }, [discountedPayments.length, clinicCurrency]);
 
+  const openRangePicker = () => {
+    setPickerOpen(true);
+  };
+
+  const closeRangePicker = () => {
+    setPickerOpen(false);
+  };
+
+  const handleDateChange = (data: {
+    range1: { startDate: Date; endDate: Date };
+  }) => {
+    const { startDate, endDate } = data.range1;
+    setDateRange([startDate, endDate]);
+  };
+
+  const handleDownloadReport = () => {
+    const startTime = formatInTimeZone(
+      dateRange[0],
+      clinicTimeZone,
+      'yyyy-MM-dd',
+    );
+    const endTime = formatInTimeZone(
+      dateRange[1],
+      clinicTimeZone,
+      'yyyy-MM-dd',
+    );
+
+    axios
+      .get(
+        `${updatedServerUrl()}/reports/payments/${
+          patient.id
+        }?startDate=${startTime}&endDate=${endTime}`,
+        {
+          headers: {
+            [HeaderKeys.authorization]: String(authToken),
+            [HeaderKeys.clinicId]: String(currentClinic.id),
+          },
+          responseType: 'blob',
+        },
+      )
+      .then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `${Date.now()}.xlsx`);
+        document.body.appendChild(link);
+        link.click();
+      });
+  };
+
   return (
     <div className={styles.patientPurchasesList}>
       <ConfirmationModal
@@ -150,42 +232,67 @@ const PatientPurchasesList = ({ patient }) => {
         </Typography>
       )}
       {!isLoading && payments.length > 0 && (
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell />
-                <TableCell>{textForKey('date')}</TableCell>
-                <TableCell>{textForKey('services')}</TableCell>
-                <TableCell>{textForKey('discount')}</TableCell>
-                <TableCell>{textForKey('paid')}</TableCell>
-                <TableCell>
-                  {`${textForKey('total')} - ${textForKey(
-                    'discount',
-                  ).toLowerCase()}`}
-                </TableCell>
-                <TableCell>{textForKey('total')}</TableCell>
-                <TableCell />
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {discountedPayments.map((payment) => (
-                <PatientPurchaseRow
-                  payment={payment}
-                  key={payment.id}
-                  handleUndoPayment={handleUndoPayment}
+        <>
+          <StatisticFilter onUpdate={handleDownloadReport}>
+            <EASTextField
+              fullWidth
+              containerClass={styles.selectControlRoot}
+              onPointerUp={openRangePicker}
+              ref={pickerRef}
+              value={dateRangeString}
+              readOnly
+              fieldLabel={textForKey('period')}
+            />
+          </StatisticFilter>
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell />
+                  <TableCell>{textForKey('date')}</TableCell>
+                  <TableCell>{textForKey('services')}</TableCell>
+                  <TableCell>{textForKey('discount')}</TableCell>
+                  <TableCell>{textForKey('paid')}</TableCell>
+                  <TableCell>
+                    {`${textForKey('total')} - ${textForKey(
+                      'discount',
+                    ).toLowerCase()}`}
+                  </TableCell>
+                  <TableCell>{textForKey('total')}</TableCell>
+                  <TableCell />
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {discountedPayments.map((payment) => (
+                  <PatientPurchaseRow
+                    payment={payment}
+                    key={payment.id}
+                    handleUndoPayment={handleUndoPayment}
+                  />
+                ))}
+              </TableBody>
+              <TableFooter>
+                <PatientPurchaseListFooter
+                  totalCost={totalAmount}
+                  totalDebts={totalDebts}
+                  totalPrepayment={totalPrepayments}
                 />
-              ))}
-            </TableBody>
-            <TableFooter>
-              <PatientPurchaseListFooter
-                totalCost={totalAmount}
-                totalDebts={totalDebts}
-                totalPrepayment={totalPrepayments}
-              />
-            </TableFooter>
-          </Table>
-        </TableContainer>
+              </TableFooter>
+            </Table>
+          </TableContainer>
+          {pickerOpen && (
+            <EasyDateRangePicker
+              open={pickerOpen}
+              onClose={closeRangePicker}
+              onChange={handleDateChange}
+              pickerAnchor={pickerRef}
+              dateRange={{
+                startDate: dateRange[0],
+                endDate: dateRange[1],
+              }}
+            />
+          )}
+        </>
       )}
     </div>
   );

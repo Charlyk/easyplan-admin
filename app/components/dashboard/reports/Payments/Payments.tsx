@@ -17,19 +17,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import EASTextField from 'app/components/common/EASTextField';
 import EasyDateRangePicker from 'app/components/common/EasyDateRangePicker';
 import StatisticFilter from 'app/components/dashboard/analytics/StatisticFilter';
+import { HeaderKeys } from 'app/utils/constants';
 import formattedAmount from 'app/utils/formattedAmount';
 import { baseApiUrl } from 'eas.config';
+import {
+  authTokenSelector,
+  currentClinicSelector,
+} from 'redux/selectors/appDataSelector';
 import {
   isPaymentReportsLoadingSelector,
   paymentReportsDataSelector,
 } from 'redux/selectors/paymentReportsSelector';
 import { fetchPaymentReports } from 'redux/slices/paymentReportsSlice';
 import { PaymentReportsGetRequest } from 'types/api';
-import {
-  authTokenSelector,
-  currentClinicSelector,
-} from '../../../../../redux/selectors/appDataSelector';
-import { HeaderKeys } from '../../../../utils/constants';
 import styles from './Payments.module.scss';
 
 interface PaymentsQuery {
