@@ -153,6 +153,8 @@ const UnsortedDealItem: React.FC<UnsortedDealItemProps> = ({
   };
 
   return (
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     <Box className={styles.unsortedDealItem} onClick={handleDealClick}>
       <ClinicsModal
         open={clinicsModal}

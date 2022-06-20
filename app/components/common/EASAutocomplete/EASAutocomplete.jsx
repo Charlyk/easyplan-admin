@@ -126,7 +126,7 @@ const EASAutocomplete = ({
   const filterOptions = (options, state) => {
     if (filterLocally) {
       return options.filter((item) =>
-        item.name.toLowerCase().includes(state.inputValue.toLowerCase()),
+        item?.name.toLowerCase().includes(state.inputValue.toLowerCase()),
       );
     }
     return options;
@@ -200,4 +200,20 @@ EASAutocomplete.propTypes = {
   onChange: PropTypes.func,
   onTextChange: PropTypes.func,
   onCreateOption: PropTypes.func,
+};
+
+EASAutocomplete.defaultProps = {
+  loading: false,
+  value: null,
+  clearOnSelect: false,
+  disabled: false,
+  placeholder: '',
+  fieldLabel: '',
+  containerClass: null,
+  filterLocally: false,
+  canCreate: false,
+  options: [],
+  onChange: () => null,
+  onTextChange: () => null,
+  onCreateOption: () => null,
 };

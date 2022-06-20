@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { HYDRATE } from 'next-redux-wrapper';
 import initialState from 'redux/initialState';
 import { AppDataState } from 'redux/types';
-import { AppLocale, CurrentClinic } from 'types';
+import { AppLocale, ClinicService, CurrentClinic } from 'types';
 import {
   AppDataRequest,
   AppDataResponse,
@@ -21,6 +21,12 @@ const appDataSlice = createSlice({
       _action: PayloadAction<DoctorCalendarOrderRequest>,
     ) {
       state.isUpdatingClinic = false;
+    },
+    dispatchUpdateConsultationService(
+      state,
+      _action: PayloadAction<number | null>,
+    ) {
+      state.isUpdatingClinic = true;
     },
     dispatchFetchAppData(state, _action: PayloadAction<AppDataRequest>) {
       state.isAppInitialized = false;
@@ -91,6 +97,24 @@ const appDataSlice = createSlice({
     setNewAppLanguage(state, action: PayloadAction<AppLocale>) {
       state.currentUser = { ...state.currentUser, language: action.payload };
     },
+    setConsultationService(state, action: PayloadAction<ClinicService | null>) {
+      if (action.payload) {
+        state.currentClinic.services = state.currentClinic.services.map(
+          (item) => {
+            if (item.id !== action.payload.id) {
+              return { ...item, isConsultation: false };
+            }
+
+            return { ...action.payload, isConsultation: true };
+          },
+        );
+      } else {
+        state.currentClinic.services = state.currentClinic.services.map(() => {
+          return { ...action.payload, isConsultation: false };
+        });
+      }
+      state.currentClinic.hasConsultationService = action.payload != null;
+    },
   },
   extraReducers: {
     [HYDRATE]: (state, action) => {
@@ -119,6 +143,8 @@ export const {
   updateIsEmailChanged,
   dispatchUpdateUserLanguage,
   setNewAppLanguage,
+  setConsultationService,
+  dispatchUpdateConsultationService,
 } = appDataSlice.actions;
 
 export default appDataSlice.reducer;

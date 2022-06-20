@@ -211,7 +211,7 @@ const Payments: React.FC<PaymentsProps> = ({ query }) => {
                     <TableCell>
                       {item.user.firstName} {item.user.lastName}
                     </TableCell>
-                    <TableCell className={styles['patient-name-label']}>
+                    <TableCell>
                       {formattedAmount(item.amount, item.currency)}
                     </TableCell>
                     <TableCell align='right'>{item.paymentMethod}</TableCell>

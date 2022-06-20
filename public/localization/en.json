@@ -853,5 +853,8 @@
   "reports": "Reports",
   "user_comment": "User comment",
   "export_excel": "Export as .xlsx",
-  "pending_consultations": "Pending consultations"
+  "consultation_appointment": "Consultation appointment",
+  "consultation_service": "Consultation service",
+  "pending_consultations": "Pending consultations",
+  "patient_guide": "Patient guide"
 }

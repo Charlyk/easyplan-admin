@@ -82,3 +82,14 @@ export async function importServicesFromFile(
   requestBody.append('categoryId', `${categoryId}`);
   return axios.post(`${baseApiUrl}/services/import`, requestBody, { headers });
 }
+
+/**
+ * Update clinic consultation service
+ * @param {number | null} serviceId
+ * @param {*} headers
+ * @returns {Promise<void>}
+ */
+export async function updateConsultationService(serviceId, headers = null) {
+  const params = serviceId ? `?serviceId=${serviceId}` : '';
+  return put(`/api/clinic/consultation-service${params}`, headers, {});
+}
