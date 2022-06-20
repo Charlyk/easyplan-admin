@@ -70,6 +70,8 @@ const BottomSheetDialog: React.FC<BottomSheetDialogProps> = ({
           <Typography variant='h6' className={styles.title}>
             {title}
           </Typography>
+          {/*eslint-disable-next-line @typescript-eslint/ban-ts-comment*/}
+          {/*@ts-ignore*/}
           <Box
             minWidth='100px'
             display='flex'
@@ -91,6 +93,8 @@ const BottomSheetDialog: React.FC<BottomSheetDialogProps> = ({
           </Box>
         </Toolbar>
       </AppBar>
+      {/*eslint-disable-next-line @typescript-eslint/ban-ts-comment*/}
+      {/*@ts-ignore*/}
       <Box flex='1' overflow='auto'>
         {children}
       </Box>

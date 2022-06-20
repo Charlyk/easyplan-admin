@@ -117,6 +117,8 @@ const PatientPurchaseRow: React.FC<Props> = ({
         </TableCell>
         <TableCell>
           {isManager && (
+            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //@ts-ignore
             <Box display={'flex'} alignItems={'center'}>
               <Tooltip title={textForKey('print receipt')}>
                 <a

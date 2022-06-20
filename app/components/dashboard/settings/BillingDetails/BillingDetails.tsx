@@ -149,6 +149,8 @@ const BillingDetails: React.FC<BillingDetailsProps> = ({ countries }) => {
             severity={'warning'}
             classes={{ message: styles.alertContainer, icon: styles.alertIcon }}
           >
+            {/*eslint-disable-next-line @typescript-eslint/ban-ts-comment*/}
+            {/*@ts-ignore*/}
             <Box display={'flex'} alignItems={'center'}>
               <Typography>{textForKey('transaction_unsuccessful')}</Typography>
               <LoadingButton
@@ -178,6 +180,8 @@ const BillingDetails: React.FC<BillingDetailsProps> = ({ countries }) => {
                   )}
               / ${subscriptionData.totalSeats} ${textForKey('seats')}`}
             </Typography>
+            {/*eslint-disable-next-line @typescript-eslint/ban-ts-comment*/}
+            {/*@ts-ignore*/}
             <Box onClick={() => handleViewModeSwitch('manage-seats')}>
               <Typography classes={{ root: styles.infoBoxLink }}>
                 {textForKey('manage_seats')}
@@ -215,6 +219,8 @@ const BillingDetails: React.FC<BillingDetailsProps> = ({ countries }) => {
                 },
               )}
             </Typography>
+            {/*eslint-disable-next-line @typescript-eslint/ban-ts-comment*/}
+            {/*@ts-ignore*/}
             <Box onClick={() => handleViewModeSwitch('payment-plan')}>
               <Typography classes={{ root: styles.infoBoxLink }}>
                 {textForKey(
@@ -239,6 +245,8 @@ const BillingDetails: React.FC<BillingDetailsProps> = ({ countries }) => {
                 ? `**** **** **** ${defaultPaymentMethod.last4}`
                 : '**** **** **** 0000'}
             </Typography>
+            {/*eslint-disable-next-line @typescript-eslint/ban-ts-comment*/}
+            {/*@ts-ignore*/}
             <Box onClick={() => handleViewModeSwitch('payment-method')}>
               <Typography classes={{ root: styles.infoBoxLink }}>
                 {textForKey('manage_payment_method')}
@@ -259,14 +267,24 @@ const BillingDetails: React.FC<BillingDetailsProps> = ({ countries }) => {
             )}
             {isDataLoading && <CircularProgress />}
           </div>
-          {selectedView === 'payment-history' && <PaymentHistory />}
+          {selectedView === 'payment-history' && (
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            <PaymentHistory />
+          )}
           {selectedView === 'payment-method' && (
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             <PaymentMethods countries={countries} />
           )}
           {selectedView === 'manage-seats' && (
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             <SeatsManagement onCancel={handleGoBack} />
           )}
           {selectedView === 'payment-plan' && (
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             <PaymentPlan onCancel={handleGoBack} />
           )}
         </div>

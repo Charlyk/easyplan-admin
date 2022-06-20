@@ -138,6 +138,8 @@ const AppointmentPatient: React.FC<AppointmentPatientProps> = ({
       title={textForKey('create patient')}
     >
       <div className={styles.appointmentPatient}>
+        {/*eslint-disable-next-line @typescript-eslint/ban-ts-comment*/}
+        {/*@ts-ignore*/}
         <Box display='flex' flexDirection='column'>
           <EASTextField
             id='patientFullName'

@@ -280,6 +280,8 @@ const DealsColumn: React.FC<DealsColumnProps> = ({
       />
       <div className={styles.titleContainer} style={{ width }}>
         {isEditingName ? (
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           <Box display='flex'>
             <TextField
               value={columnName}
@@ -296,6 +298,8 @@ const DealsColumn: React.FC<DealsColumnProps> = ({
             </IconButton>
           </Box>
         ) : (
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           <Box display='flex'>
             <Typography className={styles.titleLabel}>{columnName}</Typography>
             <Typography className={styles.countLabel}>

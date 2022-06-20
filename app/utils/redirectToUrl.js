@@ -24,7 +24,8 @@ export default function redirectToUrl(user, clinic, path) {
         path.startsWith('/services') ||
         path.startsWith('/analytics/general') ||
         path.startsWith('/analytics/doctors') ||
-        path.startsWith('/analytics/activity-logs');
+        path.startsWith('/analytics/activity-logs') ||
+        path.startsWith('/reports/payments');
       if (shouldRedirect) redirectPath = '/calendar/day';
       break;
     case Role.admin:
@@ -41,7 +42,8 @@ export default function redirectToUrl(user, clinic, path) {
         path.startsWith('/calendar') ||
         path.startsWith('/patients') ||
         path.startsWith('/messages') ||
-        path.startsWith('/settings');
+        path.startsWith('/settings') ||
+        path.startsWith('/reports');
       if (shouldRedirect) redirectPath = '/doctor';
       break;
     default:

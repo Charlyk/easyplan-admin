@@ -26,7 +26,9 @@ const EASTextarea: React.FC<EASTextFieldProps> = ({
     setFocused(isFocused);
   };
 
-  const handleValueChange = (event): void => {
+  const handleValueChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ): void => {
     onChange?.(event.target.value);
   };
 

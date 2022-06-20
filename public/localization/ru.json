@@ -849,5 +849,12 @@
   "card": "Банковская карточка",
   "transfer": "Перевод",
   "gift_certificate": "Подарочный сертификат",
-  "select_payment_method": "Selectati metoda de plata"
+  "select_payment_method": "Выберите метод оплаты",
+  "reports": "Отчеты",
+  "user_comment": "Коментарий пользователя",
+  "export_excel": "Скачать как .xlsx",
+  "consultation_appointment": "Запись на консультацию",
+  "consultation_service": "Услуга консультации",
+  "pending_consultations": "Консультации в ожидании",
+  "patient_guide": "Гид пациента"
 }
