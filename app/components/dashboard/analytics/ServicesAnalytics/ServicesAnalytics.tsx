@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useReducer, useRef } from 'react';
 import { Tooltip } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import IconButton from '@material-ui/core/IconButton';
 import Table from '@material-ui/core/Table';
@@ -389,22 +390,32 @@ const ServicesAnalytics: React.FC<ServicesAnalyticsProps> = ({
           </TableContainer>
         )}
       </div>
-      <TablePagination
-        classes={{ root: styles['table-pagination'] }}
-        rowsPerPageOptions={[25, 50, 100]}
-        colSpan={4}
-        count={totalItems}
-        rowsPerPage={parseInt(String(rowsPerPage))}
-        labelRowsPerPage={textForKey('rows per page')}
-        page={parseInt(String(page))}
-        component='div'
-        SelectProps={{
-          inputProps: { 'aria-label': 'rows per page' },
-          native: true,
-        }}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        onPageChange={handleChangePage}
-      />
+      <div className={styles.pageFooter}>
+        <Button
+          variant={'text'}
+          classes={{
+            root: styles.primaryButton,
+          }}
+        >
+          {textForKey('export_excel')}
+        </Button>
+        <TablePagination
+          classes={{ root: styles['table-pagination'] }}
+          rowsPerPageOptions={[25, 50, 100]}
+          colSpan={4}
+          count={totalItems}
+          rowsPerPage={parseInt(String(rowsPerPage))}
+          labelRowsPerPage={textForKey('rows per page')}
+          page={parseInt(String(page))}
+          component='div'
+          SelectProps={{
+            inputProps: { 'aria-label': 'rows per page' },
+            native: true,
+          }}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          onPageChange={handleChangePage}
+        />
+      </div>
       <EasyDateRangePicker
         onChange={handleDateChange}
         onClose={handleDatePickerClose}
