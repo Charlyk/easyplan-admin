@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useReducer, useMemo } from 'react';
+import React, { useContext, useEffect, useReducer } from 'react';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';

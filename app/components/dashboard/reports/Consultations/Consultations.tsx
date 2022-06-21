@@ -29,6 +29,7 @@ import {
 } from 'redux/selectors/pendingConsultationsSelector';
 import { fetchPendingConsultations } from 'redux/slices/pendingConsultationsSlice';
 import { PaymentReportsGetRequest } from 'types/api';
+import LoadingButton from '../../../common/LoadingButton';
 import styles from './PendingConsultations.module.scss';
 
 interface PaymentsQuery {
@@ -51,6 +52,7 @@ const Consultations: React.FC<PaymentsProps> = ({ query }) => {
   const currentClinic = useSelector(currentClinicSelector);
   const authToken = useSelector(authTokenSelector);
   const pickerRef = useRef(null);
+  const [isDownloading, setIsDownloading] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const [dateRange, setDateRange] = useState([
@@ -137,6 +139,7 @@ const Consultations: React.FC<PaymentsProps> = ({ query }) => {
   const handleDownloadFile = () => {
     const startDate = moment(dateRange[0]).format('YYYY-MM-DD');
     const endDate = moment(dateRange[1]).format('YYYY-MM-DD');
+    setIsDownloading(true);
     axios
       .get(
         `${baseApiUrl}/reports/consultations/download?startDate=${startDate}&endDate=${endDate}`,
@@ -155,7 +158,9 @@ const Consultations: React.FC<PaymentsProps> = ({ query }) => {
         link.setAttribute('download', `${now()}.xlsx`);
         document.body.appendChild(link);
         link.click();
-      });
+        setIsDownloading(false);
+      })
+      .catch(() => setIsDownloading(false));
   };
 
   return (
@@ -233,17 +238,14 @@ const Consultations: React.FC<PaymentsProps> = ({ query }) => {
         )}
       </div>
       <div className={styles.pageFooter}>
-        <Button
-          variant='text'
+        <LoadingButton
+          isLoading={isDownloading}
+          disabled={isDownloading}
           onClick={handleDownloadFile}
-          classes={{
-            root: styles.primaryButton,
-            disabled: styles.buttonDisabled,
-          }}
+          className={styles.primaryButton}
         >
-          <IconDownload />
           {textForKey('export_excel')}
-        </Button>
+        </LoadingButton>
         <TablePagination
           classes={{ root: styles.tablePagination }}
           rowsPerPageOptions={[25, 50, 100]}
