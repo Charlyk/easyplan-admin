@@ -298,6 +298,8 @@ export type PaymentReportsState = WithQuery<PaymentReportResponse>;
 
 export type PendingConsultationsState = WithQuery<ConsultationsResponse>;
 
+export type AppointmentsReportState = WithQuery<any>;
+
 export interface ReduxState {
   updateCategories: boolean;
   updateServices: boolean;
@@ -352,4 +354,5 @@ export interface ReduxState {
   paymentsState: PaymentsState;
   paymentReports: PaymentReportsState;
   pendingConsultations: PendingConsultationsState;
+  appointmentsReports: AppointmentsReportState;
 }
