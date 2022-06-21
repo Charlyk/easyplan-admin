@@ -65,7 +65,7 @@ const Appointment = ({ appointment }) => {
             classes={{ root: styles.statusNameLabel }}
             style={{ color: status.color }}
           >
-            {status?.name}
+            {textForKey(status?.name?.toLowerCase())}
           </Typography>
         </div>
         {(status?.id === 'CompletedPaid' || status?.id === 'PartialPaid') && (
