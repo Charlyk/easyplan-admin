@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -8,7 +7,6 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import IconDownload from '@material-ui/icons/CloudDownload';
 import axios from 'axios';
 import moment, { now } from 'moment-timezone';
 import { useRouter } from 'next/router';
@@ -16,21 +14,21 @@ import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import EASTextField from 'app/components/common/EASTextField';
 import EasyDateRangePicker from 'app/components/common/EasyDateRangePicker';
+import LoadingButton from 'app/components/common/LoadingButton';
 import StatisticFilter from 'app/components/dashboard/analytics/StatisticFilter';
+import { HeaderKeys } from 'app/utils/constants';
 import formattedAmount from 'app/utils/formattedAmount';
 import { baseApiUrl } from 'eas.config';
+import {
+  authTokenSelector,
+  currentClinicSelector,
+} from 'redux/selectors/appDataSelector';
 import {
   isPaymentReportsLoadingSelector,
   paymentReportsDataSelector,
 } from 'redux/selectors/paymentReportsSelector';
 import { fetchPaymentReports } from 'redux/slices/paymentReportsSlice';
 import { PaymentReportsGetRequest } from 'types/api';
-import {
-  authTokenSelector,
-  currentClinicSelector,
-} from '../../../../../redux/selectors/appDataSelector';
-import { HeaderKeys } from '../../../../utils/constants';
-import LoadingButton from '../../../common/LoadingButton';
 import styles from './Payments.module.scss';
 
 interface PaymentsQuery {

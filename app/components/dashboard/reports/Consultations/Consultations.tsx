@@ -14,6 +14,7 @@ import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import EASTextField from 'app/components/common/EASTextField';
 import EasyDateRangePicker from 'app/components/common/EasyDateRangePicker';
+import LoadingButton from 'app/components/common/LoadingButton';
 import StatisticFilter from 'app/components/dashboard/analytics/StatisticFilter';
 import { HeaderKeys, ScheduleStatuses } from 'app/utils/constants';
 import { baseApiUrl } from 'eas.config';
@@ -27,7 +28,6 @@ import {
 } from 'redux/selectors/pendingConsultationsSelector';
 import { fetchPendingConsultations } from 'redux/slices/pendingConsultationsSlice';
 import { PaymentReportsGetRequest } from 'types/api';
-import LoadingButton from '../../../common/LoadingButton';
 import styles from './PendingConsultations.module.scss';
 
 interface PaymentsQuery {
