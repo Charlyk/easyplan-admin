@@ -6,7 +6,6 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import IconDownload from '@material-ui/icons/CloudDownload';
 import axios from 'axios';
@@ -27,13 +26,27 @@ import {
   appointmentsReportsDataSelector,
   isAppointmentsReportsLoadingSelector,
 } from 'redux/selectors/appointmentsReportSelector';
-import { fetchPendingConsultations } from 'redux/slices/pendingConsultationsSlice';
-import { PaymentReportsGetRequest } from 'types/api';
+import { fetchAppointmentReports } from 'redux/slices/appointmentsReportSlice';
+import { AppointmentReportsPayload } from 'types/api';
 import styles from './Appointments.module.scss';
 
+const statusesOrder = [
+  'Pending',
+  'Confirmed',
+  'WaitingForPatient',
+  'Late',
+  'DidNotCome',
+  'Canceled',
+  'OnSite',
+  'AtDoctor',
+  'CompletedNotPaid',
+  'PartialPaid',
+  'CompletedPaid',
+  'Rescheduled',
+  'CompletedFree',
+];
+
 interface AppointmentsQuery {
-  page: number;
-  itemsPerPage: number;
   startDate: string;
   endDate: string;
 }
@@ -60,11 +73,9 @@ const Appointments: React.FC<PaymentsProps> = ({ query }) => {
     moment(query.endDate).toDate(),
   ]);
 
-  const [request, setRequest] = useState<PaymentReportsGetRequest>({
+  const [request, setRequest] = useState<AppointmentReportsPayload>({
     startDate: moment(query.startDate).toDate(),
     endDate: moment(query.endDate).toDate(),
-    page: query.page,
-    itemsPerPage: query.itemsPerPage,
   });
 
   const intervalName = useMemo(() => {
@@ -80,38 +91,25 @@ const Appointments: React.FC<PaymentsProps> = ({ query }) => {
     setRequest({
       startDate,
       endDate,
-      page: query.page,
-      itemsPerPage: query.itemsPerPage,
     });
   }, [query]);
 
   useEffect(() => {
-    dispatch(fetchPendingConsultations(request));
+    dispatch(fetchAppointmentReports(request));
   }, [request]);
 
   const handleFilterSubmit = async () => {
-    await reloadPage(request.itemsPerPage, 0);
-  };
-
-  const handleChangePage = async (event, newPage) => {
-    await reloadPage(request.itemsPerPage, newPage);
-  };
-
-  const handleChangeRowsPerPage = async (event) => {
-    const rows = parseInt(event.target.value);
-    await reloadPage(rows, 0);
+    await reloadPage();
   };
 
   const reloadPage = async (
-    rows = request.itemsPerPage,
-    page = request.page,
     startDate = dateRange[0],
     endDate = dateRange[1],
   ) => {
     const startDateStr = moment(startDate).format('YYYY-MM-DD');
     const endDateStr = moment(endDate).format('YYYY-MM-DD');
     await router.replace(
-      `/reports/appointments?page=${page}&startDate=${startDateStr}&endDate=${endDateStr}&itemsPerPage=${rows}`,
+      `/reports/appointments?startDate=${startDateStr}&endDate=${endDateStr}`,
     );
   };
 
@@ -131,7 +129,7 @@ const Appointments: React.FC<PaymentsProps> = ({ query }) => {
     const endDate = moment(dateRange[1]).format('YYYY-MM-DD');
     axios
       .get(
-        `${baseApiUrl}/reports/consultations/download?startDate=${startDate}&endDate=${endDate}`,
+        `${baseApiUrl}/reports/users/download?startDate=${startDate}&endDate=${endDate}`,
         {
           headers: {
             [HeaderKeys.authorization]: String(authToken),
@@ -166,62 +164,38 @@ const Appointments: React.FC<PaymentsProps> = ({ query }) => {
         />
       </StatisticFilter>
       <div className={styles.dataContainer}>
-        {isPaymentReportsLoading && appointmentsReports?.data.length === 0 && (
+        {isPaymentReportsLoading && appointmentsReports.length === 0 && (
           <div className={styles.progressWrapper}>
             <CircularProgress classes={{ root: 'circular-progress-bar' }} />
           </div>
         )}
-        {!isPaymentReportsLoading && appointmentsReports?.data.length === 0 && (
+        {!isPaymentReportsLoading && appointmentsReports.length === 0 && (
           <span className={styles.noDataLabel}>{textForKey('no results')}</span>
         )}
-        {[1, 2].length > 0 && (
+        {appointmentsReports.length > 0 && (
           <TableContainer classes={{ root: styles['table-container'] }}>
             <Table classes={{ root: styles['data-table'] }}>
               <TableHead>
                 <TableRow>
-                  <TableCell>{textForKey('date')}</TableCell>
-                  <TableCell>{textForKey('patient')}</TableCell>
-                  <TableCell>{textForKey('phone number')}</TableCell>
-                  <TableCell>{textForKey('doctor')}</TableCell>
-                  <TableCell>{textForKey('patient_guide')}</TableCell>
-                  <TableCell align='right' size='small'>
-                    {textForKey('status')}
-                  </TableCell>
-                  <TableCell align='right'>
-                    {textForKey('user_comment')}
-                  </TableCell>
+                  <TableCell>{textForKey('user')}</TableCell>
+                  {statusesOrder.map((status) => (
+                    <TableCell key={status}>
+                      {textForKey(status.toLowerCase())}
+                    </TableCell>
+                  ))}
                 </TableRow>
               </TableHead>
               <TableBody>
-                {/*{consultations.data.map((item) => (*/}
-                {/*  <TableRow key={item.id}>*/}
-                {/*    <TableCell>*/}
-                {/*      {moment(item.date).format('DD MMM YYYY HH:mm')}*/}
-                {/*    </TableCell>*/}
-                {/*    <TableCell>{item.patient.name}</TableCell>*/}
-                {/*    <TableCell className={styles.patientNameLabel}>*/}
-                {/*      <a href={`tel:${item.patient.phone.replace('+', '')}`}>*/}
-                {/*        {item.patient.phone}*/}
-                {/*      </a>*/}
-                {/*    </TableCell>*/}
-                {/*    <TableCell>{item.doctor.name}</TableCell>*/}
-                {/*    <TableCell>{item.guide ? item.guide.name : '-'}</TableCell>*/}
-                {/*    <TableCell size='small' align='right'>*/}
-                {/*      <span*/}
-                {/*        className={styles.statusLabel}*/}
-                {/*        style={{*/}
-                {/*          color: colorForStatus(item.status),*/}
-                {/*          backgroundColor: `${colorForStatus(item.status)}1A`,*/}
-                {/*        }}*/}
-                {/*      >*/}
-                {/*        {titleForStatus(item.status)}*/}
-                {/*      </span>*/}
-                {/*    </TableCell>*/}
-                {/*    <TableCell size='small' align='right'>*/}
-                {/*      {item.comment}*/}
-                {/*    </TableCell>*/}
-                {/*  </TableRow>*/}
-                {/*))}*/}
+                {appointmentsReports.map((report) => (
+                  <TableRow key={report.id}>
+                    <TableCell>
+                      {report.firstName + ' ' + report.lastName}
+                    </TableCell>
+                    {report.statuses.map((status) => (
+                      <TableCell key={status.id}>{status.count}</TableCell>
+                    ))}
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
           </TableContainer>
@@ -239,22 +213,6 @@ const Appointments: React.FC<PaymentsProps> = ({ query }) => {
           <IconDownload />
           {textForKey('export_excel')}
         </Button>
-        <TablePagination
-          classes={{ root: styles.tablePagination }}
-          rowsPerPageOptions={[25, 50, 100]}
-          colSpan={4}
-          count={appointmentsReports?.total}
-          rowsPerPage={request.itemsPerPage}
-          labelRowsPerPage={textForKey('rows per page')}
-          page={request.page}
-          component='div'
-          SelectProps={{
-            inputProps: { 'aria-label': 'rows per page' },
-            native: true,
-          }}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          onPageChange={handleChangePage}
-        />
       </div>
       <EasyDateRangePicker
         onChange={handleDateChange}

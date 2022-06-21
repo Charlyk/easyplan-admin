@@ -216,9 +216,6 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
     return paths[currentPath];
   }, [currentPath, appLanguage]);
 
-  console.log({ headerTitle });
-  console.log({ paths });
-
   const pageTitle = useMemo(() => {
     if (currentClinic == null) {
       return `EasyPlan.pro - ${headerTitle}`;

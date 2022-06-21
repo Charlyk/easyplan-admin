@@ -15,3 +15,4 @@ export * from './updateUserAccount';
 export * from './payments.types';
 export * from './paymentReportsRequest.types';
 export * from './pendingConsultationsGetRequest.types';
+export * from './appointmentsRequest.types';

@@ -327,7 +327,7 @@ const initialState: ReduxState = {
   appointmentsReports: {
     loading: false,
     error: null,
-    data: { total: 0, data: [] },
+    data: [],
   },
 };
 

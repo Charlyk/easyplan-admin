@@ -1,20 +1,22 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { HYDRATE } from 'next-redux-wrapper';
-import { PaymentReportsGetRequest } from 'types/api/request';
-import { PaymentReportResponse } from 'types/api/response';
+import { AppointmentReportsPayload } from 'types/api/request';
+import { AppointmentReportResponse } from 'types/api/response';
 import initialState from '../initialState';
 
-const appointmentsReport = createSlice({
-  name: 'paymentReports',
+const appointmentsReports = createSlice({
+  name: 'appointmentReports',
   initialState: initialState.appointmentsReports,
   reducers: {
-    fetchPAppointmentReports(
+    fetchAppointmentReports(
       state,
-      _action: PayloadAction<PaymentReportsGetRequest>,
+      _action: PayloadAction<AppointmentReportsPayload>,
     ) {
       state.loading = true;
     },
-    setAppointmentReports(state, action: PayloadAction<PaymentReportResponse>) {
+    setAppointmentReports(
+      state,
+      action: PayloadAction<AppointmentReportResponse>,
+    ) {
       state.data = action.payload;
       state.loading = false;
       state.error = null;
@@ -24,20 +26,12 @@ const appointmentsReport = createSlice({
       state.error = action.payload;
     },
   },
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
-      return {
-        ...state,
-        ...action.payload.paymentReports,
-      };
-    },
-  },
 });
 
 export const {
-  fetchPAppointmentReports,
+  fetchAppointmentReports,
   setAppointmentReports,
   setAppointmentReportsError,
-} = appointmentsReport.actions;
+} = appointmentsReports.actions;
 
-export default appointmentsReport.reducer;
+export default appointmentsReports.reducer;

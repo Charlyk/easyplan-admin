@@ -8,6 +8,7 @@ import {
   PaymentReportResponse,
   PendingConsultationsGetRequest,
   ConsultationsResponse,
+  AppointmentReportResponse,
 } from 'types/api';
 import { PaymentReportsGetRequest } from 'types/api/request';
 import { AppointmentReportsPayload } from 'types/api/request/appointmentsRequest.types';
@@ -36,8 +37,8 @@ export async function requestFetchPendingConsultations(
 
 export async function requestAppointmentReports(
   data: AppointmentReportsPayload,
-): Promise<AxiosResponse<any>> {
-  const { page, itemsPerPage, startDate, endDate } = data;
+): Promise<AxiosResponse<AppointmentReportResponse>> {
+  const { startDate, endDate } = data;
 
-  return fetchAppointmentsReport(page, itemsPerPage, startDate, endDate);
+  return fetchAppointmentsReport(startDate, endDate);
 }

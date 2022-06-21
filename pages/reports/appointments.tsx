@@ -17,13 +17,9 @@ import {
 import { setCookies } from 'redux/slices/appDataSlice';
 import { ReduxState } from 'redux/types';
 import { wrapper } from 'store';
-import { ConsultationsResponse } from 'types/api';
 
 interface ConsultationsPageProps {
-  payments: ConsultationsResponse;
   query: {
-    page: number;
-    itemsPerPage: number;
     startDate: string;
     endDate: string;
   };
@@ -86,14 +82,6 @@ export const getServerSideProps = wrapper.getServerSideProps((store) =>
 
       if (query.endDate == null) {
         query.endDate = moment().endOf('week').format('YYYY-MM-DD');
-      }
-
-      if (query.page == null) {
-        query.page = '0';
-      }
-
-      if (query.itemsPerPage == null) {
-        query.itemsPerPage = '25';
       }
 
       return {

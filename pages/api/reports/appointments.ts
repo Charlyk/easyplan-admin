@@ -19,16 +19,13 @@ async function fetchAppointmentsReports(req: NextApiRequest) {
     endDate: `${endDate}`,
   }).toString();
 
-  return axios.get(
-    `${updatedServerUrl()}/reports/appointments?${stringQuery}`,
-    {
-      headers: {
-        [HeaderKeys.authorization]: authToken,
-        [HeaderKeys.clinicId]: clinicId,
-        [HeaderKeys.subdomain]: getSubdomain(req),
-      },
+  return axios.get(`${updatedServerUrl()}/reports/users?${stringQuery}`, {
+    headers: {
+      [HeaderKeys.authorization]: authToken,
+      [HeaderKeys.clinicId]: clinicId,
+      [HeaderKeys.subdomain]: getSubdomain(req),
     },
-  );
+  });
 }
 
 export default authorized(async (req: NextApiRequest, res: NextApiResponse) => {

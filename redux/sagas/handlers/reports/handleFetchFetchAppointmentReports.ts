@@ -1,7 +1,7 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { call, put, SagaReturnType, takeLatest } from 'redux-saga/effects';
 import {
-  fetchPAppointmentReports,
+  fetchAppointmentReports,
   setAppointmentReports,
 } from 'redux/slices/appointmentsReportSlice';
 import { showErrorNotification } from 'redux/slices/globalNotificationsSlice';
@@ -29,5 +29,5 @@ function* handleFetchPaymentReports(
 }
 
 export function* paymentAppointmentReportsWatcher() {
-  yield takeLatest(fetchPAppointmentReports.type, handleFetchPaymentReports);
+  yield takeLatest(fetchAppointmentReports.type, handleFetchPaymentReports);
 }
