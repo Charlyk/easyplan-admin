@@ -8,7 +8,6 @@ export default {
   '/calendar/month': 'calendar',
   '/crm': 'crm board',
   '/settings': 'settings',
-  '/analytics/services': 'services statistics',
   '/analytics/general': 'general statistics',
   '/analytics/doctors': 'doctors statistics',
   '/analytics/activity-logs': 'activity logs',
@@ -22,4 +21,5 @@ export default {
   '/error': 'error',
   '/reports/payments': 'payments',
   '/reports/consultations': 'consultations',
+  '/reports/services': 'services statistics',
 };
