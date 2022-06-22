@@ -23,6 +23,7 @@ import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
 import EasyDateRangePicker from 'app/components/common/EasyDateRangePicker';
 import { HeaderKeys, Role, ScheduleStatuses } from 'app/utils/constants';
+import { baseApiUrl } from 'eas.config';
 import {
   authTokenSelector,
   currentClinicSelector,
@@ -30,7 +31,6 @@ import {
 import { openCreateReminderModal } from 'redux/slices/CreateReminderModal.reducer';
 import { setPatientDetails } from 'redux/slices/mainReduxSlice';
 import { ServicesStatisticResponse } from 'types';
-import { baseApiUrl } from '../../../../../eas.config';
 import StatisticFilter from '../StatisticFilter';
 import styles from './ServicesAnalytics.module.scss';
 import reducer, {
