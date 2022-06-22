@@ -19,6 +19,7 @@ import ConfirmationModal from 'app/components/common/modals/ConfirmationModal';
 import StatisticFilter from 'app/components/dashboard/analytics/StatisticFilter';
 import { HeaderKeys } from 'app/utils/constants';
 import formattedAmount from 'app/utils/formattedAmount';
+import getCurrentWeek from 'app/utils/getCurrentWeek';
 import updatedServerUrl from 'app/utils/updateServerUrl';
 import {
   authTokenSelector,
@@ -28,7 +29,6 @@ import {
 } from 'redux/selectors/appDataSelector';
 import { updateInvoiceSelector } from 'redux/selectors/invoicesSelector';
 import { PatientPurchaseDiscounted } from 'types';
-import getCurrentWeek from '../../../../../utils/getCurrentWeek';
 import PatientPurchaseListFooter from './PatientPurchaseListFooter';
 import PatientPurchaseRow from './PatientPurchaseRow';
 import styles from './PatientPurchasesList.module.scss';
