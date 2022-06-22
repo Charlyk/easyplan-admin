@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -15,6 +14,7 @@ import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import EASTextField from 'app/components/common/EASTextField';
 import EasyDateRangePicker from 'app/components/common/EasyDateRangePicker';
+import LoadingButton from 'app/components/common/LoadingButton';
 import StatisticFilter from 'app/components/dashboard/analytics/StatisticFilter';
 import { HeaderKeys } from 'app/utils/constants';
 import { baseApiUrl } from 'eas.config';
@@ -67,6 +67,7 @@ const Appointments: React.FC<PaymentsProps> = ({ query }) => {
   const authToken = useSelector(authTokenSelector);
   const pickerRef = useRef(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   const [dateRange, setDateRange] = useState([
     moment(query.startDate).toDate(),
@@ -125,6 +126,7 @@ const Appointments: React.FC<PaymentsProps> = ({ query }) => {
   };
 
   const handleDownloadFile = () => {
+    setIsDownloading(true);
     const startDate = moment(dateRange[0]).format('YYYY-MM-DD');
     const endDate = moment(dateRange[1]).format('YYYY-MM-DD');
     axios
@@ -145,6 +147,7 @@ const Appointments: React.FC<PaymentsProps> = ({ query }) => {
         link.setAttribute('download', `${now()}.xlsx`);
         document.body.appendChild(link);
         link.click();
+        setIsDownloading(false);
       });
   };
 
@@ -179,7 +182,7 @@ const Appointments: React.FC<PaymentsProps> = ({ query }) => {
                 <TableRow>
                   <TableCell>{textForKey('user')}</TableCell>
                   {statusesOrder.map((status) => (
-                    <TableCell key={status}>
+                    <TableCell key={status} align={'center'}>
                       {textForKey(status.toLowerCase())}
                     </TableCell>
                   ))}
@@ -192,7 +195,9 @@ const Appointments: React.FC<PaymentsProps> = ({ query }) => {
                       {report.firstName + ' ' + report.lastName}
                     </TableCell>
                     {report.statuses.map((status) => (
-                      <TableCell key={status.id}>{status.count}</TableCell>
+                      <TableCell key={status.id} align={'center'}>
+                        {status.count}
+                      </TableCell>
                     ))}
                   </TableRow>
                 ))}
@@ -202,17 +207,15 @@ const Appointments: React.FC<PaymentsProps> = ({ query }) => {
         )}
       </div>
       <div className={styles.pageFooter}>
-        <Button
+        <LoadingButton
           variant='text'
           onClick={handleDownloadFile}
-          classes={{
-            root: styles.primaryButton,
-            disabled: styles.buttonDisabled,
-          }}
+          className={styles.primaryButton}
+          isLoading={isDownloading}
         >
           <IconDownload />
           {textForKey('export_excel')}
-        </Button>
+        </LoadingButton>
       </div>
       <EasyDateRangePicker
         onChange={handleDateChange}
