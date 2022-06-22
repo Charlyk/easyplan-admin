@@ -53,3 +53,18 @@
   color: #34344E !important;
   background-color: transparent;
 }
+
+.debtBtn {
+  border: 1px solid #3A83DC !important;
+  color: #3A83DC !important;
+
+  &:disabled {
+    color: grey;
+    border: 1px solid #3A83DC !important;
+  }
+}
+
+.selectControlRoot {
+  width: 100%;
+  margin-right: 1em;
+}

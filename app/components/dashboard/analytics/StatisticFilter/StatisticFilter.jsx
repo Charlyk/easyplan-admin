@@ -5,7 +5,12 @@ import LoadingButton from 'app/components/common/LoadingButton';
 import IconRefresh from 'app/components/icons/iconRefresh';
 import styles from './StatisticFilter.module.scss';
 
-const StatisticFilter = ({ children, isLoading, onUpdate }) => {
+const StatisticFilter = ({
+  children,
+  isLoading,
+  onUpdate,
+  btnText = 'apply',
+}) => {
   const textForKey = useTranslate();
   return (
     <div className={styles.statisticsFilterRoot}>
@@ -16,7 +21,7 @@ const StatisticFilter = ({ children, isLoading, onUpdate }) => {
         isLoading={isLoading}
         disabled={isLoading}
       >
-        {textForKey('apply')} <IconRefresh fill='#fff' />
+        {textForKey(btnText)} <IconRefresh fill='#fff' />
       </LoadingButton>
     </div>
   );
