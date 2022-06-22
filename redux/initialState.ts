@@ -324,6 +324,11 @@ const initialState: ReduxState = {
     error: null,
     data: { total: 0, data: [] },
   },
+  appointmentsReports: {
+    loading: false,
+    error: null,
+    data: [],
+  },
 };
 
 export default initialState;

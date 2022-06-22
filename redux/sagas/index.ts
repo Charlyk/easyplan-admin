@@ -64,6 +64,7 @@ import {
   updatePatientPhoneRecordWatcher,
   paymentReportsWatcher,
   pendingConsultationsWatcher,
+  paymentAppointmentReportsWatcher,
 } from './handlers';
 
 export default function* rootSaga() {
@@ -132,5 +133,6 @@ export default function* rootSaga() {
     updatePatientPhoneRecordWatcher(),
     paymentReportsWatcher(),
     pendingConsultationsWatcher(),
+    paymentAppointmentReportsWatcher(),
   ]);
 }
