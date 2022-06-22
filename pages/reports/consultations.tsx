@@ -4,7 +4,7 @@ import { NextPage } from 'next';
 import { connect } from 'react-redux';
 import { END } from 'redux-saga';
 import MainComponent from 'app/components/common/MainComponent';
-import { default as PendingConsultationsComponent } from 'app/components/dashboard/reports/PendingConsultations';
+import { default as ConsultationsComponent } from 'app/components/dashboard/reports/Consultations';
 import { JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
 import parseCookies from 'app/utils/parseCookies';
@@ -17,10 +17,10 @@ import {
 import { setCookies } from 'redux/slices/appDataSlice';
 import { ReduxState } from 'redux/types';
 import { wrapper } from 'store';
-import { PaymentReportResponse } from 'types/api/response/paymentReport.types';
+import { ConsultationsResponse } from 'types/api';
 
-interface PendingConsultationsPageProps {
-  payments: PaymentReportResponse;
+interface ConsultationsPageProps {
+  payments: ConsultationsResponse;
   query: {
     page: number;
     itemsPerPage: number;
@@ -29,17 +29,15 @@ interface PendingConsultationsPageProps {
   };
 }
 
-const PendingConsultations: NextPage<PendingConsultationsPageProps> = ({
-  query,
-}) => {
+const Consultations: NextPage<ConsultationsPageProps> = ({ query }) => {
   return (
-    <MainComponent currentPath='/reports/pending-consultations'>
-      <PendingConsultationsComponent query={query} />
+    <MainComponent currentPath='/reports/consultations'>
+      <ConsultationsComponent query={query} />
     </MainComponent>
   );
 };
 
-export default connect((state: ReduxState) => state)(PendingConsultations);
+export default connect((state: ReduxState) => state)(Consultations);
 
 export const getServerSideProps = wrapper.getServerSideProps((store) =>
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -71,7 +69,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) =>
       const redirectTo = redirectToUrl(
         currentUser,
         currentClinic,
-        '/reports/pending-consultations',
+        '/reports/consultations',
       );
       if (redirectTo != null) {
         return {

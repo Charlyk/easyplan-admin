@@ -40,7 +40,7 @@ import {
   PaymentMethod,
   PaymentSubscription,
   PaymentReportResponse,
-  PendingConsultationsResponse,
+  ConsultationsResponse,
 } from 'types/api';
 
 export interface CalendarDataState {
@@ -296,7 +296,7 @@ export type PaymentsState = {
 
 export type PaymentReportsState = WithQuery<PaymentReportResponse>;
 
-export type PendingConsultationsState = WithQuery<PendingConsultationsResponse>;
+export type PendingConsultationsState = WithQuery<ConsultationsResponse>;
 
 export interface ReduxState {
   updateCategories: boolean;

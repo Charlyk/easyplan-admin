@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   PendingConsultationsGetRequest,
-  PendingConsultationsResponse,
+  ConsultationsResponse,
 } from '../../types/api';
 import initialState from '../initialState';
 
@@ -18,7 +18,7 @@ const pendingConsultationsSlice = createSlice({
     },
     setPendingConsultations(
       state,
-      action: PayloadAction<PendingConsultationsResponse>,
+      action: PayloadAction<ConsultationsResponse>,
     ) {
       state.data = action.payload;
       state.loading = false;

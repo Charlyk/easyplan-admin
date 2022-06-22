@@ -91,8 +91,8 @@ const rawMenuItems = [
         roles: [Role.admin, Role.manager],
       },
       {
-        text: 'pending_consultations',
-        href: '/reports/pending-consultations',
+        text: 'consultations',
+        href: '/reports/consultations',
         roles: [Role.admin, Role.manager, Role.reception],
       },
     ],
