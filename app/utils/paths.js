@@ -21,5 +21,5 @@ export default {
   '/register': 'create new account',
   '/error': 'error',
   '/reports/payments': 'payments',
-  '/reports/pending-consultations': 'pending_consultations',
+  '/reports/consultations': 'consultations',
 };

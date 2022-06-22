@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios';
 import moment from 'moment-timezone';
 import {
   PaymentReportResponse,
-  PendingConsultationsResponse,
+  ConsultationsResponse,
 } from 'types/api/response';
 import { get } from './request';
 
@@ -30,7 +30,7 @@ export const fetchPendingConsultationsReport = async (
   startDate: Date,
   endDate: Date,
   headers = null,
-): Promise<AxiosResponse<PendingConsultationsResponse>> => {
+): Promise<AxiosResponse<ConsultationsResponse>> => {
   const startDateString = moment(startDate).format('YYYY-MM-DD');
   const endDateString = moment(endDate).format('YYYY-MM-DD');
   const query = new URLSearchParams({

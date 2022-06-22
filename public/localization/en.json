@@ -856,5 +856,6 @@
   "consultation_appointment": "Consultation appointment",
   "consultation_service": "Consultation service",
   "pending_consultations": "Pending consultations",
-  "patient_guide": "Patient guide"
+  "patient_guide": "Patient guide",
+  "consultations": "Consultations"
 }

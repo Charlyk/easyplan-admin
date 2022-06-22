@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -8,7 +7,6 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import IconDownload from '@material-ui/icons/CloudDownload';
 import axios from 'axios';
 import moment, { now } from 'moment-timezone';
 import { useRouter } from 'next/router';
@@ -16,8 +14,9 @@ import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import EASTextField from 'app/components/common/EASTextField';
 import EasyDateRangePicker from 'app/components/common/EasyDateRangePicker';
+import LoadingButton from 'app/components/common/LoadingButton';
 import StatisticFilter from 'app/components/dashboard/analytics/StatisticFilter';
-import { HeaderKeys } from 'app/utils/constants';
+import { HeaderKeys, ScheduleStatuses } from 'app/utils/constants';
 import { baseApiUrl } from 'eas.config';
 import {
   authTokenSelector,
@@ -42,7 +41,7 @@ interface PaymentsProps {
   query: PaymentsQuery;
 }
 
-const PendingConsultations: React.FC<PaymentsProps> = ({ query }) => {
+const Consultations: React.FC<PaymentsProps> = ({ query }) => {
   const textForKey = useTranslate();
   const dispatch = useDispatch();
   const router = useRouter();
@@ -51,6 +50,7 @@ const PendingConsultations: React.FC<PaymentsProps> = ({ query }) => {
   const currentClinic = useSelector(currentClinicSelector);
   const authToken = useSelector(authTokenSelector);
   const pickerRef = useRef(null);
+  const [isDownloading, setIsDownloading] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const [dateRange, setDateRange] = useState([
@@ -109,13 +109,23 @@ const PendingConsultations: React.FC<PaymentsProps> = ({ query }) => {
     const startDateStr = moment(startDate).format('YYYY-MM-DD');
     const endDateStr = moment(endDate).format('YYYY-MM-DD');
     await router.replace(
-      `/reports/pending-consultations?page=${page}&startDate=${startDateStr}&endDate=${endDateStr}&itemsPerPage=${rows}`,
+      `/reports/consultations?page=${page}&startDate=${startDateStr}&endDate=${endDateStr}&itemsPerPage=${rows}`,
     );
   };
 
   const handleDatePickerOpen = () => setShowDatePicker(true);
 
   const handleDatePickerClose = () => setShowDatePicker(false);
+
+  const titleForStatus = (status) => {
+    const data = ScheduleStatuses.find((it) => it.id === status);
+    return textForKey(data?.name);
+  };
+
+  const colorForStatus = (status) => {
+    const data = ScheduleStatuses.find((it) => it.id === status);
+    return data?.color;
+  };
 
   const handleDateChange = (data: {
     range1: { startDate: Date; endDate: Date };
@@ -127,6 +137,7 @@ const PendingConsultations: React.FC<PaymentsProps> = ({ query }) => {
   const handleDownloadFile = () => {
     const startDate = moment(dateRange[0]).format('YYYY-MM-DD');
     const endDate = moment(dateRange[1]).format('YYYY-MM-DD');
+    setIsDownloading(true);
     axios
       .get(
         `${baseApiUrl}/reports/consultations/download?startDate=${startDate}&endDate=${endDate}`,
@@ -145,7 +156,9 @@ const PendingConsultations: React.FC<PaymentsProps> = ({ query }) => {
         link.setAttribute('download', `${now()}.xlsx`);
         document.body.appendChild(link);
         link.click();
-      });
+        setIsDownloading(false);
+      })
+      .catch(() => setIsDownloading(false));
   };
 
   return (
@@ -178,6 +191,10 @@ const PendingConsultations: React.FC<PaymentsProps> = ({ query }) => {
                   <TableCell>{textForKey('patient')}</TableCell>
                   <TableCell>{textForKey('phone number')}</TableCell>
                   <TableCell>{textForKey('doctor')}</TableCell>
+                  <TableCell>{textForKey('patient_guide')}</TableCell>
+                  <TableCell align='right' size='small'>
+                    {textForKey('status')}
+                  </TableCell>
                   <TableCell align='right'>
                     {textForKey('user_comment')}
                   </TableCell>
@@ -190,12 +207,24 @@ const PendingConsultations: React.FC<PaymentsProps> = ({ query }) => {
                       {moment(item.date).format('DD MMM YYYY HH:mm')}
                     </TableCell>
                     <TableCell>{item.patient.name}</TableCell>
-                    <TableCell className={styles['patient-name-label']}>
+                    <TableCell className={styles.patientNameLabel}>
                       <a href={`tel:${item.patient.phone.replace('+', '')}`}>
                         {item.patient.phone}
                       </a>
                     </TableCell>
                     <TableCell>{item.doctor.name}</TableCell>
+                    <TableCell>{item.guide ? item.guide.name : '-'}</TableCell>
+                    <TableCell size='small' align='right'>
+                      <span
+                        className={styles.statusLabel}
+                        style={{
+                          color: colorForStatus(item.status),
+                          backgroundColor: `${colorForStatus(item.status)}1A`,
+                        }}
+                      >
+                        {titleForStatus(item.status)}
+                      </span>
+                    </TableCell>
                     <TableCell size='small' align='right'>
                       {item.comment}
                     </TableCell>
@@ -207,17 +236,14 @@ const PendingConsultations: React.FC<PaymentsProps> = ({ query }) => {
         )}
       </div>
       <div className={styles.pageFooter}>
-        <Button
-          variant='text'
+        <LoadingButton
+          isLoading={isDownloading}
+          disabled={isDownloading}
           onClick={handleDownloadFile}
-          classes={{
-            root: styles.primaryButton,
-            disabled: styles.buttonDisabled,
-          }}
+          className={styles.primaryButton}
         >
-          <IconDownload />
           {textForKey('export_excel')}
-        </Button>
+        </LoadingButton>
         <TablePagination
           classes={{ root: styles.tablePagination }}
           rowsPerPageOptions={[25, 50, 100]}
@@ -249,4 +275,4 @@ const PendingConsultations: React.FC<PaymentsProps> = ({ query }) => {
   );
 };
 
-export default PendingConsultations;
+export default Consultations;
