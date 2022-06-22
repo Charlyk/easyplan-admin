@@ -95,6 +95,11 @@ const rawMenuItems = [
         href: '/reports/services',
         roles: [Role.admin, Role.manager, Role.reception],
       },
+      {
+        text: 'appointments',
+        href: '/reports/appointments',
+        roles: [Role.admin, Role.manager],
+      },
     ],
   },
   {

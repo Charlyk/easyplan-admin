@@ -22,4 +22,5 @@ export default {
   '/reports/payments': 'payments',
   '/reports/consultations': 'consultations',
   '/reports/services': 'services statistics',
+  '/reports/appointments': 'appointments',
 };

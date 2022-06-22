@@ -28,6 +28,7 @@ import payments from 'redux/slices/paymentSlice';
 import pubnubMessages from 'redux/slices/pubnubMessagesSlice';
 import servicesList from 'redux/slices/servicesListSlice';
 import usersList from 'redux/slices/usersListSlice';
+import appointmentsReports from '../slices/appointmentsReportSlice';
 import patientsAutocomplete from '../slices/patientsAutocompleteSlice';
 import paymentReports from '../slices/paymentReportsSlice';
 import pendingConsultations from '../slices/pendingConsultationsSlice';
@@ -93,6 +94,7 @@ const rootReducer = combineReducers({
   paymentsState: payments,
   paymentReports,
   pendingConsultations,
+  appointmentsReports,
 });
 
 export default rootReducer;

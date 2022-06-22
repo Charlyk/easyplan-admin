@@ -30,6 +30,7 @@ import {
   CrmDealDetailsType,
   WithQuery,
   PaginatedResponse,
+  PatientPurchase,
 } from 'types';
 import {
   AppointmentsDoctorsResponse,
@@ -41,6 +42,7 @@ import {
   PaymentSubscription,
   PaymentReportResponse,
   ConsultationsResponse,
+  AppointmentReportResponse,
 } from 'types/api';
 
 export interface CalendarDataState {
@@ -210,7 +212,7 @@ export interface PatientVisitsState {
 
 export interface PatientPurchasesState {
   isLoading: boolean;
-  payments: any[];
+  payments: PatientPurchase[];
 }
 
 export interface ChangeLogModalState {
@@ -298,6 +300,8 @@ export type PaymentReportsState = WithQuery<PaymentReportResponse>;
 
 export type PendingConsultationsState = WithQuery<ConsultationsResponse>;
 
+export type AppointmentsReportState = WithQuery<AppointmentReportResponse>;
+
 export interface ReduxState {
   updateCategories: boolean;
   updateServices: boolean;
@@ -352,4 +356,5 @@ export interface ReduxState {
   paymentsState: PaymentsState;
   paymentReports: PaymentReportsState;
   pendingConsultations: PendingConsultationsState;
+  appointmentsReports: AppointmentsReportState;
 }
