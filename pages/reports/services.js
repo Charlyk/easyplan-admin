@@ -19,7 +19,7 @@ import { wrapper } from 'store';
 
 const Services = ({ statistics, query }) => {
   return (
-    <MainComponent currentPath='/analytics/services'>
+    <MainComponent currentPath='/reports/services'>
       <ServicesAnalytics query={query} statistics={statistics} />
     </MainComponent>
   );

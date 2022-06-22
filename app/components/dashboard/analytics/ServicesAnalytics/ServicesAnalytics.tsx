@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useReducer, useRef } from 'react';
 import { Tooltip } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import IconButton from '@material-ui/core/IconButton';
 import Table from '@material-ui/core/Table';
@@ -10,18 +11,23 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import IconReminders from '@material-ui/icons/NotificationsActiveOutlined';
+import axios from 'axios';
 import isEqual from 'lodash/isEqual';
 import orderBy from 'lodash/orderBy';
 import sortBy from 'lodash/sortBy';
-import moment from 'moment-timezone';
+import moment, { now } from 'moment-timezone';
 import { useRouter } from 'next/router';
 import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
 import EasyDateRangePicker from 'app/components/common/EasyDateRangePicker';
-import { Role, ScheduleStatuses } from 'app/utils/constants';
-import { currentClinicSelector } from 'redux/selectors/appDataSelector';
+import { HeaderKeys, Role, ScheduleStatuses } from 'app/utils/constants';
+import { baseApiUrl } from 'eas.config';
+import {
+  authTokenSelector,
+  currentClinicSelector,
+} from 'redux/selectors/appDataSelector';
 import { openCreateReminderModal } from 'redux/slices/CreateReminderModal.reducer';
 import { setPatientDetails } from 'redux/slices/mainReduxSlice';
 import { ServicesStatisticResponse } from 'types';
@@ -65,6 +71,7 @@ const ServicesAnalytics: React.FC<ServicesAnalyticsProps> = ({
   const dispatch = useDispatch();
   const pickerRef = useRef(null);
   const currentClinic = useSelector(currentClinicSelector);
+  const authToken = useSelector(authTokenSelector);
   const doctors = useMemo(() => {
     return orderBy(
       currentClinic.users.filter((user) => user.roleInClinic === Role.doctor),
@@ -217,7 +224,7 @@ const ServicesAnalytics: React.FC<ServicesAnalyticsProps> = ({
 
   const titleForStatus = (status) => {
     const data = ScheduleStatuses.find((it) => it.id === status);
-    return data?.name;
+    return textForKey(data?.name).toLowerCase();
   };
 
   const colorForStatus = (status) => {
@@ -250,6 +257,39 @@ const ServicesAnalytics: React.FC<ServicesAnalyticsProps> = ({
     dispatch(
       openCreateReminderModal({ deal: statisticItem, searchType: 'Schedule' }),
     );
+  };
+
+  const handleDownloadFile = () => {
+    const fromDate = moment(startDate).format('YYYY-MM-DD');
+    const toDate = moment(endDate).format('YYYY-MM-DD');
+
+    const statuses = selectedStatuses[0].id
+      ? selectedStatuses
+          ?.map((status) => `statuses=${status.id ?? 'all'}`)
+          ?.join('&')
+      : null;
+
+    axios
+      .get(
+        `${baseApiUrl}/reports/services/download?fromDate=${fromDate}&toDate=${toDate}${
+          statuses ? `&${statuses}` : ''
+        }`,
+        {
+          headers: {
+            [HeaderKeys.authorization]: String(authToken),
+            [HeaderKeys.clinicId]: String(currentClinic.id),
+          },
+          responseType: 'blob',
+        },
+      )
+      .then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `${now()}.xlsx`);
+        document.body.appendChild(link);
+        link.click();
+      });
   };
 
   return (
@@ -389,22 +429,33 @@ const ServicesAnalytics: React.FC<ServicesAnalyticsProps> = ({
           </TableContainer>
         )}
       </div>
-      <TablePagination
-        classes={{ root: styles['table-pagination'] }}
-        rowsPerPageOptions={[25, 50, 100]}
-        colSpan={4}
-        count={totalItems}
-        rowsPerPage={parseInt(String(rowsPerPage))}
-        labelRowsPerPage={textForKey('rows per page')}
-        page={parseInt(String(page))}
-        component='div'
-        SelectProps={{
-          inputProps: { 'aria-label': 'rows per page' },
-          native: true,
-        }}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        onPageChange={handleChangePage}
-      />
+      <div className={styles.pageFooter}>
+        <Button
+          variant={'text'}
+          classes={{
+            root: styles.primaryButton,
+          }}
+          onClick={handleDownloadFile}
+        >
+          {textForKey('export_excel')}
+        </Button>
+        <TablePagination
+          classes={{ root: styles['table-pagination'] }}
+          rowsPerPageOptions={[25, 50, 100]}
+          colSpan={4}
+          count={totalItems}
+          rowsPerPage={parseInt(String(rowsPerPage))}
+          labelRowsPerPage={textForKey('rows per page')}
+          page={parseInt(String(page))}
+          component='div'
+          SelectProps={{
+            inputProps: { 'aria-label': 'rows per page' },
+            native: true,
+          }}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          onPageChange={handleChangePage}
+        />
+      </div>
       <EasyDateRangePicker
         onChange={handleDateChange}
         onClose={handleDatePickerClose}

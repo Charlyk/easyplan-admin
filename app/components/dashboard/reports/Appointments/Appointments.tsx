@@ -60,7 +60,7 @@ const Appointments: React.FC<PaymentsProps> = ({ query }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const appointmentsReports = useSelector(appointmentsReportsDataSelector);
-  const isPaymentReportsLoading = useSelector(
+  const isAppointmentReportsLoading = useSelector(
     isAppointmentsReportsLoadingSelector,
   );
   const currentClinic = useSelector(currentClinicSelector);
@@ -155,7 +155,7 @@ const Appointments: React.FC<PaymentsProps> = ({ query }) => {
     <div className={styles.pendingConsultations}>
       <StatisticFilter
         onUpdate={handleFilterSubmit}
-        isLoading={isPaymentReportsLoading}
+        isLoading={isAppointmentReportsLoading}
       >
         <EASTextField
           ref={pickerRef}
@@ -167,12 +167,12 @@ const Appointments: React.FC<PaymentsProps> = ({ query }) => {
         />
       </StatisticFilter>
       <div className={styles.dataContainer}>
-        {isPaymentReportsLoading && appointmentsReports.length === 0 && (
+        {isAppointmentReportsLoading && appointmentsReports.length === 0 && (
           <div className={styles.progressWrapper}>
             <CircularProgress classes={{ root: 'circular-progress-bar' }} />
           </div>
         )}
-        {!isPaymentReportsLoading && appointmentsReports.length === 0 && (
+        {!isAppointmentReportsLoading && appointmentsReports.length === 0 && (
           <span className={styles.noDataLabel}>{textForKey('no results')}</span>
         )}
         {appointmentsReports.length > 0 && (
@@ -212,6 +212,7 @@ const Appointments: React.FC<PaymentsProps> = ({ query }) => {
           onClick={handleDownloadFile}
           className={styles.primaryButton}
           isLoading={isDownloading}
+          disabled={isAppointmentReportsLoading}
         >
           <IconDownload />
           {textForKey('export_excel')}

@@ -6,9 +6,6 @@
 
   .table-pagination {
     background-color: white;
-    margin-left: 8px;
-    margin-right: 8px;
-    margin-bottom: 1rem;
 
     :global(.MuiTablePagination-caption), :global(.MuiTablePagination-input) {
       font-family: Inter, sans-serif !important;
@@ -216,4 +213,30 @@
   font-style: normal !important;
   font-weight: normal !important;
   font-size: 13px !important;
+}
+
+.primaryButton {
+  outline: none;
+  color: #3A83DC;
+  font-family: Inter, sans-serif;
+  font-style: normal;
+  font-size: 13px;
+  position: absolute !important;
+  left: 1rem !important;
+  top: 50% !important;
+  transform: translateY(-50%);
+  z-index: 100;
+
+  svg {
+    margin-right: 0.5rem;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.pageFooter {
+  position: relative;
+  margin-left: 8px;
+  margin-right: 12px;
+  margin-bottom: 1rem;
 }

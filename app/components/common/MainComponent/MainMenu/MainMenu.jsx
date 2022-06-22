@@ -62,11 +62,6 @@ const rawMenuItems = [
         roles: [Role.admin, Role.manager],
       },
       {
-        text: 'services',
-        href: '/analytics/services',
-        roles: [Role.admin, Role.manager, Role.reception],
-      },
-      {
         text: 'doctors',
         href: '/analytics/doctors',
         roles: [Role.admin],
@@ -93,6 +88,11 @@ const rawMenuItems = [
       {
         text: 'consultations',
         href: '/reports/consultations',
+        roles: [Role.admin, Role.manager, Role.reception],
+      },
+      {
+        text: 'services',
+        href: '/reports/services',
         roles: [Role.admin, Role.manager, Role.reception],
       },
       {
