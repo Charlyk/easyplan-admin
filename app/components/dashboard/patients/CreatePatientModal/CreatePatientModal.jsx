@@ -73,7 +73,7 @@ const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
     localDispatch(actions.setIsLoading(true));
     try {
       const requestBody = {
-        birthday: moment(birthday).format('YYYY-MM-DD'),
+        birthday: birthday ? moment(birthday).format('YYYY-MM-DD') : null,
         phoneNumber,
         language,
         source,
