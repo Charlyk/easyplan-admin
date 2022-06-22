@@ -3,7 +3,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { useDispatch, useSelector } from 'react-redux';
 import IconClose from 'app/components/icons/iconClose';
-import { getAppLanguage } from 'app/utils/localization';
+import { appLanguageSelector } from 'redux/selectors/appDataSelector';
 import styles from './GlobalNotification.module.scss';
 import {
   dispatchFetchUnreadNotification,
@@ -14,6 +14,7 @@ import { appNotificationSelector } from './GlobalNotificationView.selector';
 const GlobalNotificationView: React.FC = () => {
   const dispatch = useDispatch();
   const { notification, isLoading } = useSelector(appNotificationSelector);
+  const appLanguage = useSelector(appLanguageSelector);
 
   useEffect(() => {
     dispatch(dispatchFetchUnreadNotification());
@@ -54,9 +55,7 @@ const GlobalNotificationView: React.FC = () => {
         <IconClose fill='#ffffff' />
       </IconButton>
       <Typography className={styles.messageText}>
-        {notificationMessage[getAppLanguage()] ||
-          notificationMessage['en'] ||
-          notificationMessage}
+        {notificationMessage?.[appLanguage] ?? notificationMessage}
       </Typography>
     </div>
   );
