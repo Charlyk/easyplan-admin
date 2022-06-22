@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -8,7 +7,6 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import IconDownload from '@material-ui/icons/CloudDownload';
 import axios from 'axios';
 import moment, { now } from 'moment-timezone';
 import { useRouter } from 'next/router';
@@ -16,6 +14,7 @@ import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
 import EASTextField from 'app/components/common/EASTextField';
 import EasyDateRangePicker from 'app/components/common/EasyDateRangePicker';
+import LoadingButton from 'app/components/common/LoadingButton';
 import StatisticFilter from 'app/components/dashboard/analytics/StatisticFilter';
 import { HeaderKeys, ScheduleStatuses } from 'app/utils/constants';
 import { baseApiUrl } from 'eas.config';
@@ -51,6 +50,7 @@ const Consultations: React.FC<PaymentsProps> = ({ query }) => {
   const currentClinic = useSelector(currentClinicSelector);
   const authToken = useSelector(authTokenSelector);
   const pickerRef = useRef(null);
+  const [isDownloading, setIsDownloading] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const [dateRange, setDateRange] = useState([
@@ -137,6 +137,7 @@ const Consultations: React.FC<PaymentsProps> = ({ query }) => {
   const handleDownloadFile = () => {
     const startDate = moment(dateRange[0]).format('YYYY-MM-DD');
     const endDate = moment(dateRange[1]).format('YYYY-MM-DD');
+    setIsDownloading(true);
     axios
       .get(
         `${baseApiUrl}/reports/consultations/download?startDate=${startDate}&endDate=${endDate}`,
@@ -155,7 +156,9 @@ const Consultations: React.FC<PaymentsProps> = ({ query }) => {
         link.setAttribute('download', `${now()}.xlsx`);
         document.body.appendChild(link);
         link.click();
-      });
+        setIsDownloading(false);
+      })
+      .catch(() => setIsDownloading(false));
   };
 
   return (
@@ -233,17 +236,14 @@ const Consultations: React.FC<PaymentsProps> = ({ query }) => {
         )}
       </div>
       <div className={styles.pageFooter}>
-        <Button
-          variant='text'
+        <LoadingButton
+          isLoading={isDownloading}
+          disabled={isDownloading}
           onClick={handleDownloadFile}
-          classes={{
-            root: styles.primaryButton,
-            disabled: styles.buttonDisabled,
-          }}
+          className={styles.primaryButton}
         >
-          <IconDownload />
           {textForKey('export_excel')}
-        </Button>
+        </LoadingButton>
         <TablePagination
           classes={{ root: styles.tablePagination }}
           rowsPerPageOptions={[25, 50, 100]}
