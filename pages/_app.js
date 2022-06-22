@@ -156,14 +156,14 @@ const EasyApp = ({
       name: `${currentUser.firstName} ${currentUser.lastName}`,
       email: currentUser.email,
     };
-    tawkMessengerRef.current.setAttributes({
+    tawkMessengerRef.current?.setAttributes({
       id: currentUser.id,
       clinicId: currentClinic?.id,
       name: `${currentUser.firstName} ${currentUser.lastName}`,
       email: currentUser.email,
     });
     if (currentClinic != null) {
-      tawkMessengerRef.current.addTags([currentClinic.clinicName]);
+      tawkMessengerRef.current?.addTags([currentClinic.clinicName]);
     }
   };
 
@@ -173,14 +173,14 @@ const EasyApp = ({
         return;
       }
 
-      tawkMessengerRef.current.setAttributes({
+      tawkMessengerRef.current?.setAttributes({
         id: currentUser.id,
         clinicId: currentClinic?.id,
         name: `${currentUser.firstName} ${currentUser.lastName}`,
         email: currentUser.email,
       });
       if (currentClinic != null) {
-        tawkMessengerRef.current.addTags([currentClinic.clinicName]);
+        tawkMessengerRef.current?.addTags([currentClinic.clinicName]);
       }
     } catch (error) {
       console.error('Error', error?.message);
