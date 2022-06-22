@@ -18,6 +18,7 @@ const ServicesChart = ({ services, removeable, onClose, visible = true }) => {
   const textForKey = useTranslate();
   const data = useMemo(() => {
     const chartData = getServicesChartData(services);
+    console.log(chartData);
 
     return {
       ...chartData,

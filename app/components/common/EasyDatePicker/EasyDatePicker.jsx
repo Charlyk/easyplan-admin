@@ -6,7 +6,8 @@ import Popper from '@material-ui/core/Popper';
 import PropTypes from 'prop-types';
 import { Calendar } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
-import { getAppLanguage } from 'app/utils/localization';
+import { useSelector } from 'react-redux';
+import { appLanguageSelector } from 'redux/selectors/appDataSelector';
 import styles from './EasyDatePicker.module.scss';
 
 const EasyDatePicker = ({
@@ -20,6 +21,8 @@ const EasyDatePicker = ({
   selectedDate,
   disablePortal,
 }) => {
+  const appLanguage = useSelector(appLanguageSelector);
+
   return (
     <Popper
       className={styles.easyDatePicker}
@@ -36,7 +39,7 @@ const EasyDatePicker = ({
               <Calendar
                 minDate={minDate ?? undefined}
                 maxDate={maxDate ?? undefined}
-                locale={locales[getAppLanguage()]}
+                locale={locales[appLanguage]}
                 onChange={onChange}
                 date={selectedDate}
               />
