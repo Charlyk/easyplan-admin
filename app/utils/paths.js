@@ -22,4 +22,5 @@ export default {
   '/error': 'error',
   '/reports/payments': 'payments',
   '/reports/consultations': 'consultations',
+  '/reports/appointments': 'appointments',
 };
