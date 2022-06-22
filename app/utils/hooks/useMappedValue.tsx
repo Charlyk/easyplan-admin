@@ -11,7 +11,7 @@ const useMappedValue = (
   const appLanguage = useSelector(appLanguageSelector);
 
   return useMemo(() => {
-    const translatedValues = rawValues.map((value) => ({
+    const translatedValues = (rawValues ?? []).map((value) => ({
       ...value,
       name: textForKey(value.name.toLowerCase()),
     }));

@@ -103,14 +103,6 @@ const AddXRay = ({ open, patientId, onClose }) => {
           />
           <label htmlFor='x-ray-file'>{imageFile?.name}</label>
         </div>
-
-        <EASSelect
-          rootClass={styles.simpleField}
-          label={textForKey('select phase')}
-          value={phase}
-          options={phases}
-          onChange={handlePhaseChange}
-        />
       </form>
     </EASModal>
   );
