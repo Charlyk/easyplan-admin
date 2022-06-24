@@ -38,14 +38,9 @@ const PatientPurchaseRow: React.FC<Props> = ({
   handleUndoPayment,
 }) => {
   const textForKey = useTranslate();
-  const dispatch = useDispatch();
   const appLanguage = useSelector(appLanguageSelector);
   const timeZone = useSelector(clinicTimeZoneSelector);
   const isManager = useSelector(isManagerSelector);
-
-  const hasDebts = useMemo(() => {
-    return payment.paid < payment.total;
-  }, []);
 
   const [expanded, setExpanded] = useState(false);
 
@@ -58,17 +53,6 @@ const PatientPurchaseRow: React.FC<Props> = ({
     mode: 'total' | 'paid' = 'total',
   ) => {
     return formattedAmount(payment[mode], payment.currency);
-  };
-
-  const handlePayDebt = () => {
-    dispatch(
-      setPaymentModal({
-        open: true,
-        invoice: payment,
-        schedule: null,
-        isNew: false,
-      }),
-    );
   };
 
   return (
