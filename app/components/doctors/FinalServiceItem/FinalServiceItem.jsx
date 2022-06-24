@@ -25,7 +25,11 @@ const FinalServiceItem = ({ service, canRemove, onRemove }) => {
   const serviceName = useMemo(() => {
     let name = service.service.name;
     if (service.tooth != null) {
-      name = `${name} | ${textForKey('tooth', service.tooth.toLowerCase())}`;
+      const toothName = textForKey('tooth').replace(
+        '%{tooth}',
+        service.tooth.toLowerCase(),
+      );
+      name = `${name} | ${toothName}`;
     }
     if (service.bracesPlanType) {
       name = `${name} | ${textForKey(service.bracesPlanType.toLowerCase())}`;
