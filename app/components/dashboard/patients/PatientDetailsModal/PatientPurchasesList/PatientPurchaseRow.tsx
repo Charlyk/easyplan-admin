@@ -1,7 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { Tooltip } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
 import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import Table from '@material-ui/core/Table';
@@ -11,7 +10,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { formatInTimeZone } from 'date-fns-tz';
 import { useTranslate } from 'react-polyglot';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import IconMinus from 'app/components/icons/iconMinus';
 import IconPlus from 'app/components/icons/iconPlus';
 import IconPrint from 'app/components/icons/iconPrint';
@@ -19,7 +18,6 @@ import IconTrash from 'app/components/icons/iconTrash';
 import { DateLocales } from 'app/utils/constants';
 import formattedAmount from 'app/utils/formattedAmount';
 import { baseApiUrl } from 'eas.config';
-import { setPaymentModal } from 'redux/actions/actions';
 import {
   appLanguageSelector,
   clinicTimeZoneSelector,
