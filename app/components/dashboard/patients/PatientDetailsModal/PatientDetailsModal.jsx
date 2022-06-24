@@ -29,6 +29,7 @@ import { toggleUpdatePatients } from 'redux/slices/mainReduxSlice';
 import { requestDeletePatient } from 'redux/slices/patientsListSlice';
 import AppointmentNotes from './AppointmentNotes';
 import PatientAppointments from './PatientAppointments';
+import PatientDebtsList from './PatientDebtsList';
 import styles from './PatientDetailsModal.module.scss';
 import reducer, {
   initialState,
@@ -36,6 +37,7 @@ import reducer, {
   setCurrentMenu,
   setPatient,
   setIsFetching,
+  setViewInvoice,
   MenuItem,
   MenuItems,
   openDeleteConfirmation,
@@ -70,6 +72,7 @@ const PatientDetailsModal = ({
       currentMenu,
       isFetching,
       patient,
+      viewInvoice,
       avatarFile,
       showDeleteConfirmation,
       isDeleting,
@@ -168,6 +171,10 @@ const PatientDetailsModal = ({
     localDispatch(setAvatarFile(file));
   };
 
+  const handleDebtViewed = () => {
+    localDispatch(setViewInvoice(null));
+  };
+
   const menuContent = () => {
     switch (currentMenu) {
       case MenuItem.personalInfo:
@@ -186,6 +193,14 @@ const PatientDetailsModal = ({
       case MenuItem.xRay:
         return (
           <PatientXRay patient={patient} onAddXRay={handleAddXRayImages} />
+        );
+      case MenuItem.debts:
+        return (
+          <PatientDebtsList
+            patient={patient}
+            viewInvoice={viewInvoice}
+            onDebtShowed={handleDebtViewed}
+          />
         );
       case MenuItem.treatmentPlan:
         return <AppointmentNotes currentUser={currentUser} patient={patient} />;

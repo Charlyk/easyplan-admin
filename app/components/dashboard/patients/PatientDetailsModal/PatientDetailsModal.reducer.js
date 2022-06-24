@@ -29,6 +29,11 @@ export const MenuItems = [
     type: 'default',
   },
   {
+    id: MenuItem.debts,
+    name: 'debts',
+    type: 'default',
+  },
+  {
     id: MenuItem.notes,
     name: 'notes',
     type: 'default',

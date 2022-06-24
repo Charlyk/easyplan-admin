@@ -124,14 +124,6 @@ const PatientPurchaseRow: React.FC<Props> = ({
                   <IconTrash fill={'#ec3276'} />
                 </IconButton>
               </Tooltip>
-              <Button
-                classes={{ root: styles.debtBtn }}
-                variant={'outlined'}
-                onClick={handlePayDebt}
-                disabled={!hasDebts}
-              >
-                {textForKey('pay')}
-              </Button>
             </Box>
           )}
         </TableCell>
