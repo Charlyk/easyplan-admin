@@ -155,7 +155,7 @@ const ServicesAnalytics: React.FC<ServicesAnalyticsProps> = ({
     }
 
     const queryString = new URLSearchParams(query).toString();
-    await router.replace(`/analytics/services?${queryString}`);
+    await router.replace(`/reports/services?${queryString}`);
   };
 
   const handleFilterSubmit = async () => {
