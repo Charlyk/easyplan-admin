@@ -42,10 +42,11 @@ type CurrencyFilter = {
   totalAmount: number;
   totalDebts: number;
   totalPrepayments: number;
+  totalDiscounted?: number;
 };
 
 const getDiscountedAmount = (price: number, discount: number): number => {
-  return discount > 0 ? price - Math.trunc((price * discount) / 100) : price;
+  return price * (1 - parseFloat(`${discount < 10 ? '0.0' : '0.'}${discount}`));
 };
 
 const currentWeek = getCurrentWeek(new Date());
@@ -121,24 +122,29 @@ const PatientPurchasesList = ({ patient }) => {
     discountedPayments.forEach((payment) => {
       const currencyData = filteredByCurrencies[payment.currency];
       const total = (currencyData?.totalAmount ?? 0) + payment.total;
+      const discountedTotal =
+        (currencyData?.totalDiscounted ?? 0) + payment.discountedTotal;
       const totalPaymentsMade = payment.payments.reduce(
         (sum, detailedPayment) => sum + detailedPayment.amount,
         0,
       );
-      const debts = total - totalPaymentsMade;
-      const prepayments = totalPaymentsMade - total;
+      const debts = payment.discountedTotal - totalPaymentsMade;
+      const prepayments = discountedTotal - total;
+
       if (currencyData) {
         filteredByCurrencies[payment.currency] = {
           totalAmount: total,
           totalDebts: currencyData.totalDebts + debts > 0 ? debts : 0,
           totalPrepayments:
             currencyData.totalPrepayments + prepayments > 0 ? prepayments : 0,
+          totalDiscounted: discountedTotal,
         };
       } else {
         filteredByCurrencies[payment.currency] = {
           totalAmount: total,
           totalDebts: debts > 0 ? debts : 0,
           totalPrepayments: prepayments > 0 ? prepayments : 0,
+          totalDiscounted: discountedTotal,
         };
       }
     });
@@ -159,7 +165,7 @@ const PatientPurchasesList = ({ patient }) => {
       totalDebts,
       totalPrepayments,
     };
-  }, [discountedPayments.length, clinicCurrency]);
+  }, [discountedPayments.length, clinicCurrency, payments.length]);
 
   const openRangePicker = () => {
     setPickerOpen(true);
