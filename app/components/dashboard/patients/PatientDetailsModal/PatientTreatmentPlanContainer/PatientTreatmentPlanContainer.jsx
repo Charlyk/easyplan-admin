@@ -23,7 +23,7 @@ const PatientTreatmentPlanContainer = ({
   const [guideName, setGuideName] = useState(
     `${currentUser.firstName} ${currentUser.lastName}`,
   );
-  const canPrint = scheduleData?.treatmentPlan?.services?.length > 0;
+  const canPrint = scheduleData?.services?.length > 0;
 
   useEffect(() => {
     fetchScheduleData();
