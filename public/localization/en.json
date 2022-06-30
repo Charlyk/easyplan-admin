@@ -861,5 +861,7 @@
   "consultation_service": "Consultation service",
   "pending_consultations": "Pending consultations",
   "patient_guide": "Patient guide",
-  "consultations": "Consultations"
+  "consultations": "Consultations",
+  "send_report_to_email": "Send report to email",
+  "report_is_preparing": "You will receive the report on your email address once it will be ready"
 }

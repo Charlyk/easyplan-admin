@@ -8,7 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import axios from 'axios';
-import moment, { now } from 'moment-timezone';
+import moment from 'moment-timezone';
 import { useRouter } from 'next/router';
 import { useTranslate } from 'react-polyglot';
 import { useDispatch, useSelector } from 'react-redux';
@@ -29,6 +29,7 @@ import {
 } from 'redux/selectors/paymentReportsSelector';
 import { fetchPaymentReports } from 'redux/slices/paymentReportsSlice';
 import { PaymentReportsGetRequest } from 'types/api';
+import { showSuccessNotification } from '../../../../../redux/slices/globalNotificationsSlice';
 import styles from './Payments.module.scss';
 
 interface PaymentsQuery {
@@ -137,16 +138,10 @@ const Payments: React.FC<PaymentsProps> = ({ query }) => {
             [HeaderKeys.authorization]: String(authToken),
             [HeaderKeys.clinicId]: String(currentClinic.id),
           },
-          responseType: 'blob',
         },
       )
-      .then((response) => {
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', `${now()}.xlsx`);
-        document.body.appendChild(link);
-        link.click();
+      .then(() => {
+        dispatch(showSuccessNotification(textForKey('report_is_preparing')));
         setIsDownloading(false);
       })
       .catch(() => setIsDownloading(false));
@@ -238,7 +233,7 @@ const Payments: React.FC<PaymentsProps> = ({ query }) => {
           onClick={handleDownloadFile}
           className={styles.primaryButton}
         >
-          {textForKey('export_excel')}
+          {textForKey('send_report_to_email')}
         </LoadingButton>
         <TablePagination
           classes={{ root: styles.tablePagination }}

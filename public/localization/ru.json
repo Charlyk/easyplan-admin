@@ -861,5 +861,7 @@
   "consultation_service": "Услуга консультации",
   "pending_consultations": "Консультации в ожидании",
   "patient_guide": "Гид пациента",
-  "consultations": "Консультации"
+  "consultations": "Консультации",
+  "send_report_to_email": "Отправить отчет на E-mail",
+  "report_is_preparing": "Вы получите отчет на ваш E-mail адрес когда он будет готов"
 }

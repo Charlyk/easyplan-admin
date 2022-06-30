@@ -861,5 +861,7 @@
   "consultation_service": "Serviciu de consultare",
   "pending_consultations": "Consultații în așteptare",
   "patient_guide": "Ghidul pacientului",
-  "consultations": "Consultații"
+  "consultations": "Consultații",
+  "send_report_to_email": "Transmite raport pe email",
+  "report_is_preparing": "Veți primi raportul la adresa Dvs de email când va fi gata"
 }
